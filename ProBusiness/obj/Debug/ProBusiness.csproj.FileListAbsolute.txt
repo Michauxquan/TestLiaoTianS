@@ -1,0 +1,14 @@
+D:\MIchaux\SignalrTest\ProBusiness\obj\Debug\ProBusiness.csprojResolveAssemblyReference.cache
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProBusiness.dll
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProBusiness.pdb
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\Newtonsoft.Json.dll
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProDAL.dll
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProEntity.dll
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProEnum.dll
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProTools.dll
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProDAL.pdb
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProEntity.pdb
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProEnum.pdb
+D:\MIchaux\SignalrTest\ProBusiness\bin\Debug\ProTools.pdb
+D:\MIchaux\SignalrTest\ProBusiness\obj\Debug\ProBusiness.dll
+D:\MIchaux\SignalrTest\ProBusiness\obj\Debug\ProBusiness.pdb

@@ -1,0 +1,75 @@
+﻿@charset "utf-8";
+/* 
+ *	Date: 2014-11-7
+ *	Author: Agnes Xu
+ */
+
+
+
+
+
+.game_time {
+    width: 78px;
+    height: 87px;
+    text-align: center;
+    transform: scale(.4);
+    margin-left: -10px;
+    margin-top: -12px;
+}
+
+/* time scroll*/
+.pie {
+    width: 100%;
+    height: 100%;
+    background-color: blue;
+    border-radius: 100px;
+    position: absolute;
+}
+
+.pie1 {
+    clip: rect(0px, 200px, 200px, 100px);
+    -o-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    background-color: #d49e0c;
+}
+
+.pie2 {
+    clip: rect(0px, 100px, 200px, 0px);
+    -o-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    background-color: #d49e0c;
+}
+
+.hold {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    z-index: 1;
+}
+
+.bg {
+    width: 200px;
+    height: 200px;
+    border-radius: 200px;
+    position: absolute;
+    background-color: #c0c0c0;
+}
+
+.time {
+    width: 186px;
+    height: 186px;
+    margin: 7px 0 0 7px;
+    background-color: #440800;
+    border-radius: 160px;
+    position: absolute;
+    z-index: 1;
+    text-align: center;
+    line-height: 186px;
+    font-size: 100px;
+    font-weight: bold;
+    color: #cccccc;
+}
+
+/* .time em { position:absolute; opacity:0.4; font-size:1.3em;} */

@@ -1,0 +1,4 @@
+D:\MIchaux\SignalrTest\ProEntity\bin\Debug\ProEntity.dll
+D:\MIchaux\SignalrTest\ProEntity\bin\Debug\ProEntity.pdb
+D:\MIchaux\SignalrTest\ProEntity\obj\Debug\ProEntity.dll
+D:\MIchaux\SignalrTest\ProEntity\obj\Debug\ProEntity.pdb

@@ -1,0 +1,4 @@
+D:\MIchaux\SignalrTest\ProEnum\bin\Debug\ProEnum.dll
+D:\MIchaux\SignalrTest\ProEnum\bin\Debug\ProEnum.pdb
+D:\MIchaux\SignalrTest\ProEnum\obj\Debug\ProEnum.dll
+D:\MIchaux\SignalrTest\ProEnum\obj\Debug\ProEnum.pdb

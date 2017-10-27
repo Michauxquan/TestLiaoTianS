@@ -1,0 +1,270 @@
+﻿::-webkit-scrollbar
+{
+    width: 0px;
+    height: 0px;
+    background-color: #8f1d03;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #8f1d03;
+}
+
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #8f1d03;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+
+  font-family: "微软雅黑";
+}
+ul {
+  list-style-type: none;
+}
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+a {
+  text-decoration: none;
+}
+a img {
+  border: none;
+}
+html,
+body {
+  min-width: 1250px;
+}
+.pop-sha {
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background: rgba(0, 0, 0, 0.5);
+}
+.popup {
+  width: 586px;
+  height: 385px;
+  position: fixed;
+  display: none;
+  left: 50%;
+  z-index: 100;
+  top: 50%;
+  margin-top: -192px;
+  margin-left: -293px;
+  background: url("/modules/animg/pop-bg.png") no-repeat;
+}
+.popup .close-pop {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  transition: all .2s ease;
+  cursor: pointer;
+}
+.popup .top-cont {
+  width: 545px;
+  height: 70px;
+  margin: 0 auto;
+  margin-top: 40px;
+  overflow: hidden;
+  position: relative;
+}
+.popup .top-cont p {
+  margin-left: 20px;
+  font-size: 14px;
+  line-height: 30px;
+  margin-top: 5px;
+}
+.popup .top-cont ul {
+  overflow: hidden;
+  margin-left: 5px;
+}
+.popup .top-cont ul li {
+  line-height: 30px;
+  float: left;
+  margin-left: 15px;
+  font-size: 14px;
+}
+.popup .top-cont .rig-yuan {
+  width: 51px;
+  height: 51px;
+  box-sizing: border-box;
+  border: 1px solid #c51827;
+  position: absolute;
+  top: 7px;
+  border-radius: 50%;
+  text-align: center;
+  right: 15px;
+  line-height: 51px;
+  font-size: 15px;
+  color: #c51827;
+  transform: rotate(-35deg) !important;
+}
+.popup .center-cont {
+  width: 520px;
+  height: 65px;
+  margin: 0 auto;
+  margin-top: 28px;
+}
+.popup .center-cont ul li {
+  float: left;
+  width: 240px;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-top: 10px;
+}
+.popup .btm-cont {
+  width: 540px;
+  height: 120px;
+  margin-left: 35px;
+}
+.popup .btm-cont span {
+  display: block;
+  float: left;
+  line-height: 105px;
+  margin-top: 10px;
+}
+.popup .btm-cont textarea {
+  width: 470px;
+  height: 105px;
+  float: left;
+  margin-top: 10px;
+  resize: none;
+  margin-left: 10px;
+}
+.popup .sure {
+  width: 140px;
+  height: 38px;
+  background: url("/modules/animg/sure-bg.png") repeat-x;
+  border-radius: 5px;
+  display: block;
+  color: white;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+.footer {
+  width: 100%;
+  height: 160px;
+  background: url("/modules/animg/foot-top-bg.jpg") repeat-x;
+  background-color: #4b0c00;
+}
+.footer .foot-center {
+  width: 962px;
+  height: 122px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.footer .foot-center .foot1 {
+  width: 237px;
+  height: 66px;
+  background: #440b00;
+  border: 1px solid #633026;
+  border-radius: 4px;
+  margin-top: 35px;
+  float: left;
+}
+.footer .foot-center .foot1 img {
+  float: left;
+  margin-top: 12px;
+  margin-left: 10px;
+}
+.footer .foot-center .foot1 div {
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.footer .foot-center .foot1 div b {
+  font-size: 16px;
+  display: block;
+  color: white;
+  font-weight: inherit;
+}
+.footer .foot-center .foot1 div span {
+  display: block;
+  margin-top: 3px;
+  color: #ffffff;
+}
+.footer .foot-center .foot2 {
+  width: 237px;
+  height: 66px;
+  background: #440b00;
+  border: 1px solid #633026;
+  border-radius: 4px;
+  margin-top: 35px;
+  float: left;
+  margin-left: 10px;
+}
+.footer .foot-center .foot2 img {
+  float: left;
+  margin-top: 12px;
+  margin-left: 10px;
+}
+.footer .foot-center .foot2 div {
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.footer .foot-center .foot2 div b {
+  font-size: 16px;
+  display: block;
+  color: white;
+  font-weight: inherit;
+}
+.footer .foot-center .foot2 div span {
+  display: block;
+  margin-top: 3px;
+  color: #ffffff;
+}
+.footer .foot-center ul {
+  margin-top: 60px;
+  margin-left: 20px;
+  overflow: hidden;
+  float: left;
+}
+.footer .foot-center ul li {
+  float: left;
+  color: #fed73c;
+  margin-left: 13px;
+}
+.footer p {
+  display: block;
+  width: 100%;
+  height: 38px;
+  color: #c5c5c5;
+  text-align: center;
+  line-height: 38px;
+  background: #3c0a00;
+}
+.alert {background-color: #333;opacity:0.8; font-size: 13px; position: fixed; top:35%; z-index: 99999; 
+         padding:20px;padding-left:40px;  overflow:auto; border-radius:5px;min-width:140px;max-width:260px;}
+.alert .alert-wrap { word-wrap: break-word;  word-break:break-all;color:#fff;font-size:14px;}
+.alert-wrap .alert-icon-right:before {content:"\e613";}
+.alert-wrap .alert-icon-right {color:#fefefe;font-size:20px;float:left;}
+.alert-wrap .alert-icon-warn:before {content:"\e64a";}
+.alert-wrap .alert-icon-warn {color:#fefefe;font-size:20px;float:left;}
+.alert-wrap .alert-msg {float:left;color:#fff;font-size:16px;line-height:24px; padding:0 20px 0 15px;max-width:160px;}
+.alert-wrap .alert-close:before {content:"\e628";}
+.alert-wrap .alert-close {float:left;color:#ddd;font-size:20px;padding-top:0px;cursor:pointer;}
+.alert-wrap .alert-close:hover {color:#fff;}
+/*confirm样式*/
+.confirm-layer {position: fixed; z-index:99998; top:0; left:0;right:0; bottom:0; background-color:#000; opacity:0.7;}
+.confirm { border: 1px solid #ccc; background-color: #fff; font-size: 13px; position: fixed; top:35%; z-index: 99999; width:260px; overflow:auto;padding:20px;border-radius:3px; }
+.confirm .confirm-wrap { word-wrap: break-word;  word-break:break-all;font-size:16px;  }
+.confirm .confirm-bottom { margin-top:20px; text-align:right; }
+.confirm-bottom .sure { padding:10px 24px; background-color:#D64242; color:#fff; border:none; cursor:pointer; display:inline-block; border-radius:3px; }
+.confirm-bottom .sure:hover {  background-color:#AC1716;  }
+.confirm-bottom .close { padding:5px 40px; color:#999; border:none; cursor:pointer; display:inline-block; }
+.confirm-bottom .close:hover {color:#AC1716; }

@@ -1,0 +1,4 @@
+D:\MIchaux\SignalrTest\ProDAL\bin\Debug\ProDAL.dll
+D:\MIchaux\SignalrTest\ProDAL\bin\Debug\ProDAL.pdb
+D:\MIchaux\SignalrTest\ProDAL\obj\Debug\ProDAL.dll
+D:\MIchaux\SignalrTest\ProDAL\obj\Debug\ProDAL.pdb

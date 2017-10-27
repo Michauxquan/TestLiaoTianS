@@ -1,0 +1,5 @@
+D:\MIchaux\SignalrTest\ProTools\bin\Debug\ProTools.dll
+D:\MIchaux\SignalrTest\ProTools\bin\Debug\ProTools.pdb
+D:\MIchaux\SignalrTest\ProTools\bin\Debug\Newtonsoft.Json.dll
+D:\MIchaux\SignalrTest\ProTools\obj\Debug\ProTools.dll
+D:\MIchaux\SignalrTest\ProTools\obj\Debug\ProTools.pdb

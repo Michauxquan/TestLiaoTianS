@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>消息推送页面</title>
+    <script src="~/Scripts/jquery-1.6.4.min.js"></script>
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
+    <script src="~/Scripts/jquery.signalR-1.1.4.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+</head>
+<body>
+    <a target="_blank" href="http://download.csdn.net/detail/qq_21533697/9702306#comment">源码地址</a> </br>
+    在线人数:
+    <span id="usersCount"></span> </br>
+    昵称自己加上...</br>
+    滚屏自己滚...</br>
+    还要加些什么，在线改...</br>
+    
+    
+     <textarea id="txtMess" rows="3" cols="30">
+       我是表情 <img src="http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif">
+     </textarea></br>
+    @*<input type="text" style="width:100px;height:50px;" id="txtMess" />*@
+    <input type="button" value="发送广播消息" id="btnPush" style="width:200px;height:50px;" />
+    <div id="xxoo"> </div>
+    <script>
+        (function () {
+
+            //发送信息
+            $("#btnPush").click(function () {
+                var $mess = $("#txtMess");
+                $.ajax({
+                    url: "../Base/fnBroadcast",
+                    data: { msg: encodeURI($mess.val()) },
+                    type: "post",
+                    dataType: "text",
+                    success: function (result) {
+                        if (result.indexOf("成功") !== -1) {
+                            $mess.html('我是表情  <img src="http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif">');
+                        }
+                        else {
+                            alert(result);
+                        }
+                    }
+                });
+				 $.ajax({
+                    url: "../Base/fnBroadcastMsg",
+                    data: { msg: encodeURI($mess.val()) },
+                    type: "post",
+                    dataType: "text",
+                    success: function (result) {
+                        if (result.indexOf("成功") !== -1) {
+                            $mess.html('我是表情  <img src="http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif">');
+                        }
+                        else {
+                            alert(result);
+                        }
+                    }
+                });
+            });
+
+            //接收信息
+            var allHub = $.connection.allHub;//对应后台的 类 AllHub
+            allHub.client.notice = function (msg) {
+                $("#xxoo").prepend("<br/>" + decodeURI( msg));
+            }
+
+
+            // Create a function that the hub can call back to display messages.
+            allHub.client.updateUsersOnlineCount = function (count) {
+                // Add the message to the page.
+                $('#usersCount').text(count);
+            };
+
+            $.connection.hub.start();
+
+        })();
+    </script>
+</body>
+</html>
