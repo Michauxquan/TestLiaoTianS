@@ -24,3 +24,5 @@ Thunbs.db
 obj/
 [Rr]elease*/
 _ReSharper*/
+*.Debug/
+*.debug/
