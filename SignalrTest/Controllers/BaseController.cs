@@ -348,7 +348,7 @@ namespace SignalR.Controllers
             return View();
         }
         //
-        public ActionResult BroadcastTest()
+        public ActionResult BJLottery()
         {
             if (Session["Manager"] == null)
             {
@@ -366,7 +366,24 @@ namespace SignalR.Controllers
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
-
+        public ActionResult HGLottery()
+        {
+            if (Session["Manager"] == null)
+            {
+                return Redirect("/Home/Login");
+            }
+            ViewBag.UserName = CurrentUser.LoginName;
+            return View();
+        }
+        public ActionResult DJLottery()
+        {
+            if (Session["Manager"] == null)
+            {
+                return Redirect("/Home/Login");
+            }
+            ViewBag.UserName = CurrentUser.LoginName;
+            return View();
+        }
         //进度条  
         public void fnProgressBar()
         {

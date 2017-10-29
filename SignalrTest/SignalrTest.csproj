@@ -276,10 +276,12 @@
     <Content Include="Views\Base\Broadcast.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\SecondPage.cshtml" />
-    <Content Include="Views\Base\BroadcastTest.cshtml" />
+    <Content Include="Views\Base\BJLottery.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\Login1.cshtml" />
     <Content Include="Views\Base\CQLottery.cshtml" />
+    <Content Include="Views\Base\DJLottery.cshtml" />
+    <Content Include="Views\Base\HGLottery.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
