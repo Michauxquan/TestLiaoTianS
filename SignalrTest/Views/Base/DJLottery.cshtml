@@ -1,67 +1,48 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "重庆时时彩";
 }
-
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-    <link href="~/Scripts/bootstrap/bootstrap.css" rel="stylesheet" />
-    <script src="~/Scripts/bootstrap/jquery-2.1.4.js"></script>
+@section scripts{
     <script src="~/Scripts/jquery.signalR-1.1.4.js"></script>
-    <script src="~/Scripts/bootstrap/bootstrap-3.3.6.js"></script>
     <script src="~/signalr/hubs"></script>
-    <style>
-       .sysmsg{width: 60%;    margin: 5px auto;    text-align: left;    border-radius: 5px;    background-color: #eee;    padding: 5px;    color: #666;}
-	   .mymsg{width: 200px; margin: 5px; float:right;    text-align: center;    border-radius: 5px;    background-color: #eee;    padding: 5px;    color: #666;}
-	   .othermsg{width: 200px; margin: 5px; float:left;    text-align: center;    border-radius: 5px;    background-color: #eee;    padding: 5px;    color: #666}
-	   .clear{clear:both;width:0px;width:0px;}
-    </style>
-</head>
-<body>
-    <div class="container" style="margin-top: 10px">
-        <div class="row">
-            <div class="col-md-9">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        聊天室
-                    </div>
-                    <div id="div_msgbody" class="panel-body" style='min-height: 500px; max-height: 500px; overflow: auto; max-width: 850px;'>
-                        <div id="div_msg" style='word-wrap: break-word; word-break: break-word;'></div>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="row">
-                            <div class="col-md-11">
-                                <div class="input-group">
-                                    <span class="input-group-addon">内容：</span>
-                                    <input id="message" type="text" class="form-control" maxlength="500" placeholder='在此输入聊天内容' />
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <button id="btn_Send" type="button" class="btn btn-info">发送</button>
-                            </div>
-                        </div>
-                    </div>
+}
+<div class="container" style="margin-top: 0px;width:100%;">
+    <div class="row">
+        <div class="col-md-9" style="padding-left:0px;padding-right:0px;width:100%;">
+            <div class="panel panel-primary">
+                <div class="panel-heading" data-issuenum="">
+                    重庆时时彩
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        用户列表
-                    </div>
-                    <div class="panel-body" style='min-height: 500px; max-height: 500px; overflow: auto;'>
-                        <div id="div_member"></div>
-                    </div>
-                    <div class="panel-footer">
-                        <div style="height: 34px; height: 34px; line-height: 34px">
-                            人员总数：<label id="lab_total">0</label>
+                <div id="div_msgbody" class="panel-body" style='min-height: 473px; max-height: 100%; overflow: auto; width:100%;'>
+                    <div id="div_msg" style='word-wrap: break-word; word-break: break-word;'></div>
+                </div>
+                <div class="panel-footer" style="height:100%;">
+                    <div class="row">
+                        <div class="col-md-11" style="padding-right: 1px;padding-left: 1px;">
+                            <div class="input-group" style="width:100%">
+                                <div class="left" style="width:78%">
+                                    <input id="message" type="text" class="form-control" maxlength="500" style="width:100%" placeholder='在此输入聊天内容' />
+                                </div>
+                                <div class="left" style="max-width:58px;">
+                                    <button id="btn_Send" type="button" class="btn btn-info ">发送</button>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+</div>
+<script type="text/javascript">
+        $(function () {
+            $('/Base/GetlotteryResult', { cpcode: '@ViewBag.CPCode' }, function (data) {
+                var result = eval(data.result);
+                if (result != null && typeof (result.IssueNum) != 'undefined') {
+                    $('.panel-heading').data('issuenum', result.IssueNum);
+                }
+            });
+        });
         var userNickName='@ViewBag.UserName';
         jQuery(document).ready(function () {
             while (!userNickName) {
@@ -69,15 +50,6 @@
             }
 
             var chatHub = $.connection.DJRoomHub;
-
-            chatHub.client.NotifyUserEnter = function (nickName, users) {
-                buildUserTemplate(users);
-            }
-
-            chatHub.client.NotifyUserLeft = function (nickName, users) {
-                buildUserTemplate(users);
-            }
-
             chatHub.client.NotifySendMessage = function (nickName, message) {
                 var userAvatar = 'http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif';
                 if (nickName == userNickName) {
@@ -106,52 +78,67 @@
             $.connection.hub.start().done(function () {
                 chatHub.server.userEnter(userNickName);
             });
-
-            $("#message").keydown(function (event) {
-                if (event.keyCode == 13) {
+            $(document).on("keypress", function (e) {
+                if (e.keyCode == 13) {
                     if ($("#message").val() != "") {
-                        chatHub.server.sendMessage(userNickName, $("#message").val());
+                        if ($("#message").val().trim() == "数据") {
+                            GetToday();
+                        }
+                        else {
+                            chatHub.server.sendMessage(userNickName, $("#message").val());
+                        }
                         $("#message").val("");
                     }
                 }
             });
-
             $("#btn_Send").click(function () {
                 if ($("#message").val() != "") {
-                    chatHub.server.sendMessage(userNickName, $("#message").val());
+                    if ($("#message").val().trim() == "数据") {
+                        GetToday();
+                    }
+                    else {
+                        chatHub.server.sendMessage(userNickName, $("#message").val());
+                    }
                     $("#message").val("");
                 }
             })
-
-            function buildUserTemplate(users) {
-                $("#lab_total").text(users.length);
-                var userTemplate = "<ul style='list-style:none;'>"
-                $.each(users, function (e, v) {
-                    var userAvatar = 'http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif';
-                    userTemplate += "<li style='padding-top:5px;'>"
-                        + "<img class='round-img-list' src='" + userAvatar + "'/>"
-                        + "<label style='color:#666666;margin-left:10px'>" + v.NickName + "</label>"
-                        + "</li>";
-                });
-
-                userTemplate += "</ul>";
-
-                $("#div_member").html(userTemplate);
-            }
 			//var allHub = $.connection.allHub;//对应后台的 类 AllHub
-            chatHub.client.notice = function (msg) { 
-			  var userAvatar = 'http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif'; 
-                $("#div_msg").append("<div>" 
+            chatHub.client.notice = function (msg) {
+			  var userAvatar = 'http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif';
+                $("#div_msg").append("<div>"
                     + "<div class='demo clearfix'>"
                     + "<span class='triangle'></span>"
                     + "<div class='article sysmsg'>" + decodeURI( msg)
-                    + "</div></div></div>"); 
+                    + "</div></div></div>");
 
                 var objDiv = document.getElementById("div_msgbody");
                 objDiv.scrollTop = objDiv.scrollHeight;
-                //$("#xxoo").prepend("<br/>" + decodeURI( msg));
             }
         });
-    </script>
-</body>
-</html>
+        function GetToday() {
+            $.post('/Base/GetTodyRopert', {cpcode:'@ViewBag.CPCode',issuenum:  $('.panel-heading').data('issuenum')}, function (data) {
+                var dt = eval(data)
+                if (dt.result[0].length > 0) {
+                    $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
+                  + "<div style='margin:0 auto;width:80%'> <span style='text-align:center;'>♣♣系统私信♣♣</span>"
+                  + "<br/><span style='text-align:center;'>我的余额:" + parseFloat(dt.fee.AccountFee).toFixed(2) + "</span>"
+                  + "<br/><span style='text-align:center;'>本期投注:" + parseFloat(dt.bettfee == "" ? "0" : dt.bettfee).toFixed(2) + "</span>"
+                  + "<br/><span style='text-align:center;'>今日投注:" + parseFloat(dt.result[0].TotalPayMent).toFixed(2) + "</span>"
+                  + "<br/><span style='text-align:center;'>今日中奖:" + parseFloat(dt.result[0].TotalWin).toFixed(2) + "</span>"
+                  + "<br/><span style='text-align:center;'>今日盈亏:" + parseFloat(dt.result[0].TotalWin - result[0].TotalPayMent).toFixed(2) + "</span>"
+                  + "</div></div><div class='clear-float'/>");
+                } else {
+                    $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
+                    + "<div style='margin:0 auto;width:80%'> <span style='text-align:center;'>♣♣系统私信♣♣</span>"
+                    + "<br/><span style='text-align:center;'>我的余额:" + parseFloat(dt.fee.AccountFee).toFixed(2) + "</span>"
+                    + "<br/><span style='text-align:center;'>本期投注:" + parseFloat(dt.bettfee == "" ? "0" : dt.bettfee).toFixed(2) + "</span>"
+                    + "<br/><span style='text-align:center;'>今日投注:0</span>"
+                    + "<br/><span style='text-align:center;'>今日中奖:0</span>"
+                    + "<br/><span style='text-align:center;'>今日盈亏:0</span>"
+                    + "</div></div><div class='clear-float'/>");
+                }
+            });
+        }
+</script>
+
+

@@ -9,6 +9,9 @@ using SignalrTest.Controllers;
 using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
+using ProBusiness;
+using ProEntity;
+using ProBusiness.UserAttrs;
 
 namespace SignalR.Controllers 
 {
@@ -216,6 +219,16 @@ namespace SignalR.Controllers
 
         public void SendMessage(string nickName, string message)
         {
+            var strs=message.Trim().Split('/');
+            if (strs.Length == 3) {
+                foreach (string item in strs)
+                {
+                    if (!string.IsNullOrEmpty(item)) {
+
+                    }
+                }
+            }
+
             Clients.All.NotifySendMessage(nickName, message);
         }
 
@@ -354,6 +367,7 @@ namespace SignalR.Controllers
             {
                 return Redirect("/Home/Login");
             }
+            ViewBag.CPCode = "BJSC";
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
@@ -363,6 +377,7 @@ namespace SignalR.Controllers
             {
                 return Redirect("/Home/Login");
             }
+            ViewBag.CPCode = "CQSSC";
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
@@ -372,6 +387,7 @@ namespace SignalR.Controllers
             {
                 return Redirect("/Home/Login");
             }
+            ViewBag.CPCode = "NHGKLB";
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
@@ -381,6 +397,7 @@ namespace SignalR.Controllers
             {
                 return Redirect("/Home/Login");
             }
+            ViewBag.CPCode = "NDJKLB";
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
@@ -437,8 +454,53 @@ namespace SignalR.Controllers
             return result;
         }
 
+        public JsonResult GetTodyRopert(string cpcode="cqssc", string issuenum="")
+        { 
+            var msg = "网络延迟,请稍后再试";
+            int totalCount = 0;
+            var bibett = LotteryOrderBusiness.GetIssueNumFee(cpcode, issuenum.Trim(), "");
+            var fee=M_UsersBusiness.GetUserAccount(CurrentUser.UserID);
+            var result = UserReportBussiness.GetReportList(DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59", CurrentUser.UserID, 1, 1, ref totalCount, ref totalCount);
+            JsonDictionary.Add("result", result);
+            JsonDictionary.Add("bettfee", bibett);
+            JsonDictionary.Add("fee", fee);
+            JsonDictionary.Add("Errmsg", msg);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public JsonResult GetlotteryResult(string cpcode)
+        { 
+            JsonDictionary.Add("item", LotteryResultBusiness.GetNowLottery(cpcode, " and a.status!=2 "));
+            return new JsonResult()
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
 
-
+        public JsonResult GetIssueNumFee(string cpcode, string issuenum = "", string type = "")
+        {
+            var result = LotteryOrderBusiness.GetIssueNumFee(cpcode, issuenum.Trim(), type);
+            JsonDictionary.Add("PayFee", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
+        public JsonResult GetUserAccount()
+        {
+            var model = M_UsersBusiness.GetUserAccount(CurrentUser.UserID);
+            JsonDictionary.Add("Fee", model.AccountFee); 
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
         #region Api
         public string fnSendSysMsg(string msg, string hubname = "cqssc")
         {
