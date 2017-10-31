@@ -19,7 +19,7 @@ namespace SignalrTest.Controllers
         {
             if (Session["Manager"] == null)
             {
-                return Redirect("/Home/Login");
+                return Redirect("/Home/Login1");
             }
             return View();
         }
@@ -30,19 +30,20 @@ namespace SignalrTest.Controllers
         }
         public ActionResult Login()
         {
-            if (Session["IsLogin"] != null)
-            {
-                return Redirect("/Home/Login1");
-            }
-            return View();
+            return Redirect("/Home/Login1");
+            //if (Session["IsLogin"] != null)
+            //{
+            //    return Redirect("/Home/Login1");
+            //}
+            //return View();
         }
         public ActionResult Login1()
         {
-            if (Session["IsLogin"] == null || Session["IsLogin"].ToString() != CommonBusiness.GetAppSet().Where(x => x.KName == "Login").FirstOrDefault().KValue)
-            {
-                Session.RemoveAll();
-                return Redirect("/Home/Login");
-            }
+            //if (Session["IsLogin"] == null || Session["IsLogin"].ToString() != CommonBusiness.GetAppSet().Where(x => x.KName == "Login").FirstOrDefault().KValue)
+            //{
+            //    Session.RemoveAll();
+            //    return Redirect("/Home/Login");
+            //}
             if (CurrentUser != null)
             {
                 return Redirect("/Home/Index");

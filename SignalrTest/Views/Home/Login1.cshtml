@@ -50,7 +50,7 @@
 	        }
 	        $.post('/Home/UserLogin', { userName: loginuser, pwd: typepw }, function (data) {
 	            if (data.result == 1) {
-	                location.href = "/Home/Index";
+	                location.href = "/Base/CQLottery";
 	            } else {
 	                window.wxc.xcConfirm('账户或密码不正确', window.wxc.xcConfirm.typeEnum.warning);
 	            }

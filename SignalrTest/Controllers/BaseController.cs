@@ -219,16 +219,7 @@ namespace SignalR.Controllers
 
         public void SendMessage(string nickName, string message)
         {
-            var strs=message.Trim().Split('/');
-            if (strs.Length == 3) {
-                foreach (string item in strs)
-                {
-                    if (!string.IsNullOrEmpty(item)) {
-
-                    }
-                }
-            }
-
+       
             Clients.All.NotifySendMessage(nickName, message);
         }
 
@@ -501,6 +492,71 @@ namespace SignalR.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
+        public string MessageInfo(string message,string cpcode)
+        {
+            string mes = "处理失败";
+            var strs = message.Trim().Split('/');
+            string[] list1 = new string[] { };
+            string[] list2 = new string[] { };
+            string[] list3 = new string[] { };
+            if (strs.Length == 3)
+            {
+                if (strs[1].Trim().IndexOf("龙") > -1 || strs[1].Trim().IndexOf("虎") > -1 || strs[1].Trim().IndexOf("和") > -1)
+                {
+                    var chars = strs[1].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if ("龙虎和".IndexOf(s) > -1)
+                        {
+                            list2[list2.Count()] = c.ToString();
+                        }
+                    }
+                   // list[1]=
+                }
+                else {
+                    var chars = strs[0].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if (cpcode.ToLower() == "bjsc")
+                        {
+
+                        }
+                        else
+                        {
+                            if ("万千百十个".IndexOf(s) > -1)
+                            {
+                                list1[list1.Count()] = c.ToString();
+                            }
+                        }
+                    }
+                    chars = strs[1].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if ("龙虎和".IndexOf(s) > -1)
+                        {
+                            list2[list2.Count()] = c.ToString();
+                        }
+                    }
+                    chars = strs[2].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if ("龙虎和".IndexOf(s) > -1)
+                        {
+                            list3[list3.Count()] = c.ToString();
+                        }
+                    }
+                }
+            }
+
+
+            return mes;
+        }
+
         #region Api
         public string fnSendSysMsg(string msg, string hubname = "cqssc")
         {
