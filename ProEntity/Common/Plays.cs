@@ -17,7 +17,7 @@ namespace ProEntity
         public int PLen { get; set; }
         public string PIDS { get; set; }
         public int Status { get; set; }
-
+        public string CPCode { get; set; }
         public List<Plays> ChildPlays{get;set;} 
         // , , ,拼接
         public string Content { get; set; }
@@ -28,7 +28,7 @@ namespace ProEntity
 
         ///单注限额
         public string BettMax { get; set; }
-
+        public string OutName { get; set; }
         /// <summary>
         /// 填充数据
         /// </summary>

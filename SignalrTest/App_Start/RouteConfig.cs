@@ -17,7 +17,7 @@ namespace SignalrTest
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Base", action = "BroadcastTest", id = UrlParameter.Optional }
+                defaults: new { controller = "Base", action = "CQLottery", id = UrlParameter.Optional }
             );
         }
     }

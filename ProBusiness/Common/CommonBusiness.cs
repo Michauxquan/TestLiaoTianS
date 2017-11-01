@@ -124,9 +124,31 @@ namespace ProBusiness
                 _lottertList = value;
             }
         }
-
+        private static List<Plays> _plays;
+        public static List<Plays> LottertPlays
+        {
+            get
+            {
+                if (_plays == null)
+                {
+                    _plays = new List<Plays>();
+                    DataTable dt = new CommonDAL().GetAllLotteryPlayInfo();
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        Plays model = new Plays();
+                        model.FillData(dr);
+                        _plays.Add(model);
+                    }
+                }
+                return _plays;
+            }
+            set
+            {
+                _plays = value;
+            }
+        }
         #endregion
-         
+
 
         /// <summary>
         /// 修改表中某字段值

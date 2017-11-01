@@ -18,6 +18,15 @@ namespace ProDAL
             DataTable dt = GetDataTable("select * from Menu where Type=1 and IsHide=0 order by Sort ");
             return dt;
         }
+        /// <summary>
+        /// 获取菜单
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetAllLotteryPlayInfo()
+        {
+            DataTable dt = GetDataTable("select * from LotteryPlayInfo ");
+            return dt;
+        }
 
         /// <summary>
         /// 获取后台菜单
