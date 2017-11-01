@@ -579,14 +579,16 @@ namespace SignalR.Controllers
                     list3[list3.Count()] = strs[2].Trim().Replace("共", "").Replace("各", "");
                 }
             }
-            Dictionary<string,string> plays = new Dictionary<string,string>();
+            Dictionary<string,string> tplays = new Dictionary<string,string>();
             foreach (string s in list1)
             {
                 foreach (string t in list2)
                 {
-                    if (!plays.ContainsKey(s + t))
+                    string key = s + t;
+                    string pid = plays.Where(x => x.OutName.IndexOf(key) > -1).FirstOrDefault().PIDS;
+                    if (!tplays.ContainsKey(s + t) && !string.IsNullOrWhiteSpace(pid))
                     {
-                        plays.Add(s + t,s+t);
+                        tplays.Add(s + t, pid);
                     }                    
                 }
             }
