@@ -299,7 +299,128 @@ namespace ProBusiness
                 comissuenum= jsonarr[comnum].Split(',')[type];
             } 
             return comissuenum;
-        } 
+        }
 
+
+        public string MessageInfo(string message,string cpcode,string issuenum,string uid) {
+            string mes = "处理失败";
+            List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode).ToList();
+            Lottery lottery = CommonBusiness.LottertList.Where(x => x.CPCode == cpcode).FirstOrDefault();
+            var strs = message.Trim().Split('/');
+            string[] list1 = new string[] { };
+            string[] list2 = new string[] { };
+            string[] list3 = new string[] { };
+            bool istotal = false;
+            if (strs.Length == 3)
+            {
+                var chars = strs[1].Trim().ToCharArray();
+                if (strs[1].Trim().IndexOf("龙") > -1 || strs[1].Trim().IndexOf("虎") > -1 || strs[1].Trim().IndexOf("和") > -1)
+                {
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if ("龙虎和".IndexOf(s) > -1)
+                        {
+                            list2[list2.Count()] = c.ToString();
+                        }
+                    }
+                    chars = strs[0].Trim().ToCharArray();
+                    string mv = "";
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if (cpcode.ToLower() == "bjsc")
+                        {
+
+                        }
+                        else
+                        {
+                            if ("万千百十个".IndexOf(s) > -1)
+                            {
+                                if (mv.Length == 2)
+                                {
+                                    list1[list1.Count()] = mv;
+                                    mv = s;
+                                }
+                                else
+                                {
+                                    mv = mv + s;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    chars = strs[0].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if (cpcode.ToLower() == "bjsc")
+                        {
+
+                        }
+                        else
+                        {
+                            if ("万千百十个".IndexOf(s) > -1)
+                            {
+                                list1[list1.Count()] = c.ToString();
+                            }
+                        }
+                    }
+                    chars = strs[1].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if ("龙虎和大小单双1234567890".IndexOf(s) > -1)
+                        {
+                            list2[list2.Count()] = s;
+                        }
+                    }
+                }
+                chars = strs[2].Trim().ToCharArray();
+                foreach (char c in chars)
+                {
+                    string s = c.ToString();
+                    if ("共".IndexOf(s) > -1)
+                    {
+                        istotal = true;
+                    }
+                    list3[list3.Count()] = strs[2].Trim().Replace("共", "").Replace("各", "");
+                }
+            }
+            List<LotteryOrder> orders = new List<LotteryOrder>();
+            Dictionary<string, string> tplays = new Dictionary<string, string>();
+            foreach (string s in list1)
+            {
+                foreach (string t in list2)
+                {
+                    string key = s + t;
+                    string pid = plays.Where(x => x.OutName.IndexOf(key) > -1).FirstOrDefault().PIDS;
+                    if (!tplays.ContainsKey(s + t) && !string.IsNullOrWhiteSpace(pid))
+                    {
+                        LotteryOrder order = new LotteryOrder();
+                        order.CPCode = cpcode.ToUpper();
+                        order.CPName = lottery.CPName;
+                        order.Status = 0;
+                        order.TypeName = key;
+                        order.Type = pid;
+                        order.Num = 1;
+                        order.PMuch = 1;
+                        order.RPoint = 0;
+                        order.MType = 0;
+                        order.ModelName = "";
+                        order.PayFee = Convert.ToDecimal(list3[list3.Count()]);
+                        order.Content = t;
+                        order.UserID = uid;
+                        order.IssueNum = issuenum;
+                        orders.Add(order);
+                        tplays.Add(s + t, pid);
+                    }
+                }
+            }
+
+            return mes;
+        }
     }
 }

@@ -565,7 +565,10 @@ from #orderreport
                }
                if (!result)
                {
-                   msg += errormsg+" ";
+                   if (msg.IndexOf(errormsg.Trim()) == -1)
+                   {
+                       msg += errormsg + " ";
+                   }
                }
                else
                {

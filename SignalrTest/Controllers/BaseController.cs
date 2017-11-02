@@ -173,7 +173,7 @@ namespace SignalR.Controllers
             Clients.All.NotifyUserEnter(nickName, users);
         }
 
-        public void SendMessage(string nickName, string message)
+        public void SendMessage(string nickName, string message, string issuenum, string uid)
         { 
             Clients.All.NotifySendMessage(nickName, message);
         }
@@ -217,7 +217,7 @@ namespace SignalR.Controllers
             Clients.All.NotifyUserEnter(nickName, users);
         }
 
-        public void SendMessage(string nickName, string message)
+        public void SendMessage(string nickName, string message, string issuenum, string uid)
         {
        
             Clients.All.NotifySendMessage(nickName, message);
@@ -261,7 +261,7 @@ namespace SignalR.Controllers
             Clients.All.NotifyUserEnter(nickName, users);
         }
 
-        public void SendMessage(string nickName, string message)
+        public void SendMessage(string nickName, string message, string issuenum, string uid)
         {
             Clients.All.NotifySendMessage(nickName, message);
         }
@@ -305,8 +305,9 @@ namespace SignalR.Controllers
             Clients.All.NotifyUserEnter(nickName, users);
         }
 
-        public void SendMessage(string nickName, string message)
+        public void SendMessage(string nickName, string message,string issuenum,string uid)
         {
+           // TaskService.BasService.MessageInfo(message, "NDJKLB", issuenum, uid);
             Clients.All.NotifySendMessage(nickName, message);
         }
 
@@ -359,6 +360,7 @@ namespace SignalR.Controllers
                 return Redirect("/Home/Login");
             }
             ViewBag.CPCode = "BJSC";
+            ViewBag.Uid = CurrentUser.UserID;
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
@@ -369,6 +371,7 @@ namespace SignalR.Controllers
                 return Redirect("/Home/Login");
             }
             ViewBag.CPCode = "CQSSC";
+            ViewBag.Uid = CurrentUser.UserID;
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
@@ -380,6 +383,7 @@ namespace SignalR.Controllers
             }
             ViewBag.CPCode = "NHGKLB";
             ViewBag.UserName = CurrentUser.LoginName;
+            ViewBag.Uid = CurrentUser.UserID;
             return View();
         }
         public ActionResult DJLottery()
@@ -389,6 +393,7 @@ namespace SignalR.Controllers
                 return Redirect("/Home/Login");
             }
             ViewBag.CPCode = "NDJKLB";
+            ViewBag.Uid = CurrentUser.UserID;
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
         }
@@ -493,26 +498,28 @@ namespace SignalR.Controllers
             };
         }
 
-        public string MessageInfo(string message,string cpcode)
+        public JsonResult MessageInfo(string message, string cpcode, string issuenum)
         {
-            string mes = "处理失败";
-            List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode).ToList();
-            var strs = message.Trim().Split('/');
-            string[] list1 = new string[] { };
-            string[] list2 = new string[] { };
-            string[] list3 = new string[] { };
-            bool istotal = false;
+            string mes = "";
+            var result = -1;
+            var strs = message.Trim().Split('/');         
             if (strs.Length == 3)
             {
+                List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode).ToList();
+                Lottery lottery = CommonBusiness.LottertList.Where(x => x.CPCode == cpcode.ToUpper()).FirstOrDefault();
+                List<string> list1 = new List<string>();
+                List<string> list2 = new List<string>();
+                List<string> list3 = new List<string>();
+                bool istotal = false;
                 var chars = strs[1].Trim().ToCharArray();
                 if (strs[1].Trim().IndexOf("龙") > -1 || strs[1].Trim().IndexOf("虎") > -1 || strs[1].Trim().IndexOf("和") > -1)
-                {                    
+                {
                     foreach (char c in chars)
                     {
                         string s = c.ToString();
                         if ("龙虎和".IndexOf(s) > -1)
                         {
-                            list2[list2.Count()] = c.ToString();
+                            list2.Add(s);
                         }
                     }
                     chars = strs[0].Trim().ToCharArray();
@@ -528,20 +535,18 @@ namespace SignalR.Controllers
                         {
                             if ("万千百十个".IndexOf(s) > -1)
                             {
+                                mv = mv + s;
                                 if (mv.Length == 2)
                                 {
-                                    list1[list1.Count()] = mv;
-                                    mv = s;
+                                    list1.Add(mv);
+                                    mv ="";
                                 }
-                                else
-                                {
-                                    mv = mv + s;                                   
-                                }                                
                             }
                         }
                     }
                 }
-                else {
+                else
+                {
                     chars = strs[0].Trim().ToCharArray();
                     foreach (char c in chars)
                     {
@@ -554,7 +559,7 @@ namespace SignalR.Controllers
                         {
                             if ("万千百十个".IndexOf(s) > -1)
                             {
-                                list1[list1.Count()] = c.ToString();
+                                list1.Add(s);
                             }
                         }
                     }
@@ -564,38 +569,62 @@ namespace SignalR.Controllers
                         string s = c.ToString();
                         if ("龙虎和大小单双1234567890".IndexOf(s) > -1)
                         {
-                            list2[list2.Count()] =s;
+                            list2.Add(s);
                         }
-                    }                   
-                }
-                chars = strs[2].Trim().ToCharArray();
-                foreach (char c in chars)
-                {
-                    string s = c.ToString();
-                    if ("共".IndexOf(s) > -1)
-                    {
-                        istotal = true;
                     }
-                    list3[list3.Count()] = strs[2].Trim().Replace("共", "").Replace("各", "");
                 }
-            }
-            Dictionary<string,string> tplays = new Dictionary<string,string>();
-            foreach (string s in list1)
-            {
-                foreach (string t in list2)
+              
+                if (strs[2].IndexOf("共") > -1)
                 {
-                    string key = s + t;
-                    string pid = plays.Where(x => x.OutName.IndexOf(key) > -1).FirstOrDefault().PIDS;
-                    if (!tplays.ContainsKey(s + t) && !string.IsNullOrWhiteSpace(pid))
+                    istotal = true;
+                }  
+                list3.Add(System.Text.RegularExpressions.Regex.Replace(strs[2], @"[^0-9]+", "")); 
+                if (list1.Count > 0 && list2.Count > 0 && list3.Count > 0)
+                {
+                    List<LotteryOrder> orders = new List<LotteryOrder>();
+                    Dictionary<string, string> tplays = new Dictionary<string, string>();
+                    foreach (string s in list1)
                     {
-                        tplays.Add(s + t, pid);
-                    }                    
+                        foreach (string t in list2)
+                        {
+                            string key = s + t;
+                            string pid = plays.Where(x => x.OutName.IndexOf(key) > -1).FirstOrDefault().PIDS;
+                            if (!tplays.ContainsKey(s + t) && !string.IsNullOrWhiteSpace(pid))
+                            {
+                                LotteryOrder order = new LotteryOrder();
+                                order.CPCode = cpcode.ToUpper();
+                                order.CPName = lottery.CPName;
+                                order.Status = 0;
+                                order.TypeName = key;
+                                order.Type = pid;
+                                order.Num = 1;
+                                order.PMuch = 1;
+                                order.RPoint = 0;
+                                order.MType = 0;
+                                order.ModelName = "";
+                                order.PayFee = Convert.ToDecimal(list3[list3.Count-1]);
+                                order.Content = t;
+                                order.UserID = CurrentUser.UserID;
+                                order.IssueNum = issuenum;
+                                orders.Add(order);
+                                tplays.Add(s + t, pid);
+                            }
+                        }
+                    }
+                    result = LotteryOrderBusiness.CreateUserOrderList(orders, CurrentUser, OperateIP, 0, 4, ref mes);
+                }
+                else {
+                    mes = "输入格式不正确";
                 }
             }
-
-            return mes;
+            
+            JsonDictionary.Add("result", result>0?"投注成功":mes);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
         }
-
         #region Api
         public string fnSendSysMsg(string msg, string hubname = "cqssc")
         {
