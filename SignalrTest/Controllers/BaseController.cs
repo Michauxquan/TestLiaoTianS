@@ -601,7 +601,7 @@ namespace SignalR.Controllers
                                 order.PMuch = 1;
                                 order.RPoint = 0;
                                 order.MType = 0;
-                                order.ModelName = "";
+                                order.ModelName = "0/0%";
                                 order.PayFee = Convert.ToDecimal(list3[list3.Count-1]);
                                 order.Content = t;
                                 order.UserID = CurrentUser.UserID;
