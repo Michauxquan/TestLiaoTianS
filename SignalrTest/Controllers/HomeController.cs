@@ -30,12 +30,28 @@ namespace SignalrTest.Controllers
         }
         public ActionResult Login()
         {
+
             return Redirect("/Home/Login1");
             //if (Session["IsLogin"] != null)
             //{
             //    return Redirect("/Home/Login1");
             //}
             //return View();
+        }
+        public ActionResult LogOut()
+        {
+            HttpCookie cook = Request.Cookies["cp"];
+            if (cook != null)
+            {
+                cook["status"] = "0";
+                Response.Cookies.Add(cook);
+                if (CurrentUser != null)
+                {
+                    M_UsersBusiness.UpdLine(CurrentUser.UserID, 0);
+                }
+            }
+            Session.RemoveAll(); 
+            return Redirect("/Home/Login1"); 
         }
         public ActionResult Login1()
         {

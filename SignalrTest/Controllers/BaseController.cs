@@ -381,7 +381,7 @@ namespace SignalR.Controllers
             {
                 return Redirect("/Home/Login");
             }
-            ViewBag.CPCode = "NHGKLB";
+            ViewBag.CPCode = "XHGKLB";
             ViewBag.UserName = CurrentUser.LoginName;
             ViewBag.Uid = CurrentUser.UserID;
             return View();
@@ -392,7 +392,7 @@ namespace SignalR.Controllers
             {
                 return Redirect("/Home/Login");
             }
-            ViewBag.CPCode = "NDJKLB";
+            ViewBag.CPCode = "XDJKLB";
             ViewBag.Uid = CurrentUser.UserID;
             ViewBag.UserName = CurrentUser.LoginName;
             return View();
