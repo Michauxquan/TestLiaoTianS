@@ -142,13 +142,98 @@ namespace SignalR.Controllers
         {
             this.Groups.Add(this.Context.ConnectionId, id);
         }
-
-        
-
     }
 
+
+    public class overHub : Hub {
+        public static bool IsTrueMes(string cpcode,string message) {
+            bool result= false;
+            var strs = message.Trim().Split('/');
+            if (strs.Length == 3)
+            { 
+                List<string> list1 = new List<string>();
+                List<string> list2 = new List<string>();
+                List<string> list3 = new List<string>();
+                bool istotal = false;
+                var chars = strs[1].Trim().ToCharArray();
+                if (strs[1].Trim().IndexOf("龙") > -1 || strs[1].Trim().IndexOf("虎") > -1 || strs[1].Trim().IndexOf("和") > -1)
+                {
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if ("龙虎和".IndexOf(s) > -1)
+                        {
+                            list2.Add(s);
+                        }
+                    }
+                    chars = strs[0].Trim().ToCharArray();
+                    string mv = "";
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if (cpcode.ToLower() == "bjsc")
+                        {
+
+                        }
+                        else
+                        {
+                            if ("万千百十个".IndexOf(s) > -1)
+                            {
+                                mv = mv + s;
+                                if (mv.Length == 2)
+                                {
+                                    list1.Add(mv);
+                                    mv = "";
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    chars = strs[0].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if (cpcode.ToLower() == "bjsc")
+                        {
+
+                        }
+                        else
+                        {
+                            if ("万千百十个".IndexOf(s) > -1)
+                            {
+                                list1.Add(s);
+                            }
+                        }
+                    }
+                    chars = strs[1].Trim().ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        string s = c.ToString();
+                        if ("龙虎和大小单双1234567890".IndexOf(s) > -1)
+                        {
+                            list2.Add(s);
+                        }
+                    }
+                }
+
+                if (strs[2].IndexOf("共") > -1)
+                {
+                    istotal = true;
+                }
+                list3.Add(System.Text.RegularExpressions.Regex.Replace(strs[2], @"[^0-9]+", ""));
+                if (list1.Count > 0 && list2.Count > 0 && list3.Count > 0)
+                {
+                    result = true;
+                } 
+            }
+            return result;
+        }
+
+    }
     [HubName("ChatRoomHub")]
-    public class ChatHub : Hub
+    public class ChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
         public void UserEnter(string nickName)
@@ -174,8 +259,11 @@ namespace SignalR.Controllers
         }
 
         public void SendMessage(string nickName, string message, string issuenum, string uid)
-        { 
-            Clients.All.NotifySendMessage(nickName, message);
+        {
+            if (IsTrueMes("BJSC", message))
+            {
+                Clients.All.NotifySendMessage(nickName, message);
+            }
         }
 
         public override Task OnDisconnected()
@@ -191,7 +279,7 @@ namespace SignalR.Controllers
     }
 
     [HubName("CQRoomHub")]
-    public class CQChatHub : Hub
+    public class CQChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
         public void UserEnter(string nickName)
@@ -219,8 +307,10 @@ namespace SignalR.Controllers
 
         public void SendMessage(string nickName, string message, string issuenum, string uid)
         {
-       
-            Clients.All.NotifySendMessage(nickName, message);
+            if (IsTrueMes("CQSSC", message))
+            {
+                Clients.All.NotifySendMessage(nickName, message);
+            }
         }
 
         public override Task OnDisconnected()
@@ -235,7 +325,7 @@ namespace SignalR.Controllers
         }
     }
     [HubName("HGRoomHub")]
-    public class HGChatHub : Hub
+    public class HGChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
         public void UserEnter(string nickName)
@@ -263,7 +353,10 @@ namespace SignalR.Controllers
 
         public void SendMessage(string nickName, string message, string issuenum, string uid)
         {
-            Clients.All.NotifySendMessage(nickName, message);
+            if (IsTrueMes("XHGKLB", message))
+            {
+                Clients.All.NotifySendMessage(nickName, message);
+            }
         }
 
         public override Task OnDisconnected()
@@ -279,7 +372,7 @@ namespace SignalR.Controllers
     }
 
     [HubName("DJRoomHub")]
-    public class DJChatHub : Hub
+    public class DJChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
         public void UserEnter(string nickName)
@@ -307,8 +400,10 @@ namespace SignalR.Controllers
 
         public void SendMessage(string nickName, string message,string issuenum,string uid)
         {
-           // TaskService.BasService.MessageInfo(message, "NDJKLB", issuenum, uid);
-            Clients.All.NotifySendMessage(nickName, message);
+            if (IsTrueMes("XDJKLB", message))
+            {
+                Clients.All.NotifySendMessage(nickName, message);
+            }
         }
 
         public override Task OnDisconnected()
@@ -617,7 +712,6 @@ namespace SignalR.Controllers
                     mes = "输入格式不正确";
                 }
             }
-            
             JsonDictionary.Add("result", result>0?"投注成功":mes);
             return new JsonResult
             {
@@ -625,6 +719,8 @@ namespace SignalR.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
+
+
         #region Api
         public string fnSendSysMsg(string msg, string hubname = "cqssc")
         {
