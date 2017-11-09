@@ -35,26 +35,32 @@
     </div>
 </div>
 <script type="text/javascript">
-        $(function () {
-            $.post('/Base/GetlotteryResult', { cpcode: '@ViewBag.CPCode' }, function (data) {
-                var result = eval(data.item);
-                if (result != null && typeof (result.IssueNum) != 'undefined') {
-                    $('.panel-heading').data('issuenum', result.IssueNum); 
-                }
-            });
+    function getIssue() {
+        $.post('/Base/GetlotteryResult', { cpcode: '@ViewBag.CPCode' }, function (data) {
+            var result = eval(data.item);
+            if (result != null && typeof (result.IssueNum) != 'undefined') {
+                $('.panel-heading').data('issuenum', result.IssueNum);
+            }
         });
-        var userNickName='@ViewBag.UserName';
+    }
+    $(function () {
+        getIssue();
+        Getresult();
+        setInterval(function () { Getresult(); }, 400000); 
+    });
+    var userNickName = '@ViewBag.UserName';
+    var userTrueName = '@ViewBag.NickName';
         jQuery(document).ready(function () {
             while (!userNickName) {
                 userNickName = window.prompt("请输入昵称！");
             }
 
             var chatHub = $.connection.HGRoomHub;
-            chatHub.client.NotifySendMessage = function (nickName, message) {
+            chatHub.client.NotifySendMessage = function (nickName,userName,message) {
                 var userAvatar = 'http://forum.csdn.net/PointForum/ui/scripts/csdn/Plugin/001/face/29.gif';
                 if (nickName == userNickName) {
                     $("#div_msg").append("<div style='text-align:right;'>"
-                    + "<div float:right> <span style='margin-right:10px'>" + nickName + "</span>"
+                    + "<div float:right> <span style='margin-right:10px'>" + userName + "</span>"
                      + "<img src='" + userAvatar + "' style='height:30px;width:30px;position:relative'/>"
                     + "<div class='demo clearfix fr'>"
                     + "<span class='triangle'></span>"
@@ -64,7 +70,7 @@
                 else {
                     $("#div_msg").append("<div>"
                      + "<img src='" + userAvatar + "' style='height:30px;width:30px;position:relative'/>"
-                     + "<span style='left:10px;position:relative'>" + nickName + "</span>"
+                     + "<span style='left:10px;position:relative'>" + userName + "</span>"
                      + "<div class='demo clearfix'>"
                      + "<span class='triangle'></span>"
                      + "<div class='article othermsg'>" + message
@@ -76,7 +82,7 @@
             }
 
             $.connection.hub.start().done(function () {
-                chatHub.server.userEnter(userNickName);
+                chatHub.server.userEnter(userNickName, userTrueName);
             });
             $(document).on("keypress", function (e) {
                 if (e.keyCode == 13) {
@@ -120,39 +126,56 @@
         function GetToday() {
             $.post('/Base/GetTodyRopert', {cpcode:'@ViewBag.CPCode',issuenum:  $('.panel-heading').data('issuenum')}, function (data) {
                 var dt = eval(data)
-                if (dt.result[0].length > 0) {
-                    $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
-                  + "<div style='margin:0 auto;width:80%'> <span style='text-align:center;'>♣♣系统私信♣♣</span>"
-                  + "<br/><span style='text-align:center;'>我的余额:" + parseFloat(dt.fee.AccountFee).toFixed(2) + "</span>"
-                  + "<br/><span style='text-align:center;'>本期投注:" + parseFloat(dt.bettfee == "" ? "0" : dt.bettfee).toFixed(2) + "</span>"
-                  + "<br/><span style='text-align:center;'>今日投注:" + parseFloat(dt.result[0].TotalPayMent).toFixed(2) + "</span>"
-                  + "<br/><span style='text-align:center;'>今日中奖:" + parseFloat(dt.result[0].TotalWin).toFixed(2) + "</span>"
-                  + "<br/><span style='text-align:center;'>今日盈亏:" + parseFloat(dt.result[0].TotalWin - result[0].TotalPayMent).toFixed(2) + "</span>"
-                  + "</div></div><div class='clear-float'/>");
-                } else {
-                    $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
-                    + "<div style='margin:0 auto;width:80%'> <span style='text-align:center;'>♣♣系统私信♣♣</span>"
-                    + "<br/><span style='text-align:center;'>我的余额:" + parseFloat(dt.fee.AccountFee).toFixed(2) + "</span>"
-                    + "<br/><span style='text-align:center;'>本期投注:" + parseFloat(dt.bettfee == "" ? "0" : dt.bettfee).toFixed(2) + "</span>"
-                    + "<br/><span style='text-align:center;'>今日投注:0</span>"
-                    + "<br/><span style='text-align:center;'>今日中奖:0</span>"
-                    + "<br/><span style='text-align:center;'>今日盈亏:0</span>"
-                    + "</div></div><div class='clear-float'/>");
-                }
+                $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
+             + "<div style='margin:0 auto;width:80%'> <span style='text-align:center;'>♣♣系统私信♣♣</span>"
+             + "<br/><span style='text-align:center;'>我的余额:" + parseFloat(dt.fee.AccountFee).toFixed(2) + "</span>"
+             + "<br/><span style='text-align:center;'>本期投注:" + parseFloat(dt.bettfee == "" ? "0" : dt.bettfee).toFixed(2) + "</span>"
+             + "<br/><span style='text-align:center;'>今日投注:" + parseFloat(dt.totalpayment).toFixed(2) + "</span>"
+             + "<br/><span style='text-align:center;'>今日中奖:" + parseFloat(dt.totalwin).toFixed(2) + "</span>"
+             + "<br/><span style='text-align:center;'>今日盈亏:" + parseFloat(dt.yl).toFixed(2) + "</span>"
+             + "</div></div><div class='clear-float'/>");
+                var objDiv = document.getElementById("div_msgbody");
+                objDiv.scrollTop = objDiv.scrollHeight;
             });
         }
-   function SendInfo(message) {
-            $.post('/Base/MessageInfo', {message:message,
-                cpcode:'@ViewBag.CPCode',
-                issuenum: $('.panel-heading').data('issuenum') },
-                function (data) {
-                    var dt = eval(data);
-                    if (+dt.result != "") {
-                        $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
-                        + "<div style='margin:0 auto;width:80%;text-align:center;'> " + dt.result + "</div></div><div class='clear-float'/>");
-                    }
-                });
-        }
+    function SendInfo(message) {
+        $.post('/Base/MessageInfo', {
+            message: message,
+            cpcode: '@ViewBag.CPCode',
+            issuenum: $('.panel-heading').data('issuenum')
+        },
+            function (data) {
+                var dt = eval(data);
+                if (dt.result != "") {
+                    $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
+                    + "<div style='margin:0 auto;width:80%;text-align:center;'> " + dt.result + "</div></div><div class='clear-float'/>");
+                    var objDiv = document.getElementById("div_msgbody");
+                    objDiv.scrollTop = objDiv.scrollHeight;
+                }
+            });
+    }
+
+    function Getresult() {
+        $.post('/Base/LotterryResultList', { cpcode: '@ViewBag.CPCode' }, function (data) {
+            var html = "<div style='text-align:center;padding:15px;background-color: #eee;color:#333;'>"
+            + "<div style='margin:0 auto;width:80%;line-height:22px;'> ====开奖历史====<br/>";
+            var list11 = [];
+            for (var i = 0; i < data.items.length; i++) {
+                var jg = data.items[i].ResultNum.split(' ');
+                var colr = parseInt(jg[0]) > parseInt(jg[4]) ? "龙" : (parseInt(jg[0]) < parseInt(jg[4]) ? "虎" : "和");
+                var color = colr == "龙" ? "#e21e1e" : (colr == "虎" ? "#0060bd" : "#0dad54");
+                html += data.items[i].IssueNum + "期"
+                    + "&nbsp; &nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:#e21e1e;border-radius: 50%;'>" + jg[0] + "</font>&nbsp"
+                    + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black ;border-radius: 50%;'>" + jg[1] + "</font> &nbsp;"
+                    + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black ;border-radius: 50%;'>" + jg[2] + "</font>&nbsp;"
+                    + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black;border-radius: 50%;'>" + jg[3] + "</font> &nbsp;"
+                    + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:#e21e1e;border-radius: 50%;'>" + jg[4] + "</font> &nbsp; &nbsp"
+                    + "<font style='color: #fff;text-align: center;padding:1px 3px;font-size:12px;background-color:" + color + " ;border-radius: 50%;'>" + colr + "</font><br/>";
+            }
+            html += "</div></div><div class='clear-float'/>";
+            $("#div_msg").append(html);
+        });
+    }
 </script>
 
 

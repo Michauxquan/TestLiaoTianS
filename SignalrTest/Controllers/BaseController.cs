@@ -148,13 +148,16 @@ namespace SignalR.Controllers
     public class overHub : Hub {
         public static bool IsTrueMes(string cpcode,string message) {
             bool result= false;
-            var strs = message.Trim().Split('/');
+            var strs = message.Trim().Split(' ');
+            if (strs.Length == 2) {
+                message = "万个 " + message.Trim();
+                strs = message.Split(' ');
+            }
             if (strs.Length == 3)
             { 
                 List<string> list1 = new List<string>();
                 List<string> list2 = new List<string>();
-                List<string> list3 = new List<string>();
-                bool istotal = false;
+                List<string> list3 = new List<string>(); 
                 var chars = strs[1].Trim().ToCharArray();
                 if (strs[1].Trim().IndexOf("龙") > -1 || strs[1].Trim().IndexOf("虎") > -1 || strs[1].Trim().IndexOf("和") > -1)
                 {
@@ -216,12 +219,7 @@ namespace SignalR.Controllers
                             list2.Add(s);
                         }
                     }
-                }
-
-                if (strs[2].IndexOf("共") > -1)
-                {
-                    istotal = true;
-                }
+                } 
                 list3.Add(System.Text.RegularExpressions.Regex.Replace(strs[2], @"[^0-9]+", ""));
                 if (list1.Count > 0 && list2.Count > 0 && list3.Count > 0)
                 {
@@ -236,17 +234,19 @@ namespace SignalR.Controllers
     public class ChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
-        public void UserEnter(string nickName)
+        public void UserEnter(string nickName,string username="")
         {
             UserEntity userEntity = new UserEntity
             {
                 NickName = nickName,
+                UserName= username,
                 ConnectionId = Context.ConnectionId
             };
             if (!users.Where(x => x.NickName == "系统管理员").Any()) {
                 UserEntity userEntity2 = new UserEntity
                 {
                     NickName = "系统管理员",
+                    UserName = "系统管理员",
                     ConnectionId = Context.ConnectionId
                 };
                 users.Add(userEntity2);
@@ -262,7 +262,8 @@ namespace SignalR.Controllers
         {
             if (IsTrueMes("BJSC", message))
             {
-                Clients.All.NotifySendMessage(nickName, message);
+                UserEntity user = users.Where(x => x.NickName == nickName).FirstOrDefault();
+                Clients.All.NotifySendMessage(nickName, user.UserName, message);
             }
         }
 
@@ -282,11 +283,12 @@ namespace SignalR.Controllers
     public class CQChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
-        public void UserEnter(string nickName)
+        public void UserEnter(string nickName,string username="")
         {
             UserEntity userEntity = new UserEntity
             {
                 NickName = nickName,
+                UserName = username,
                 ConnectionId = Context.ConnectionId
             };
             if (!users.Where(x => x.NickName == "系统管理员").Any())
@@ -294,6 +296,7 @@ namespace SignalR.Controllers
                 UserEntity userEntity2 = new UserEntity
                 {
                     NickName = "系统管理员",
+                    UserName = "系统管理员",
                     ConnectionId = Context.ConnectionId
                 };
                 users.Add(userEntity2);
@@ -309,7 +312,8 @@ namespace SignalR.Controllers
         {
             if (IsTrueMes("CQSSC", message))
             {
-                Clients.All.NotifySendMessage(nickName, message);
+                UserEntity user = users.Where(x => x.NickName == nickName).FirstOrDefault();
+                Clients.All.NotifySendMessage(nickName, user.UserName, message);
             }
         }
 
@@ -328,11 +332,12 @@ namespace SignalR.Controllers
     public class HGChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
-        public void UserEnter(string nickName)
+        public void UserEnter(string nickName,string username="")
         {
             UserEntity userEntity = new UserEntity
             {
                 NickName = nickName,
+                UserName=username,
                 ConnectionId = Context.ConnectionId
             };
             if (!users.Where(x => x.NickName == "系统管理员").Any())
@@ -340,6 +345,7 @@ namespace SignalR.Controllers
                 UserEntity userEntity2 = new UserEntity
                 {
                     NickName = "系统管理员",
+                    UserName = "系统管理员",
                     ConnectionId = Context.ConnectionId
                 };
                 users.Add(userEntity2);
@@ -355,7 +361,8 @@ namespace SignalR.Controllers
         {
             if (IsTrueMes("XHGKLB", message))
             {
-                Clients.All.NotifySendMessage(nickName, message);
+                UserEntity user = users.Where(x => x.NickName == nickName).FirstOrDefault();
+                Clients.All.NotifySendMessage(nickName, user.UserName, message);
             }
         }
 
@@ -375,11 +382,12 @@ namespace SignalR.Controllers
     public class DJChatHub : overHub
     {
         static List<UserEntity> users = new List<UserEntity>();
-        public void UserEnter(string nickName)
+        public void UserEnter(string nickName,string username="")
         {
             UserEntity userEntity = new UserEntity
             {
                 NickName = nickName,
+                UserName=username,
                 ConnectionId = Context.ConnectionId
             };
             if (!users.Where(x => x.NickName == "系统管理员").Any())
@@ -387,6 +395,7 @@ namespace SignalR.Controllers
                 UserEntity userEntity2 = new UserEntity
                 {
                     NickName = "系统管理员",
+                    UserName = "系统管理员",
                     ConnectionId = Context.ConnectionId
                 };
                 users.Add(userEntity2);
@@ -402,7 +411,8 @@ namespace SignalR.Controllers
         {
             if (IsTrueMes("XDJKLB", message))
             {
-                Clients.All.NotifySendMessage(nickName, message);
+                UserEntity user = users.Where(x => x.NickName == nickName).FirstOrDefault();
+                Clients.All.NotifySendMessage(nickName, user.UserName, message);
             }
         }
 
@@ -420,7 +430,7 @@ namespace SignalR.Controllers
     public class UserEntity
     {
         public string NickName { get; set; }
-
+        public string UserName { get; set; }
         public string ConnectionId { get; set; }
         public string Actar { get; set; }
     }
@@ -457,6 +467,7 @@ namespace SignalR.Controllers
             ViewBag.CPCode = "BJSC";
             ViewBag.Uid = CurrentUser.UserID;
             ViewBag.UserName = CurrentUser.LoginName;
+            ViewBag.NickName = CurrentUser.UserName;
             return View();
         }
 
@@ -468,6 +479,7 @@ namespace SignalR.Controllers
             ViewBag.CPCode = "CQSSC";
             ViewBag.Uid = CurrentUser.UserID;
             ViewBag.UserName = CurrentUser.LoginName;
+            ViewBag.NickName = CurrentUser.UserName;
             return View();
         }
         public ActionResult HGLottery()
@@ -479,6 +491,7 @@ namespace SignalR.Controllers
             ViewBag.CPCode = "XHGKLB";
             ViewBag.UserName = CurrentUser.LoginName;
             ViewBag.Uid = CurrentUser.UserID;
+            ViewBag.NickName = CurrentUser.UserName;
             return View();
         }
         public ActionResult DJLottery()
@@ -490,6 +503,7 @@ namespace SignalR.Controllers
             ViewBag.CPCode = "XDJKLB";
             ViewBag.Uid = CurrentUser.UserID;
             ViewBag.UserName = CurrentUser.LoginName;
+            ViewBag.NickName = CurrentUser.UserName;
             return View();
         }
         //进度条  
@@ -550,9 +564,12 @@ namespace SignalR.Controllers
             var msg = "网络延迟,请稍后再试";
             int totalCount = 0;
             var bibett = LotteryOrderBusiness.GetIssueNumFee(cpcode, issuenum.Trim(), "");
-            var fee=M_UsersBusiness.GetUserAccount(CurrentUser.UserID);
-            var result = UserReportBussiness.GetReportList(DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00", DateTime.Now.ToString("yyyy-MM-dd") + " 23:59:59", CurrentUser.UserID, 1, 1, ref totalCount, ref totalCount);
-            JsonDictionary.Add("result", result);
+            var fee=M_UsersBusiness.GetUserAccount(CurrentUser.UserID);           
+            var totalpayment = CommonBusiness.Select("AccountOperateRecord", "isnull(SUM(isnull(AccountChange,0)),0)", "PlayType in(4,5) and CreateTime>'" + DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00'");
+            var userwin = CommonBusiness.Select("AccountOperateRecord", "isnull(SUM(isnull(AccountChange,0)),0)", "PlayType =8 and CreateTime>'" + DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00'");
+            JsonDictionary.Add("totalpayment", totalpayment);
+            JsonDictionary.Add("totalwin", totalpayment);
+            JsonDictionary.Add("yl", Convert.ToDecimal(userwin) - Convert.ToDecimal(totalpayment));
             JsonDictionary.Add("bettfee", bibett);
             JsonDictionary.Add("fee", fee);
             JsonDictionary.Add("Errmsg", msg);
@@ -597,15 +614,18 @@ namespace SignalR.Controllers
         {
             string mes = "";
             var result = -1;
-            var strs = message.Trim().Split('/');         
+            var strs = message.Trim().Split(' ');
+            if (strs.Length == 2) {
+                message ="万个 "+message.Trim();
+                strs = message.Trim().Split(' ');
+            }
             if (strs.Length == 3)
             {
                 List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode).ToList();
                 Lottery lottery = CommonBusiness.LottertList.Where(x => x.CPCode == cpcode.ToUpper()).FirstOrDefault();
                 List<string> list1 = new List<string>();
                 List<string> list2 = new List<string>();
-                List<string> list3 = new List<string>();
-                bool istotal = false;
+                List<string> list3 = new List<string>(); 
                 var chars = strs[1].Trim().ToCharArray();
                 if (strs[1].Trim().IndexOf("龙") > -1 || strs[1].Trim().IndexOf("虎") > -1 || strs[1].Trim().IndexOf("和") > -1)
                 {
@@ -669,10 +689,7 @@ namespace SignalR.Controllers
                     }
                 }
               
-                if (strs[2].IndexOf("共") > -1)
-                {
-                    istotal = true;
-                }  
+              
                 list3.Add(System.Text.RegularExpressions.Regex.Replace(strs[2], @"[^0-9]+", "")); 
                 if (list1.Count > 0 && list2.Count > 0 && list3.Count > 0)
                 {
@@ -697,7 +714,7 @@ namespace SignalR.Controllers
                                 order.RPoint = 0;
                                 order.MType = 0;
                                 order.ModelName = "0/0%";
-                                order.PayFee = Convert.ToDecimal(list3[list3.Count-1]);
+                                order.PayFee =0;
                                 order.Content = t;
                                 order.UserID = CurrentUser.UserID;
                                 order.IssueNum = issuenum;
@@ -706,7 +723,22 @@ namespace SignalR.Controllers
                             }
                         }
                     }
-                    result = LotteryOrderBusiness.CreateUserOrderList(orders, CurrentUser, OperateIP, 0, 4, ref mes);
+                    if (orders.Count > 1) {
+                        decimal payfee= Convert.ToDecimal(Convert.ToInt32(Convert.ToInt32(list3[list3.Count-1])/ orders.Count));
+                        if (payfee > 10)
+                        {
+                            orders.ForEach(x => x.PayFee = payfee);
+                            result = LotteryOrderBusiness.CreateUserOrderList(orders, CurrentUser, OperateIP, 0, 4, ref mes);
+                        }
+                        else {
+                            mes = "单注金额必须大于10元";
+                        }
+                    }
+                    else
+                    {
+                        mes = "输入格式不正确";
+                    }
+
                 }
                 else {
                     mes = "输入格式不正确";
@@ -720,6 +752,16 @@ namespace SignalR.Controllers
             };
         }
 
+        public JsonResult LotterryResultList(string cpcode) {
+            int totalcount = 0;
+            var result =LotteryResultBusiness.GetPagList(cpcode, 2, false, 10, 1, ref totalcount, ref totalcount,DateTime.Now.AddHours(-2).ToString("yyyy-MM-dd HH:mm:ss"));
+            JsonDictionary.Add("items", result);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
 
         #region Api
         public string fnSendSysMsg(string msg, string hubname = "cqssc")
