@@ -532,7 +532,7 @@ namespace SignalR.Controllers
                 else if (hubname.ToLower() == "xdjklb") {
                     hub = GlobalHost.ConnectionManager.GetHubContext<DJChatHub>();
                 }
-                hub.Clients.All.notice("【系统消息】"+ msg); 
+                hub.Clients.All.notice("【系统消息】<br/>" + msg); 
                 result = "发送成功!";
             }
             catch (Exception e)
@@ -784,7 +784,7 @@ namespace SignalR.Controllers
                 {
                     hub = GlobalHost.ConnectionManager.GetHubContext<DJChatHub>();
                 }
-                hub.Clients.All.notice("【系统消息】" + msg);
+                hub.Clients.All.notice("【系统消息】<br/>" + msg);
                 result = "发送成功!";
             }
             catch (Exception e)

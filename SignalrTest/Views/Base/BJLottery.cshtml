@@ -121,8 +121,8 @@
         function GetToday() {
             $.post('/Base/GetTodyRopert', {cpcode:'@ViewBag.CPCode',issuenum:  $('.panel-heading').data('issuenum')}, function (data) {
                 var dt = eval(data)
-                $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
-             + "<div style='margin:0 auto;width:80%'> <span style='text-align:center;'>♣♣系统私信♣♣</span>"
+                $("#div_msg").append("<div style='text-align:center;padding:15px 5px;background-color: #eee;color:#009c06;'>"
+             + "<div style='margin:0 auto;width:100%'> <span style='text-align:center;'>♣♣系统私信♣♣</span>"
              + "<br/><span style='text-align:center;'>我的余额:" + parseFloat(dt.fee.AccountFee).toFixed(2) + "</span>"
              + "<br/><span style='text-align:center;'>本期投注:" + parseFloat(dt.bettfee == "" ? "0" : dt.bettfee).toFixed(2) + "</span>"
              + "<br/><span style='text-align:center;'>今日投注:" + parseFloat(dt.totalpayment).toFixed(2) + "</span>"
