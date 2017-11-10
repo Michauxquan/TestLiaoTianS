@@ -160,19 +160,19 @@
 
         function Getresult() {
             $.post('/Base/LotterryResultList', { cpcode: '@ViewBag.CPCode' }, function (data) {
-                var html = "<div style='text-align:center;padding:15px;background-color: #eee;color:#333;'>"
-                + "<div style='margin:0 auto;width:80%;line-height:22px;'> ====开奖历史====<br/>";
+                var html = "<div style='text-align:center;padding:15px 5px;background-color: #eee;color:#333;'>"
+                + "<div style='margin:0 auto;width:100%;line-height:22px;'> ====开奖历史====<br/>";
                 var list11 = [];
                 for (var i = 0; i < data.items.length; i++) {
                     var jg = data.items[i].ResultNum.split(' ');
                     var colr = parseInt(jg[0]) > parseInt(jg[4]) ? "龙" : (parseInt(jg[0]) < parseInt(jg[4]) ? "虎" : "和");
                     var color = colr == "龙" ? "#e21e1e" : (colr == "虎" ? "#0060bd" : "#0dad54");
                     html += data.items[i].IssueNum + "期"
-                        + "&nbsp; &nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:#e21e1e;border-radius: 50%;'>" + jg[0] + "</font>&nbsp"
-                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black ;border-radius: 50%;'>" + jg[1] + "</font> &nbsp;"
-                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black ;border-radius: 50%;'>" + jg[2] + "</font>&nbsp;"
-                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black;border-radius: 50%;'>" + jg[3] + "</font> &nbsp;"
-                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:#e21e1e;border-radius: 50%;'>" + jg[4] + "</font> &nbsp; &nbsp"
+                        + "&nbsp; &nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:#e21e1e;border-radius: 50%;'>" + jg[0] + "</font>"
+                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black ;border-radius: 50%;'>" + jg[1] + "</font>"
+                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black ;border-radius: 50%;'>" + jg[2] + "</font>"
+                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:black;border-radius: 50%;'>" + jg[3] + "</font>"
+                        + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:#e21e1e;border-radius: 50%;'>" + jg[4] + "</font>&nbsp;"
                         + "<font style='color: #fff;text-align: center;padding:1px 3px;font-size:10px;background-color:" + color + " ;border-radius: 50%;'>" + colr + "</font><br/>";
                 }
                 html += "</div>";
