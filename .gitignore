@@ -22,7 +22,10 @@ Thunbs.db
 *.lib
 *.sbr
 obj/
+bin/
 [Rr]elease*/
 _ReSharper*/
 *.Debug/
 *.debug/
+*.dll
+*.dll
