@@ -621,7 +621,7 @@ namespace SignalR.Controllers
             }
             if (strs.Length == 3)
             {
-                List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode).ToList();
+                List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode && x.OutName!=null).ToList();
                 Lottery lottery = CommonBusiness.LottertList.Where(x => x.CPCode == cpcode.ToUpper()).FirstOrDefault();
                 List<string> list1 = new List<string>();
                 List<string> list2 = new List<string>();

@@ -46,7 +46,7 @@
     $(function () {
         getIssue();
         Getresult();
-        setInterval(function () { Getresult(); }, 400000);
+        setInterval(function () { Getresult(); }, 40000);
     });
     var userNickName = '@ViewBag.UserName';
     var userTrueName = '@ViewBag.NickName';
@@ -157,7 +157,6 @@
         $.post('/Base/LotterryResultList', { cpcode: '@ViewBag.CPCode' }, function (data) {
             var html = "<div style='text-align:center;padding:15px;background-color: #eee;color:#333;'>"
             + "<div style='margin:0 auto;width:80%;line-height:22px;'> ====开奖历史====<br/>";
-            var list11 = []; 
             for (var i = 0; i < data.items.length; i++) {
                 var jg = data.items[i].ResultNum.split(' '); 
                 var colr = parseInt(jg[0]) > parseInt(jg[4]) ? "龙" : (parseInt(jg[0]) < parseInt(jg[4]) ? "虎" : "和");
@@ -170,9 +169,64 @@
                     + "&nbsp;<font style='color: #fff;text-align: center;padding:1px 6px;font-size:12px;background-color:#e21e1e;border-radius: 50%;'>" + jg[4] + "</font> &nbsp; &nbsp"
                     +"<font style='color: #fff;text-align: center;padding:1px 3px;font-size:12px;background-color:" + color + " ;border-radius: 50%;'>" + colr + "</font><br/>";
             }
-            html += "</div></div><div class='clear-float'/>";
+            html += "</div>";
+            html += "<div style='margin:0 auto;width:80%;line-height:22px;'> =======长龙======<br/>";          
+            var wan=getKey(data.items, 0);
+            var qian=getKey(data.items, 1);
+            var bai=getKey(data.items, 2);
+            var shi=getKey(data.items, 3);
+            var ge = getKey(data.items, 4);
+            html += "万位→";
+            for (var key in wan) {
+                html +="&nbsp;"+ key + ":" + wan[key]+"期 &nbsp;"
+            }
+            html += "<br/>";
+            html += "千位→";
+            for (var key in qian) {
+                html += "&nbsp;" + key + ":" + qian[key] + "期 &nbsp;"
+            }
+            html += "<br/>";
+            html += "百位→";
+            for (var key in bai) {
+                html += "&nbsp;" + key + ":" + bai[key] + "期 &nbsp;"
+            }
+            html += "<br/>";
+            html += "十位→";
+            for (var key in shi) {
+                html += "&nbsp;" + key + ":" + shi[key] + "期 &nbsp;"
+            }
+            html += "<br/>";
+            html += "个位→";
+            for (var key in ge) {
+                html += "&nbsp;" + key + ":" + ge[key] + "期 &nbsp;"
+            }
+            html += "<br/> ================<br/>";
+            html += "</div>";
+            html += "</div><div class='clear-float'/>";
             $("#div_msg").append(html);
         });
+    }
+
+    function getKey(items, ind) {
+        var item = {};
+        var k = true, j = true;
+        for (var i = 0; i < items.length; i++) {
+            var lst = items[i].ResultNum.split(' '); 
+            var dx = parseInt(lst[ind]) > 4 ? "大" : "小";
+            var ds = parseInt(lst[ind]) % 2 == 0 ? "双" : "单";
+            if (typeof (item['大']) == 'undefined' && typeof (item['小']) == 'undefined') {
+                item[dx] = 1;
+            } else if (typeof (item[dx]) != 'undefined' && k == true) {
+                item[dx] = parseInt(item[dx]) + 1;
+            } else { k = false; }
+           
+            if (typeof (item['单']) == 'undefined' && typeof (item['双']) == 'undefined') {
+                item[ds] = 1;
+            } else if (typeof (item[ds]) != 'undefined' && j == true) {
+                item[ds] = parseInt(item[ds]) + 1;
+            } else { j = false; }
+        }
+        return item;
     }
 </script>
 
