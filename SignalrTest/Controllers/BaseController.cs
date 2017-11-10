@@ -621,7 +621,7 @@ namespace SignalR.Controllers
             }
             if (strs.Length == 3)
             {
-                List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode && x.OutName!=null).ToList();
+                List<Plays> plays = CommonBusiness.LottertPlays.Where(x => x.CPCode == cpcode && !string.IsNullOrEmpty(x.OutName)).ToList();
                 Lottery lottery = CommonBusiness.LottertList.Where(x => x.CPCode == cpcode.ToUpper()).FirstOrDefault();
                 List<string> list1 = new List<string>();
                 List<string> list2 = new List<string>();
@@ -714,7 +714,7 @@ namespace SignalR.Controllers
                                 order.RPoint = 0;
                                 order.MType = 0;
                                 order.ModelName = "0/0%";
-                                order.PayFee =0;
+                                order.PayFee = Convert.ToDecimal(Convert.ToInt32(list3[list3.Count - 1]));
                                 order.Content = t;
                                 order.UserID = CurrentUser.UserID;
                                 order.IssueNum = issuenum;
@@ -724,7 +724,7 @@ namespace SignalR.Controllers
                         }
                     }
                     if (orders.Count > 1) {
-                        decimal payfee= Convert.ToDecimal(Convert.ToInt32(Convert.ToInt32(list3[list3.Count-1])/ orders.Count));
+                        decimal payfee = Convert.ToDecimal(Convert.ToInt32(Convert.ToInt32(list3[list3.Count - 1]) / orders.Count));
                         if (payfee > 10)
                         {
                             orders.ForEach(x => x.PayFee = payfee);
@@ -733,6 +733,8 @@ namespace SignalR.Controllers
                         else {
                             mes = "单注金额必须大于10元";
                         }
+                    } else if (orders.Count== 1) {
+                        result = LotteryOrderBusiness.CreateUserOrderList(orders, CurrentUser, OperateIP, 0, 4, ref mes);
                     }
                     else
                     {

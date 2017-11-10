@@ -207,6 +207,8 @@
             html += "</div>";
             html += "</div><div class='clear-float'/>";
             $("#div_msg").append(html);
+            var objDiv = document.getElementById("div_msgbody");
+            objDiv.scrollTop = objDiv.scrollHeight;
         });
     }
     function getKey(items, ind) {

@@ -82,7 +82,7 @@
             }
 
             $.connection.hub.start().done(function () {
-                chatHub.server.userEnter(userNickName);
+                chatHub.server.userEnter(userNickName, userTrueName);
             });
             $(document).on("keypress", function (e) {
                 if (e.keyCode == 13) {
@@ -210,6 +210,8 @@
                 html += "</div>";
                 html += "</div><div class='clear-float'/>";
                 $("#div_msg").append(html);
+                var objDiv = document.getElementById("div_msgbody");
+                objDiv.scrollTop = objDiv.scrollHeight;
             });
         }
         function getKey(items, ind) {
