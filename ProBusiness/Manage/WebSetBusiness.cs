@@ -334,7 +334,10 @@ namespace ProBusiness.Manage
         {
             return WebSetDAL.BaseProvider.ReturnLotteryResult(cpcode, issuenum);
         }
-
+        public static bool ReturnLotteryResult(string cpcode, string issuenum,string userid,ref string mes)
+        {
+            return WebSetDAL.BaseProvider.ReturnLotteryResult(cpcode, issuenum,userid,ref mes);
+        }
         public static bool UpdatePlayInfo(string cpcode, string pids, string playinfo,string bettnum,string content,string sapacerate)
         {
             return WebSetDAL.BaseProvider.UpdatePlayInfo(cpcode, pids, playinfo, bettnum,content, sapacerate);

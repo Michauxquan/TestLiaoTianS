@@ -257,7 +257,62 @@ end catch
 
 ", paras, CommandType.Text) > 0;
         }
+        public bool ReturnLotteryResult(string cpcode, string issuenum, string userid, ref string mes)
+        {
+            SqlParameter[] paras =
+            {
+                new SqlParameter("@CPCode", cpcode),
+                new SqlParameter("@IssueNum", issuenum),
+                new SqlParameter("@userid", userid),
+            };
+            int result = ExecuteNonQuery(@"
+begin try
+begin tran 
 
+if not exists(select 1 from lotteryorder where cpcode=@CPCode and IssueNum=@IssueNum and userid=@userid and status=0 )
+begin
+    select 0
+end
+ else if exists(select 1 from lotteryresult where cpcode=@CPCode and IssueNum=@IssueNum and status!=0)
+begin
+    select -2
+end
+else
+begin
+    declare @ttt table (ordercode varchar(60))
+
+    if  exists(select 1 from lotteryorder where cpcode=@CPCode and IssueNum=@IssueNum  and userid=@userid and status=0)
+    begin
+    insert into @ttt  select LCode from LotteryOrder   where  CPCode=@CPCode and  IssueNum=@IssueNum and userid=@userid and status=0 
+    update LotteryOrder set status=3 where  LCOde in(select ordercode from @ttt)  and Status=0
+
+    insert into AccountOperateRecord (UserID,AccountChange,Account,PlayType,CreateTime,	Remark,CreateUserID,IP,InAccount,Type,FKCode)
+
+    select a.UserID,PayFee,PayFee+b.AccountFee,9,GETDATE(),'撤单返款,单号'+a.LCode,a.UserID,IP,PayFee,0,a.LCode from LotteryOrder a join UserAccount b on a.UserID=b.UserID where  CPCode=@CPCode and  IssueNum=@IssueNum  and Lcode in ( select ordercode from @ttt)
+
+
+    update a set AccountFee =AccountFee+isnull(b.payFee,0) from UserAccount a join (select  userid ,sum(isnull(payFee,0)) payFee from  lotteryorder where  CPCode=@CPCode and  IssueNum=@IssueNum  and lcode in(select ordercode from @ttt) group by userid ) b on a.userid=b.userid 
+
+    select 1
+    end
+    else 
+        select 0
+end
+commit tran
+end try
+begin catch
+rollback tran
+select -1
+end catch
+
+", paras, CommandType.Text);
+            if (result>0) { mes = "【" + issuenum + "】期，撤单成功"; }
+            else if (result == -2) { mes = "【" + issuenum + "】期已封盘，撤单失败"; }
+            else if (result == -1) { mes = "【" + issuenum + "】期，撤单失败"; }
+            else if (result == 0) { mes = "【" + issuenum + "】期，未存在有效订单，撤单失败"; }
+            else { mes = "【" + issuenum + "】期，撤单失败"; }
+            return result > 0;
+        }
         public bool ReturnLotteryResultMyselft(string lcode)
         {
             SqlParameter[] paras =

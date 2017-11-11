@@ -12,6 +12,8 @@ using Microsoft.AspNet.SignalR.Hubs;
 using ProBusiness;
 using ProEntity;
 using ProBusiness.UserAttrs;
+using SignalrTest.Common;
+using ProBusiness.Manage;
 
 namespace SignalR.Controllers 
 {
@@ -148,6 +150,7 @@ namespace SignalR.Controllers
     public class overHub : Hub {
         public static bool IsTrueMes(string cpcode,string message) {
             bool result= false;
+            message = message.Replace("毒", "万千百十个");
             var strs = message.Trim().Split(' ');
             if (strs.Length == 2) {
                 message = "万个 " + message.Trim();
@@ -534,6 +537,7 @@ namespace SignalR.Controllers
                 }
                 hub.Clients.All.notice("【系统消息】<br/>" + msg); 
                 result = "发送成功!";
+                LogHelper.Info("SysSendMsg", "SysSendMsg", msg);
             }
             catch (Exception e)
             {
@@ -568,7 +572,7 @@ namespace SignalR.Controllers
             var totalpayment = CommonBusiness.Select("AccountOperateRecord", "isnull(SUM(isnull(AccountChange,0)),0)", "PlayType in(4,5) and CreateTime>'" + DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00'");
             var userwin = CommonBusiness.Select("AccountOperateRecord", "isnull(SUM(isnull(AccountChange,0)),0)", "PlayType =8 and CreateTime>'" + DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00'");
             JsonDictionary.Add("totalpayment", totalpayment);
-            JsonDictionary.Add("totalwin", totalpayment);
+            JsonDictionary.Add("totalwin", userwin);
             JsonDictionary.Add("yl", Convert.ToDecimal(userwin) - Convert.ToDecimal(totalpayment));
             JsonDictionary.Add("bettfee", bibett);
             JsonDictionary.Add("fee", fee);
@@ -614,7 +618,8 @@ namespace SignalR.Controllers
         {
             string mes = "";
             var result = -1;
-            var strs = message.Trim().Split(' ');
+            message = message.Replace("毒", "万千百十个");
+            var strs = message.Trim().Split(' '); 
             if (strs.Length == 2) {
                 message ="万个 "+message.Trim();
                 strs = message.Trim().Split(' ');
@@ -723,7 +728,7 @@ namespace SignalR.Controllers
                             }
                         }
                     }
-                    if (orders.Count > 1) {
+                    if (list2.Count > 1 && orders.Count>1) {
                         decimal payfee = Convert.ToDecimal(Convert.ToInt32(Convert.ToInt32(list3[list3.Count - 1]) / orders.Count));
                         if (payfee > 10)
                         {
@@ -733,8 +738,15 @@ namespace SignalR.Controllers
                         else {
                             mes = "单注金额必须大于10元";
                         }
-                    } else if (orders.Count== 1) {
-                        result = LotteryOrderBusiness.CreateUserOrderList(orders, CurrentUser, OperateIP, 0, 4, ref mes);
+                    } else if (orders.Count>0) {
+                        if (Convert.ToDecimal(Convert.ToInt32(list3[list3.Count - 1])) > 10)
+                        {
+                            result = LotteryOrderBusiness.CreateUserOrderList(orders, CurrentUser, OperateIP, 0, 4, ref mes);
+                        }
+                        else
+                        {
+                            mes = "单注金额必须大于10元";
+                        }
                     }
                     else
                     {
@@ -756,7 +768,7 @@ namespace SignalR.Controllers
 
         public JsonResult LotterryResultList(string cpcode) {
             int totalcount = 0;
-            var result =LotteryResultBusiness.GetPagList(cpcode, 2, false, 10, 1, ref totalcount, ref totalcount,DateTime.Now.AddHours(-2).ToString("yyyy-MM-dd HH:mm:ss"));
+            var result = LotteryResultBusiness.GetPagList(cpcode, 2, false, 10, 1, ref totalcount, ref totalcount, DateTime.Now.ToString("yyyy-MM-dd") + " 00:00:00");
             JsonDictionary.Add("items", result);
             return new JsonResult
             {
@@ -764,7 +776,16 @@ namespace SignalR.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
         }
-
+        public JsonResult CanalOrder(string cpcode, string issuenum) {
+            string mes = "撤单失败";
+            var result = WebSetBusiness.ReturnLotteryResult(cpcode, issuenum,CurrentUser.UserID,ref mes);
+            JsonDictionary.Add("result", mes);
+            return new JsonResult
+            {
+                Data = JsonDictionary,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+        }
         #region Api
         public string fnSendSysMsg(string msg, string hubname = "cqssc")
         {
@@ -786,10 +807,12 @@ namespace SignalR.Controllers
                 }
                 hub.Clients.All.notice("【系统消息】<br/>" + msg);
                 result = "发送成功!";
+                LogHelper.Info("SysSendMsg", "SysSendMsg", msg);
             }
             catch (Exception e)
             {
                 result = "发送失败!\n失败原因:\n" + e.Message;
+                LogHelper.Error("SysSendMsg", "SysSendMsg", msg);
             }
             return result;
         }

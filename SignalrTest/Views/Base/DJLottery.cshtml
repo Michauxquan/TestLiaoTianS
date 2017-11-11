@@ -35,18 +35,23 @@
     </div>
 </div>
 <script type="text/javascript">
+    var lasttime = 1;
     function getIssue() {
-        $.post('/Base/GetlotteryResult', { cpcode: '@ViewBag.CPCode' }, function (data) {
-            var result = eval(data.item);
-            if (result != null && typeof (result.IssueNum) != 'undefined') {
-                $('.panel-heading').data('issuenum', result.IssueNum);
-            }
-        });
+        lasttime = lasttime - 1;
+        if (lasttime < 1) {
+            $.post('/Base/GetlotteryResult', { cpcode: '@ViewBag.CPCode' }, function (data) {
+                var result = eval(data.item);
+                if (result != null && typeof (result.IssueNum) != 'undefined') {
+                    $('.panel-heading').data('issuenum', result.IssueNum);
+                    lasttime = parseInt(result.Time);
+                }
+            });
+        }
     }
-    $(function () {
-        getIssue();
+    $(function () { 
         Getresult();
         setInterval(function () { Getresult(); }, 40000);
+        setInterval(function () { getIssue(); }, 1000);
     });
     var userNickName = '@ViewBag.UserName';
     var userTrueName = '@ViewBag.NickName';
@@ -60,17 +65,17 @@
                 var userAvatar = '/modules/animg/29.gif';
                 if (nickName == userNickName) {
                     $("#div_msg").append("<div style='text-align:right;'>"
-                    + "<div float:right> <span style='margin-right:10px'>" + username + "</span>"
+                    + "<div float:right> <span style='margin-right:10px'>" + getdatenow() + " &nbsp;" + username + "</span>"
                      + "<img src='" + userAvatar + "' style='height:30px;width:30px;position:relative'/>"
                     + "<div class='demo clearfix fr'>"
                     + "<span class='triangle'></span>"
-                    + "<div class='article mymsg' style=''>" + message
+                    + "<div class='article mymsg' style=''>"+ message
                     + "</div> <div class='clear'></div></div></div></div><div class='clear-float'/>");
                 }
                 else {
                     $("#div_msg").append("<div>"
                      + "<img src='" + userAvatar + "' style='height:30px;width:30px;position:relative'/>"
-                     + "<span style='left:10px;position:relative'>" + username + "</span>"
+                     + "<span style='left:10px;position:relative'>" + getdatenow() + " &nbsp;" + username + "</span>"
                      + "<div class='demo clearfix'>"
                      + "<span class='triangle'></span>"
                      + "<div class='article othermsg'>" + message
@@ -89,10 +94,11 @@
                     if ($("#message").val() != "") {
                         if ($("#message").val().trim() == "数据") {
                             GetToday();
-                        }
-                        else {
+                        } else if ($("#message").val().trim() == "撤单") {
+                            CanalOrder();
+                        }else {
                             SendInfo($("#message").val());
-                            chatHub.server.sendMessage(userNickName, $("#message").val(), $('.panel-heading').data('issuenum'),'@ViewBag.Uid');
+                            chatHub.server.sendMessage(userNickName, $("#message").val(), $('.panel-heading').data('issuenum'), '@ViewBag.Uid');
                         }
                         $("#message").val("");
                     }
@@ -102,8 +108,9 @@
                 if ($("#message").val() != "") {
                     if ($("#message").val().trim() == "数据") {
                         GetToday();
-                    }
-                    else {
+                    } else if ($("#message").val().trim() == "撤单") {
+                        CanalOrder();
+                    } else {
                         SendInfo($("#message").val());
                         chatHub.server.sendMessage(userNickName, $("#message").val(), $('.panel-heading').data('issuenum'),'@ViewBag.Uid');
                     }
@@ -111,16 +118,17 @@
                 }
             })
 			//var allHub = $.connection.allHub;//对应后台的 类 AllHub
-            chatHub.client.notice = function (msg) {              
+            chatHub.client.notice = function (msg) {
                 var mesage = decodeURI(msg);
                 if (mesage.indexOf("开奖结果") > -1) {
+                    lasttime = 0;
                     getIssue();
                 }
                 var userAvatar = '/modules/animg/29.gif';
                 $("#div_msg").append("<div>"
                     + "<div class='demo clearfix'>"
                     + "<span class='triangle'></span>"
-                    + "<div class='article sysmsg'>" + mesage
+                    + "<div class='article sysmsg'>" + mesage.replace(/\|/g,"<br/>")
                     + "</div></div></div>");
 
                 var objDiv = document.getElementById("div_msgbody");
@@ -162,7 +170,7 @@
             var html = "<div style='text-align:center;padding:15px 5px;;background-color: #eee;color:#333;'>"
             + "<div style='margin:0 auto;width:100%;line-height:22px;'> ====开奖历史====<br/>";
             for (var i = 0; i < data.items.length; i++) {
-                var jg = data.items[i].ResultNum.split(' '); 
+                var jg = data.items[i].ResultNum.split(' ');
                 var colr = parseInt(jg[0]) > parseInt(jg[4]) ? "龙" : (parseInt(jg[0]) < parseInt(jg[4]) ? "虎" : "和");
                 var color = colr == "龙" ? "#e21e1e" : (colr == "虎" ? "#0060bd" : "#0dad54");
                 html += data.items[i].IssueNum + "期"
@@ -174,7 +182,7 @@
                     +"&nbsp;<font style='color: #fff;text-align: center;padding:1px 3px;font-size:12px;background-color:" + color + " ;border-radius: 50%;'>" + colr + "</font><br/>";
             }
             html += "</div>";
-            html += "<div style='margin:0 auto;width:80%;line-height:22px;'> =======长龙======<br/>";          
+            html += "<div style='margin:0 auto;width:80%;line-height:22px;'> =======长龙======<br/>";
             var wan=getKey(data.items, 0);
             var qian=getKey(data.items, 1);
             var bai=getKey(data.items, 2);
@@ -217,7 +225,7 @@
         var item = {};
         var k = true, j = true;
         for (var i = 0; i < items.length; i++) {
-            var lst = items[i].ResultNum.split(' '); 
+            var lst = items[i].ResultNum.split(' ');
             var dx = parseInt(lst[ind]) > 4 ? "大" : "小";
             var ds = parseInt(lst[ind]) % 2 == 0 ? "双" : "单";
             if (typeof (item['大']) == 'undefined' && typeof (item['小']) == 'undefined') {
@@ -225,7 +233,7 @@
             } else if (typeof (item[dx]) != 'undefined' && k == true) {
                 item[dx] = parseInt(item[dx]) + 1;
             } else { k = false; }
-           
+
             if (typeof (item['单']) == 'undefined' && typeof (item['双']) == 'undefined') {
                 item[ds] = 1;
             } else if (typeof (item[ds]) != 'undefined' && j == true) {
@@ -233,6 +241,21 @@
             } else { j = false; }
         }
         return item;
+    }
+    function getdatenow() {
+        var date = new Date();
+        return date.getFullYear() + "-" + (parseInt(date.getMonth()) + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ":" + date.getSeconds();
+    }
+    function CanalOrder() {
+        $.post('/base/CanalOrder', { cpcode: '@ViewBag.CPCode', issuenum: $('.panel-heading').data('issuenum') }, function (data) {
+            var dt = eval(data);
+            if (dt.result != "") {
+                $("#div_msg").append("<div style='text-align:center;padding:15px;background-color: #eee;color:#009c06;'>"
+                + "<div style='margin:0 auto;width:80%;text-align:center;'> " + dt.result + "</div></div><div class='clear-float'/>");
+                var objDiv = document.getElementById("div_msgbody");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
+        });
     }
 </script>
 
