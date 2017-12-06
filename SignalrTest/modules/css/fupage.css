@@ -1,0 +1,119 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+ul li{
+	list-style: none;
+}
+
+a{
+	text-decoration: none;
+	color: #fff;
+}
+body{
+	background-image: url(/modules/img/bg2.png);
+	background-size: cover;
+}
+
+.header{
+	width: 96%;
+	background-color: #000;
+	opacity: 0.6;
+	position: fixed;
+	top: 5px;
+	left: 2%;
+	right: 2%;
+	height: 50px;
+	border-radius: 5px;
+}
+.header .header-left{
+	float: left;
+	width: 50%;
+	padding-left: 10px;
+	font-size: 20px;
+	color: #bfa44d;
+	font-weight: 600;
+}
+.header .header-left .back{
+	display: inline-block;
+}
+.header .header-left img{
+	height: 35px;
+	vertical-align: middle;
+	padding-bottom: 5px;
+}
+.header .header-left .title{
+	display: inline-block;
+	height: 50px;
+	line-height: 50px;
+	padding-left: 10px;
+}
+
+.header .header-right{
+	float: left;
+	width: 50%;
+	height: 50px;	
+}
+.header .header-right .setting{
+	height: 50px;
+	float: right;
+	padding-top: 5px;
+	padding-right: 5px;
+}
+.header .header-right .setting img{
+	height: 35px;
+	vertical-align: middle;
+}
+.header .header-right .money{
+	float: right;
+	color: #bfa44d;
+	font-size: 20px;
+	line-height: 50px;
+	padding-right: 10px;
+}
+.head-menu{
+	width: 130px;
+	height: 175px;
+	background-color: #161616;
+	position: fixed;
+	top: 50px;
+	right: 7px;
+	/*display: none;*/
+}
+.head-menu ul li{
+	height: 35px;
+	width: 80%;
+	line-height: 35px;
+	padding-left: 3%;
+	color: #fff;
+	margin: 0 auto;
+	border-bottom: 1px solid #424240;
+}
+.head-menu img{
+	height: 25px;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.content{
+	width: 100%;
+	padding-top: 60px;
+}
+.content .games{
+	width: 70%;
+	margin: 15px auto;
+	border-radius: 5px;
+	padding: 5px;
+	background:linear-gradient(#f3cf57, #986f15);
+	line-height: 35px;
+	font-size: 28px;
+	color: #000;
+	font-weight: 600;
+	text-align: center;
+}
+.content .games img{
+	width: 65%;
+	margin: 0 auto;
+}

@@ -1,0 +1,712 @@
+﻿@{
+    ViewBag.Title = "档期统计";
+    Layout = null;
+}
+<style type="text/css">
+    
+/*表格样式-rpt*/
+.table-list-rpt { width:100%; border-top:solid 1px #ccc;border-left:solid 1px #ccc; border-collapse:collapse;border-spacing:0;color:#fff;}
+.table-list-rpt tr{ height:25px; line-height:25px;  background-color: #fff0;}
+.table-list-rpt tr:hover { background-color: #eee0; }
+.table-list-rpt td{ border-bottom:solid 1px #ccc;border-right:solid 1px #ccc; padding:5px 10px; vertical-align:middle;  }
+.table-list-rpt a{ color:#333;  vertical-align:middle;}
+.table-list-rpt a:hover{ color:red; text-decoration:underline; }
+.table-list-rpt .tr-header{ text-align:center;font-weight:bold; height:35px; }
+.table-list-rpt .tr-header td{ background-color:#eee0; color:#fff;}
+
+</style>
+<script> 
+</script>
+
+<h3>当期统计报表</h3> 
+<style type="text/css">
+    .qiu {width: 20px;height: 20px;line-height: 20px;border-radius: 50%;font-size: 12px;font-weight: 900;text-align: center;margin: 2px auto;border: 3px solid #00c005;}
+    .qiu33 {width: 20px;height: 20px;line-height: 20px;border-radius: 50%;font-size: 12px;font-weight: 900;text-align: center;margin: 2px auto;border: 3px solid red;}
+    .qiu44 {width: 20px;height: 20px;line-height: 20px;border-radius: 50%;font-size: 12px;font-weight: 900;text-align: center;margin: 2px auto;border: 3px solid #2c77c0;}
+    .qiu55 {width: 20px;height: 20px;line-height: 20px;border-radius: 50%;font-size: 12px;font-weight: 900;text-align: center;margin: 2px auto;border: 3px solid #d6ad0b;}
+        
+    .h1 { font-size: 20px; line-height:34px;margin-top: 0px !important;}
+</style> 
+    <script type="text/javascript">
+        $(function () {
+            $('#lotteryslt').change(function () {
+                if ($('#lotteryslt').val() == 'BJSC') {
+                    $('.sscdiv').hide();
+                    $('.bjscdiv').show();
+                } else {
+                    $('.bjscdiv').hide();
+                    $('.sscdiv').show();
+                }
+            });
+            $('#rrttseacher').click(function () { 
+                $('.cjiuhong').html('');
+                $.post('/Help/QHReportList', { cpcode: $('#lotteryslt').val() }, function (data) {
+                    for (var i = 0; i < data.items.length; i++) {
+                        $('.' + data.items[i].Type).html(data.items[i].PayFee);
+                        console.log($('.' + data.items[i].Type).html());
+                    }
+                }); 
+            });
+        });
+
+    </script>
+ <div class="tagContent  selectTag" id="tagContent0" style="max-height: 800px; overflow-y: scroll; padding-bottom: 60px;">
+    <div class="jbxx_text">
+        <ul>
+            <li style="margin-top: 0px;height: 50px;line-height: 53px;">
+                <select class="input" id="lotteryslt" style="width: 130px;">
+                    @foreach (ProEntity.Lottery model in ExpandClass.GetLottery(HttpContext.Current))
+                    {
+                        if (model.Status == 1)
+                        {
+                            <option value="@(model.CPCode)">@(model.CPName)</option>
+                        }
+                    }
+                </select>
+                <input type="button" class="button btn" id="rrttseacher" value=" 查询 "> 
+            </li>
+        </ul>
+         <div style="clear: both;"></div>
+    </div>
+
+ <div class="content-body">
+ <div style="border: 1px solid #ccc;" class="sscdiv">
+     <h1 class="center h1">定位胆</h1>
+     <table class="table-list-rpt">
+         <tr class="tr-header">
+             <td class="center" colspan="2">第一球</td><td class="center" colspan="2">第二球</td><td class="center" colspan="2">第三球</td><td class="center" colspan="2">第四球</td><td class="center" colspan="2">第五球</td>
+         </tr>
+         <tr class="tr-header">
+             <td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">0</div></td><td class="center cjiuhong 1DWEID_2DYIM_0"></td>
+             <td class="center">
+                 <div class="qiu">0</div></td><td class="center cjiuhong 1DWEID_2DERM_0"></td>
+             <td class="center">
+                 <div class="qiu">0</div></td><td class="center cjiuhong 1DWEID_2DSANM_0"></td>
+             <td class="center">
+                 <div class="qiu">0</div></td><td class="center cjiuhong 1DWEID_2DSIM_0"></td>
+             <td class="center">
+                 <div class="qiu">0</div></td><td class="center cjiuhong 1DWEID_2DWUM_0"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">1</div></td><td class="center cjiuhong 1DWEID_2DYIM_1"></td>
+             <td class="center">
+                 <div class="qiu">1</div></td><td class="center cjiuhong 1DWEID_2DERM_1"></td>
+             <td class="center">
+                 <div class="qiu">1</div></td><td class="center cjiuhong 1DWEID_2DSANM_1"></td>
+             <td class="center">
+                 <div class="qiu">1</div></td><td class="center cjiuhong 1DWEID_2DSIM_1"></td>
+             <td class="center">
+                 <div class="qiu">1</div></td><td class="center cjiuhong 1DWEID_2DWUM_1"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">2</div></td><td class="center cjiuhong 1DWEID_2DYIM_2"></td>
+             <td class="center">
+                 <div class="qiu">2</div></td><td class="center cjiuhong 1DWEID_2DERM_2"></td>
+             <td class="center">
+                 <div class="qiu">2</div></td><td class="center cjiuhong 1DWEID_2DSANM_2"></td>
+             <td class="center">
+                 <div class="qiu">2</div></td><td class="center cjiuhong 1DWEID_2DSIM_2"></td>
+             <td class="center">
+                 <div class="qiu">2</div></td><td class="center cjiuhong 1DWEID_2DWUM_2"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">3</div></td><td class="center cjiuhong 1DWEID_2DYIM_3"></td>
+             <td class="center">
+                 <div class="qiu">3</div></td><td class="center cjiuhong 1DWEID_2DERM_3"></td>
+             <td class="center">
+                 <div class="qiu">3</div></td><td class="center cjiuhong 1DWEID_2DSANM_3"></td>
+             <td class="center">
+                 <div class="qiu">3</div></td><td class="center cjiuhong 1DWEID_2DSIM_3"></td>
+             <td class="center">
+                 <div class="qiu">3</div></td><td class="center cjiuhong 1DWEID_2DWUM_3"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">4</div></td><td class="center cjiuhong 1DWEID_2DYIM_4"></td>
+             <td class="center">
+                 <div class="qiu">4</div></td><td class="center cjiuhong 1DWEID_2DERM_4"></td>
+             <td class="center">
+                 <div class="qiu">4</div></td><td class="center cjiuhong 1DWEID_2DSANM_4"></td>
+             <td class="center">
+                 <div class="qiu">4</div></td><td class="center cjiuhong 1DWEID_2DSIM_4"></td>
+             <td class="center">
+                 <div class="qiu">4</div></td><td class="center cjiuhong 1DWEID_2DWUM_4"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">5</div></td><td class="center cjiuhong 1DWEID_2DYIM_5"></td>
+             <td class="center">
+                 <div class="qiu">5</div></td><td class="center cjiuhong 1DWEID_2DERM_5"></td>
+             <td class="center">
+                 <div class="qiu">5</div></td><td class="center cjiuhong 1DWEID_2DSANM_5"></td>
+             <td class="center">
+                 <div class="qiu">5</div></td><td class="center cjiuhong 1DWEID_2DSIM_5"></td>
+             <td class="center">
+                 <div class="qiu">5</div></td><td class="center cjiuhong 1DWEID_2DWUM_5"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">6</div></td><td class="center cjiuhong 1DWEID_2DYIM_6"></td>
+             <td class="center">
+                 <div class="qiu">6</div></td><td class="center cjiuhong 1DWEID_2DERM_6"></td>
+             <td class="center">
+                 <div class="qiu">6</div></td><td class="center cjiuhong 1DWEID_2DSANM_6"></td>
+             <td class="center">
+                 <div class="qiu">6</div></td><td class="center cjiuhong 1DWEID_2DSIM_6"></td>
+             <td class="center">
+                 <div class="qiu">6</div></td><td class="center cjiuhong 1DWEID_2DWUM_6"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">7</div></td><td class="center cjiuhong 1DWEID_2DYIM_7"></td>
+             <td class="center">
+                 <div class="qiu">7</div></td><td class="center cjiuhong 1DWEID_2DERM_7"></td>
+             <td class="center">
+                 <div class="qiu">7</div></td><td class="center cjiuhong 1DWEID_2DSANM_7"></td>
+             <td class="center">
+                 <div class="qiu">7</div></td><td class="center cjiuhong 1DWEID_2DSIM_7"></td>
+             <td class="center">
+                 <div class="qiu">7</div></td><td class="center cjiuhong 1DWEID_2DWUM_7"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">8</div></td><td class="center cjiuhong 1DWEID_2DYIM_8"></td>
+             <td class="center">
+                 <div class="qiu">8</div></td><td class="center cjiuhong 1DWEID_2DERM_8"></td>
+             <td class="center">
+                 <div class="qiu">8</div></td><td class="center cjiuhong 1DWEID_2DSANM_8"></td>
+             <td class="center">
+                 <div class="qiu">8</div></td><td class="center cjiuhong 1DWEID_2DSIM_8"></td>
+             <td class="center">
+                 <div class="qiu">8</div></td><td class="center cjiuhong 1DWEID_2DWUM_8"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">9</div></td><td class="center cjiuhong 1DWEID_2DYIM_9"></td>
+             <td class="center">
+                 <div class="qiu">9</div></td><td class="center cjiuhong 1DWEID_2DERM_9"></td>
+             <td class="center">
+                 <div class="qiu">9</div></td><td class="center cjiuhong 1DWEID_2DSANM_9"></td>
+             <td class="center">
+                 <div class="qiu">9</div></td><td class="center cjiuhong 1DWEID_2DSIM_9"></td>
+             <td class="center">
+                 <div class="qiu">9</div></td><td class="center cjiuhong 1DWEID_2DWUM_9"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSW_大"></td>
+             <td class="center">
+                 <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSQ_大"></td>
+             <td class="center">
+                 <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSB_大"></td>
+             <td class="center">
+                 <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSS_大"></td>
+             <td class="center">
+                 <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSG_大"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSW_小"></td>
+             <td class="center">
+                 <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSQ_小"></td>
+             <td class="center">
+                 <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSB_小"></td>
+             <td class="center">
+                 <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSS_小"></td>
+             <td class="center">
+                 <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSG_小"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSW_单"></td>
+             <td class="center">
+                 <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSQ_单"></td>
+             <td class="center">
+                 <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSB_单"></td>
+             <td class="center">
+                 <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSS_单"></td>
+             <td class="center">
+                 <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSG_单"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSW_双"></td>
+             <td class="center">
+                 <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSQ_双"></td>
+             <td class="center">
+                 <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSB_双"></td>
+             <td class="center">
+                 <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDSS_双"></td>
+             <td class="center">
+                 <div class="qiu55">双</div></td><td class="center cjiuhong 11QUWEIX_2DXDS_2DXDSG_双"></td>
+         </tr>
+     </table>
+
+     <div class="clear"></div>
+ </div>
+ <div style="border: 1px solid #ccc;" class="sscdiv">
+     <h1 class="center h1">龙虎斗</h1>
+     <table class="table-list-rpt">
+         <tr class="tr-header">
+             <td class="center" colspan="2">万千</td><td class="center" colspan="2">万百</td><td class="center" colspan="2">万事</td><td class="center" colspan="2">万个</td><td class="center" colspan="2">千百</td>
+         </tr>
+         <tr class="tr-header">
+             <td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td>
+         </tr>
+         <tr >
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWQian_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWBai_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWShi_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWGe_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQBai_龙"></td>
+         </tr>
+         <tr >
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWQian_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWBai_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWShi_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWGe_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQBai_和"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWQian_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWBai_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWShi_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDWGe_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQBai_虎"></td>
+         </tr>
+         <tr class="tr-header">
+             <td class="center" colspan="2">千十</td><td class="center" colspan="2">千个</td><td class="center" colspan="2">百十</td><td class="center" colspan="2">百个</td><td class="center" colspan="2">千百</td>
+         </tr>
+         <tr class="tr-header">
+             <td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td>
+         </tr>
+         <tr >
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQShi_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQGe_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDBShi_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDBGe_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDSGe_龙"></td>
+         </tr>
+         <tr >
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQShi_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQGe_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDBShi_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDBGe_和"></td>
+             <td class="center">
+                 <div class="qiu">和</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDSGe_和"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQShi_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDQGe_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDBShi_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDBGe_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHDSGe_虎"></td>
+         </tr>
+
+     </table>
+
+     <div class="clear"></div>
+ </div>
+
+ <div style="border: 1px solid #ccc; display: none;" class="bjscdiv">
+ <h1 class="center h1">定位胆</h1>
+ <table class="table-list-rpt">
+ <tr class="tr-header">
+     <td class="center" colspan="2">第一名</td><td class="center" colspan="2">第二名</td><td class="center" colspan="2">第三名</td><td class="center" colspan="2">第四名</td><td class="center" colspan="2">第五名</td>
+     <td class="center" colspan="2">第六名</td><td class="center" colspan="2">第七名</td><td class="center" colspan="2">第八名</td><td class="center" colspan="2">第九名</td><td class="center" colspan="2">第十名</td>
+ </tr>
+ <tr class="tr-header">
+     <td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td>
+     <td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DYIM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DERM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DSANM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DSIM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DWUM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DLIUM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DQIM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DBAM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DJIUM_01"></td>
+     <td class="center">
+         <div class="qiu">01</div></td><td class="center cjiuhong 1DWEID_2DSHIM_01"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DYIM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DERM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DSANM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DSIM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DWUM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DLIUM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DQIM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DBAM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DJIUM_02"></td>
+     <td class="center">
+         <div class="qiu">02</div></td><td class="center cjiuhong 1DWEID_2DSHIM_02"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DYIM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DERM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DSANM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DSIM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DWUM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DLIUM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DQIM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DBAM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DJIUM_03"></td>
+     <td class="center">
+         <div class="qiu">03</div></td><td class="center cjiuhong 1DWEID_2DSHIM_03"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DYIM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DERM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DSANM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DSIM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DWUM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DLIUM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DQIM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DBAM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DJIUM_04"></td>
+     <td class="center">
+         <div class="qiu">04</div></td><td class="center cjiuhong 1DWEID_2DSHIM_04"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DYIM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DERM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DSANM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DSIM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DWUM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DLIUM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DQIM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DBAM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DJIUM_05"></td>
+     <td class="center">
+         <div class="qiu">05</div></td><td class="center cjiuhong 1DWEID_2DSHIM_05"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DYIM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DERM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DSANM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DSIM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DWUM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DLIUM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DQIM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DBAM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DJIUM_06"></td>
+     <td class="center">
+         <div class="qiu">06</div></td><td class="center cjiuhong 1DWEID_2DSHIM_06"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DYIM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DERM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DSANM_07"></td>
+     <td class="center">
+         <div class="qiu">07</td><td class="center cjiuhong 1DWEID_2DSIM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DWUM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DLIUM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DQIM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DBAM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DJIUM_07"></td>
+     <td class="center">
+         <div class="qiu">07</div></td><td class="center cjiuhong 1DWEID_2DSHIM_07"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DYIM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DERM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DSANM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DSIM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DWUM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DLIUM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DQIM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DBAM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DJIUM_08"></td>
+     <td class="center">
+         <div class="qiu">08</div></td><td class="center cjiuhong 1DWEID_2DSHIM_08"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DYIM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DERM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DSANM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DSIM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DWUM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DLIUM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DQIM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DBAM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DJIUM_09"></td>
+     <td class="center">
+         <div class="qiu">09</div></td><td class="center cjiuhong 1DWEID_2DSHIM_09"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DYIM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DERM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DSANM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DSIM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DWUM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DLIUM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DQIM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DBAM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DJIUM_10"></td>
+     <td class="center">
+         <div class="qiu">10</div></td><td class="center cjiuhong 1DWEID_2DSHIM_10"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS1_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS2_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS3_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS4_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS5_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS6_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS7_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS8_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS9_大"></td>
+     <td class="center">
+         <div class="qiu33">大</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS10_大"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS1_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS2_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS3_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS4_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS5_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS6_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS7_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS8_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS9_小"></td>
+     <td class="center">
+         <div class="qiu44">小</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS10_小"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS1_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS2_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS3_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS4_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS5_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS6_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS7_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS8_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS9_单"></td>
+     <td class="center">
+         <div class="qiu">单</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS10_单"></td>
+ </tr>
+ <tr>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_3DXDS1_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS2_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS3_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 1QUWEIX_2DXDS_2DXDS4_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 11QUWEIX_2DXDS_2DXDS5_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 11QUWEIX_2DXDS_2DXDS6_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 11QUWEIX_2DXDS_2DXDS7_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 11QUWEIX_2DXDS_2DXDS8_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 11QUWEIX_2DXDS_2DXDS9_双"></td>
+     <td class="center">
+         <div class="qiu55">双</div></td><td class="center cjiuhong 11QUWEIX_2DXDS_2DXDS10_双"></td>
+ </tr>
+ </table>
+
+ <div class="clear"></div>
+ </div>
+ <div style="border: 1px solid #ccc; display: none;" class="bjscdiv">
+     <h1 class="center h1">龙虎斗</h1>
+     <table class="table-list-rpt">
+         <tr class="tr-header">
+             <td class="center" colspan="2">1 VS 10</td><td class="center" colspan="2">2 VS 9</td><td class="center" colspan="2">3 VS 8</td><td class="center" colspan="2">4 VS 7</td><td class="center" colspan="2">5 VS 6</td>
+         </tr>
+         <tr class="tr-header">
+             <td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td><td class="center">内容</td><td class="center">下注额</td>
+         </tr>
+         <tr >
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD1v10_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD2v9_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD3v8_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD4v7_龙"></td>
+             <td class="center">
+                 <div class="qiu33">龙</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD5v6_龙"></td>
+         </tr>
+         <tr>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD1v10_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD2v9_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD3v8_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD4v7_虎"></td>
+             <td class="center">
+                 <div class="qiu44">虎</div></td><td class="center cjiuhong 1QUWEIX_2LHDOU_3LHD5v6_虎"></td>
+         </tr>
+
+     </table>
+
+     <div class="clear"></div>
+ </div>
+
+
+ </div>
+ </div>
+ 

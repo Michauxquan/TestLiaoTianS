@@ -177,7 +177,9 @@
     <Compile Include="Common\UserAuthorize.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BbaseController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -254,6 +256,26 @@
     <Content Include="modules\animg\29.gif" />
     <Content Include="modules\animg\Demo_Asp_Sdk.rar" />
     <Content Include="modules\animg\tab.cache" />
+    <Content Include="modules\css\bet.css" />
+    <Content Include="modules\css\bill.css" />
+    <Content Include="modules\css\changePwd.css" />
+    <Content Include="modules\css\fupage.css" />
+    <Content Include="modules\css\game.css" />
+    <Content Include="modules\css\index.css" />
+    <Content Include="modules\css\jedate.css" />
+    <Content Include="modules\css\red.css" />
+    <Content Include="modules\css\userdefault.css" />
+    <Content Include="modules\css\userdefaultcon.css" />
+    <Content Include="modules\css\yingkui.css" />
+    <Content Include="modules\datapager\images\next.png" />
+    <Content Include="modules\datapager\images\previous.png" />
+    <Content Include="modules\datapager\images\snext.png" />
+    <Content Include="modules\datapager\images\sprevious.png" />
+    <Content Include="modules\datapager\paginate.js" />
+    <Content Include="modules\datapager\style.css" />
+    <Content Include="modules\laydate\theme\default\font\iconfont.eot" />
+    <Content Include="modules\laydate\theme\default\font\iconfont.ttf" />
+    <Content Include="modules\laydate\theme\default\font\iconfont.woff" />
     <None Include="Properties\PublishProfiles\1.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="modules\ancss\index.css" />
@@ -355,6 +377,11 @@
     <Content Include="modules\animg\xx.gif" />
     <Content Include="modules\animg\yxyx.png" />
     <Content Include="modules\animg\zoushi.png" />
+    <Content Include="modules\laydate\laydate.js" />
+    <Content Include="modules\laydate\theme\default\font\iconfont.svg" />
+    <Content Include="modules\laydate\theme\default\laydate.css" />
+    <Content Include="modules\pager\jquery.page.js" />
+    <Content Include="modules\pager\page.css" />
     <Content Include="modules\plug\antip\xcConfirm.css" />
     <Content Include="modules\plug\antip\xcConfirm.js" />
     <Content Include="modules\plug\laydate\demo.html" />
@@ -386,6 +413,8 @@
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Help\ZeroClipboard.swf" />
+    <Content Include="Views\User\ZeroClipboard.swf" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -407,6 +436,19 @@
     <Content Include="Views\Base\CQLottery.cshtml" />
     <Content Include="Views\Base\DJLottery.cshtml" />
     <Content Include="Views\Base\HGLottery.cshtml" />
+    <Content Include="Views\User\UserAdd.cshtml" />
+    <Content Include="Views\User\UserDefault.cshtml" />
+    <Content Include="Views\User\UserIndex.cshtml" />
+    <Content Include="Views\User\UserList.cshtml" />
+    <Content Include="Views\Help\Addmember.cshtml" />
+    <Content Include="Views\Help\BettRecord.cshtml" />
+    <Content Include="Views\Help\BettSumRecord.cshtml" />
+    <Content Include="Views\Help\IssueNumReport.cshtml" />
+    <Content Include="Views\Help\Moneyinout.cshtml" />
+    <Content Include="Views\Help\MoneyRecord.cshtml" />
+    <Content Include="Views\Help\ShareLink.cshtml" />
+    <Content Include="Views\Help\UserReport.cshtml" />
+    <Content Include="Views\Help\ZSRecord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

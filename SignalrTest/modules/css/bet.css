@@ -1,0 +1,153 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+a{
+	text-decoration: none;
+	color: #fff;
+}
+ul li{
+	list-style: none;
+}
+body{
+	background-image: url(../img/bg2.png);
+	background-size: cover;
+}
+
+.header{
+	width: 96%;
+	background-color: #000;
+	opacity: 0.6;
+	position: fixed;
+	top: 5px;
+	left: 2%;
+	right: 2%;
+	height: 50px;
+	border-radius: 5px;
+}
+.header .header-left{
+	float: left;
+	width: 50%;
+	padding-left: 10px;
+	font-size: 20px;
+	color: #bfa44d;
+	font-weight: 600;
+}
+.header .header-left .back{
+	display: inline-block;
+}
+.header .header-left img{
+	height: 35px;
+	vertical-align: middle;
+	padding-bottom: 5px;
+}
+.header .header-left .title{
+	display: inline-block;
+	height: 50px;
+	line-height: 50px;
+	padding-left: 10px;
+}
+
+.header .header-right{
+	float: left;
+	width: 50%;
+	height: 50px;	
+}
+.header .header-right .setting{
+	height: 50px;
+	float: right;
+	padding-top: 5px;
+	padding-right: 5px;
+}
+.header .header-right .setting img{
+	height: 35px;
+	vertical-align: middle;
+}
+.header .header-right .money{
+	float: right;
+	color: #bfa44d;
+	font-size: 20px;
+	line-height: 50px;
+	padding-right: 10px;
+}
+.head-menu{
+	width: 130px;
+	height: 175px;
+	background-color: #161616;
+	position: fixed;
+	top: 50px;
+	right: 7px;
+	/*display: none;*/
+}
+.head-menu ul li{
+	height: 35px;
+	width: 80%;
+	line-height: 35px;
+	padding-left: 3%;
+	color: #fff;
+	margin: 0 auto;
+	border-bottom: 1px solid #424240;
+}
+.head-menu img{
+	height: 25px;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.chcck-bill{
+	width: 100%;
+	margin: 60px auto;
+	color: #ccc;
+}
+.chcck-bill .datainp{
+	width: 90px;
+	height: 30px;
+	margin-left: 10px;
+	/*margin-right: 10px;*/
+}
+.chcck-bill .dateSub{
+	height: 30px;
+	padding: 0 15px;
+	color: #fff;
+	border: 0px;
+	border-radius: 15px;
+	outline: 0;
+	background-color: #ff7200;
+}
+.jedatebox{
+	width: 220px;
+}
+
+.bet{
+	margin-top: 60px;
+}
+.bet .datainp{
+	margin-left: 10px;
+	width: 130px;
+	height: 30px;
+	text-indent: 3px;
+}
+.sel-menu{
+	margin-left: 10px;
+	margin-top: 15px;
+}
+.sub-btn{
+	height: 30px;
+	padding: 0 15px;
+	color: #fff;
+	border: 0px;
+	border-radius: 15px;
+	outline: 0;
+	background-color: #ff7200;
+	margin-top: 15px;
+}
+.no-find {
+	height: 50px;
+	background-color: #fff;
+	font-size: 12px;
+	color: #666;
+	margin-top: 5px;
+	text-align: center;
+	line-height: 50px;
+}

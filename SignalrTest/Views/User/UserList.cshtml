@@ -1,0 +1,546 @@
+﻿@using ProEntity.Manage
+@{ 
+    ViewBag.Title = "代理中心"; 
+}
+@section css{
+    	<link rel="stylesheet" type="text/css" href="/modules/css/red.css"/>
+    <link rel="stylesheet" type="text/css" href="/modules/css/bill.css"/>
+        <link href="/modules/ancss/personal-center.css" rel="stylesheet" />
+        <link href="/modules/laydate/theme/default/laydate.css" rel="stylesheet"/>
+        <link href="/modules/pager/page.css" rel="stylesheet"/>
+    <style>        
+        body {background:#243c2369 !important;color:black !important;        }
+        /*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track{-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);border-radius: 10px; }
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb{border-radius: 10px;-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  }
+ .header{width:96%;background-color:#000;opacity:.6;position:fixed;top:5px;left:2%;right:2%;height:50px;border-radius:5px}
+.header .header-left{float:left;width:197px;font-size:18px;color:#bfa44d;font-weight:600}
+.header .header-left .back{float:left}
+.header .header-left img{margin-top:5px;height:35px}
+.header .header-left .title{display:inline-block;height:50px;line-height:50px;float:left}
+.header .header-right{float:right;width:110px;height:50px}
+.header .header-right .setting{height:40px;float:right;padding-top:5px}
+.header .header-right .setting img{height:30px;margin-top:4px;width:25px;vertical-align:middle}
+.header .header-right .money{float:right;color:#bfa44d;font-size:18px;line-height:50px}
+.header .header-right .money p{width:85px}
+.head-menu{width:130px;height:210px;background-color:#161616;position:fixed;top:50px;right:7px;z-index:111111111}
+.head-menu ul li{height:35px;width:80%;line-height:35px;padding-left:3%;color:#fff;margin:0 auto;border-bottom:1px solid #424240}
+.head-menu img{height:25px;vertical-align:middle;margin-right:5px}
+.tab{width:100%}
+.tab thead tr{border-left:1px solid #fff}
+.tab thead tr th{border-top:1px solid #fff;line-height:20px;background:#870f00;color:#fff;font-weight:lighter;text-align:center;border-right:1px solid #907c73}
+.tab tbody tr{border-right:1px solid #fff}
+.tab tbody tr td{border-left:1px solid #fff;text-align:center;line-height:25px;color:#fff;border-bottom:1px solid #fff;height:35px}
+    </style>
+}
+@section scripts{
+    <script src="/modules/laydate/laydate.js"></script>
+    <script src="/modules/pager/jquery.page.js"></script>
+    }
+ 
+<div class="tagContent  selectTag" style="margin-top: 20px;" id="tagContent0">
+
+    <div class="chcck-bill jbxx_text" style="color: #443d3d;margin:10px auto;">
+        <ul style=" margin-right: 20px; margin-top: 5px;"><li style="line-height: 24px;">
+             日期：
+                <input type="text" name="btime" id="btime" value="" class="Wdate" style="width:100px;">
+                &nbsp;至
+                <input type="text" name="etime" id="etime" value="" class="Wdate" style="width:100px;">&nbsp;
+            <br/>
+            范围：
+            <select class="input gameuser" id="isself" name="isself">
+                <option value="1">全部</option>
+                <option value="0">自己</option>
+                <option value="1">直接下级</option>
+                <option value="2">所有下级</option>
+            </select>
+            登录帐号：<input name="ousername" id="ousername" type="text" style="width: 120px;" value="">
+            <br/>
+
+            <div style="float: right;">
+                &nbsp;<a href="/Help/Addmember" style="padding: 7px 20px;" class="button dateSub" >添加</a>
+                 &nbsp;<input type="button" class="button dateSub" id="btn_bt_search" value=" 查询 "/>
+
+                &nbsp;<input type="button" class="button dateSub" id="btn_team_search" value=" 团队统计 "/>
+            </div>
+          
+        </li></ul>
+        <div style="clear: both;"></div>
+    </div>
+    <div id="plistdiv" style="margin-top: 5px; text-indent: 20px;color：#443d3d">
+        
+    </div>
+    <div style="height: 360px; font-size: 12px;"> 
+        <table class="tab" cellpadding="0" cellspacing="0" border="0" id="table"  style="margin-top:10px;">
+            <thead style="font-size: 13px;">
+            <tr>
+                <th >登录账号</th> 
+                <th >类型</th>
+                <th >团队总额</th>  
+                <th>团队总投</th>
+                <th>团队盈亏</th>
+                <th>
+                    操作
+                </th>
+            </tr>
+
+            </thead>
+            <tbody id="utbody">
+
+            </tbody>
+
+
+        </table>
+
+    </div>
+</div>
+
+
+<div class="xcConfirm" id="zhuanzhang" style="height: 250px; display: none;">
+    
+    <div class="xc_layer"></div>
+    <div class="popBox"  style="height:250px">
+        <div class="ttBox"><a class="clsBtn"></a><span class="tt">转账</span></div>
+        <div class="txtBox" style="height:120px">
+            <p style="height:120px">登陆账号:<input class="loginname" style="width: 220px;height: 30px; border: solid 1px #89070f; font-size: 18px; margin-top: 6px;">
+                转账金额:<input class="accountfee" style="width: 220px;height: 30px; border: solid 1px #89070f; font-size: 18px; margin-top: 6px;">
+                资金密码:<input class="accountpwd" type="password" style="width: 220px;height: 30px; border: solid 1px #89070f; font-size: 18px; margin-top: 6px;">
+            </p>
+        </div>
+        <div class="btnArea">
+            <div class="btnGroup"><a class="sgBtn sgBtn1 ok">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="xcConfirm" id="UdetailInfo" style="display: none; width: 400px;">
+    <div class="xc_layer"></div>
+    <div class="popBox" style="height: 250px; width: 400px;">
+        <div class="ttBox"><a class="clsBtn"></a><span class="tt">返点详情</span></div>
+
+        <table style="width: 350px; margin: 0 auto; margin-top: 15px;" border="0" cellspacing="0" cellpadding="0" class="ddxq_tb jbhy_tb">
+
+            <tbody><tr>
+                <td width="20%" class="jbxx_right">用户名：</td>
+                <td width="80%" id="suname" style="color: #F60;">-</td>
+            </tr>
+            <tr>
+                <td class="jbxx_right"  width="25%">彩票返点：</td>
+                <td style="color: #F60;" class="ladong_pv">
+                    <span id="tdsider" style="margin-top: 5px;">
+                        	<div class="reduction" id="redudw" onclick="addordown(0)"><a href="javascript:void(0)" style="color: #fff; background: #dbb35f;" >-</a></div>
+                            <div id="box">
+                              <div id="bg">
+                               <div id="bgcolor"></div>
+                              </div>
+                              <div id="bt"></div>
+                             </div>  
+                            <div class="Plus" id="plusdw" onclick="addordown(1)"><a href="javascript:void(0)" style="color: #fff; background: #dbb35f;">+</a></div>
+                            <div class="clear"></div>
+                        </span> 
+                    <div class="clear"></div>
+                    <br/><br/>  <span style="text-align: center;">定位胆:<input name="" type="text" class="ipt_01" id="txtdw" style="width: 40px;" readonly="readonly"></span> 
+                    <span style="text-align: center;">大小单双:<input name="" type="text" class="ipt_01" id="txt11x5" style="width: 40px;" readonly="readonly"></span>    
+                    <span style="text-align: center;">龙虎斗:<input name="" type="text" class="ipt_01" id="txt3d" style="width: 40px;" readonly="readonly"></span>  
+                    <span style="text-align: center;">奖金模式:<input name="" type="text" class="ipt_01" id="txtmaxodds" style="width: 50px;" readonly="readonly"></span>
+                </td>
+            </tr>
+            </tbody></table>
+
+        <div class="btnArea">
+            <div class="btnGroup"><a class="dtlBtn sgBtn ok">确定</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var list = [];
+    var item = {};
+    var $bgcolor = $('#bgcolor');
+    var statu = false;
+    var $box = $('#box');
+    var $bg = $('#bg');
+    var $btn = $('#bt');
+    var ox = 0;
+    var lx = 0;
+    var left = 0;
+    var bgleft = 0;
+    (function ($) {
+        $('#webtitle').html('代理中心');
+        $('#wf_title1').html('');
+        $('#back').unbind('click').bind('click', function () {
+            window.location.href = "/Lottery/CQLottery/CQSSC";
+        });
+        $btn.mousedown(function (e) {
+            lx = $btn.offset().left;
+            ox = e.pageX - left;
+            statu = true;
+        });
+        $(document).mouseup(function () {
+            statu = false;
+        });
+        $box.mousemove(function (e) {
+            if (statu) {
+                left = e.pageX - ox;
+                if (left < 1) {
+                    left = 1;
+                }
+                if (left > list.length) {
+                    left = list.length;
+                }
+                getSet(left);
+                $btn.css('left', left);
+                $bgcolor.width(left);
+            }
+        });
+        $bg.click(function (e) {
+            if (!statu) {
+                bgleft = $bg.offset().left;
+                left = e.pageX - bgleft;
+                if (left < 1) {
+                    left = 1;
+                }
+                if (left > list.length) {
+                    left = list.length;
+                }
+                getSet(left);
+                $btn.css('left', left);
+                $bgcolor.stop().animate({ width: left }, list.length);
+            }
+        });
+        $('.dtlBtn').click(function () {
+            $('#UdetailInfo').hide();
+            $.post('/User/UpdUserBackSet', { userid: $('#txtdw').data("uid"), backid: $('#txtdw').data('backid') }, function (data) {
+                if (data.result) {
+                    window.wxc.xcConfirm('执行成功', window.wxc.xcConfirm.typeEnum.success);
+                } else {
+                    window.wxc.xcConfirm(data.msg, window.wxc.xcConfirm.typeEnum.error);
+                }
+            });
+        });
+    })(jQuery);
+
+    function UserBack(uid, logname) {
+        $('#suname').html(logname);
+        $('#txtdw').data('uid', uid);
+        $('#UdetailInfo').show();
+        $.post('/help/GetUserNextBackSet', { iseque: true, userid: uid }, function (data) {
+            var result = data;
+            list = result.Items;
+            item = result.Item;
+            if (list.length == 0) {
+                list = item;
+            }
+            getSet(90 - parseInt(item[0].AutoID) + 1);
+            $('#box').css('width', list.length + 'px');
+            $('#UdetailInfo').show();
+            $bg.unbind('click').bind('click', function (e) {
+                if (!statu) {
+                    bgleft = $bg.offset().left;
+                    left = e.pageX - bgleft;
+                    if (left < 1) {
+                        left = 1;
+                    }
+                    if (left > list.length) {
+                        left = list.length;
+                    }
+                    getSet(left);
+                    $btn.css('left', left);
+                    $bgcolor.stop().animate({ width: left }, list.length);
+                }
+            });
+        });
+    }
+
+
+    function addordown(type) {
+        var wid = $('#bt').position().left;
+        if (type == 0) {
+            wid = parseInt(wid) - 1 > 1 ? wid - 1 : 1;
+        } else {
+            wid = parseInt(wid) + 1 < list.length ? wid + 1 : list.length;
+        }
+        $('#bt').css('left', wid);
+        $('#bgcolor').width(wid);
+        getSet(wid);
+        $('#bgcolor').stop().animate({ width: wid }, list.length);
+    }
+
+    function getSet(i) {
+        var ite;
+        if (list.length > 0) {
+            if (list.length < i) {
+                ite = list[list.length - 1];
+            } else {
+                ite = list[i - 1];
+            }
+        } else {
+            ite = item[0];
+        }
+        $('#bt').css('left', i);
+        $('#bgcolor').width(i);
+        $('#txtdw').val(ite.SSCType + '%');
+        $('#txtdw').data('backid', ite.AutoID);
+        $('#txt3d').val(ite.FCType);
+        $('#txt11x5').val(ite.X5Type + '%');
+        $('#txtmaxodds').val(ite.WinFee);
+    }
+</script> 
+ <script type="text/javascript">
+     var nuid = '@ViewBag.NUID';
+     var Params = {
+         userid: '',
+         username: '',
+         btime: '',
+         etime: '',
+         isxj: 1,
+         pageIndex: 1
+     };
+     var useridss = '';
+
+     function GetReportList(uid, obj) {
+         Params.userid = uid;
+         Params.username = $('#ousername').val();
+         Params.btime = $('#btime').val();
+         Params.etime = $('#etime').val();
+         Params.isxj = $('#isself').val();
+         $.post('/User/UserRPTList', Params, function (data) {
+             var html = "";
+             var tt = "";
+             var ssyl = 0;
+             useridss = '';
+             for (var i = 0; i < data.Items.length; i++) {
+                 if (data.Items[i].AutoID == nuid) {
+                     tt += '<tr><td style="max-width:120px;" ><a href="/User/UserList">' + data.Items[i].LoginName + '</a></td><td >' + (data.Items[i].Type == 1 ? '代理' : '会员') + '</td>' +
+                         '<td >' + data.Items[i].SumFee + '</td>' +
+                         '<td>' + (data.Items[i].Type == 0 ? data.Items[i].TotalPayMent : "&nbsp;") + '</td><td class="teamyl" data-id="' + data.Items[i].UserID + '">&nbsp;</td>' +
+                         '<td><span class="spanc restpwd"  data-type="1" data-id="' + data.Items[i].AutoID + '">重置密码</span></td>' +
+                         '</tr>';
+                     ssyl = data.Items[i].UserID;
+                     if (data.Items[i].Type > 0) {
+                         useridss = data.Items[i].UserID + ',' + useridss;
+                     }
+                 } else {
+                     html += '<tr ><td style="max-width:120px;"><a herf="javascript:void(0);" class="ulname" data-uid="' + data.Items[i].UserID + '" data-id="' + data.Items[i].AutoID + '">' + data.Items[i].LoginName + '</a></td><td >' + (data.Items[i].Type == 1 ? '代理' : '会员') + '</td>' +
+                         '<td >' + data.Items[i].SumFee + '</td>' +
+                         '<td >' + (data.Items[i].Type == 0 ? data.Items[i].TotalPayMent : "&nbsp;") + '</td><td class="teamyl" data-id="' + (data.Items[i].Type > 0 ? data.Items[i].UserID : "") + '">' + (data.Items[i].Type == 0 ? data.Items[i].YL : "&nbsp;") + '</td>' +
+                         '<td><span class="spanc reaccount"  data-id="' + data.Items[i].AutoID + '" data-name="' + data.Items[i].LoginName + '">转账</span>&nbsp;<span class="spanc uupdLevel" data-type="' + data.Items[i].SafeLevel + '" data-id="' + data.Items[i].AutoID + '">高返</span>' +
+                         '&nbsp;<span class="spanc userdetail" data-name="' + data.Items[i].LoginName + '" data-uid="' + data.Items[i].UserID + '">详情</span></td>' +
+                         '</tr>';
+                     if (data.Items[i].Type > 0) {
+                         useridss = data.Items[i].UserID + ',' + useridss;
+                     }
+                 }
+             }
+             html += '<tr style="font-weight: bold;" class="color2"><td>当页合计：</td><td colspan="">&nbsp;</td><td>' + data.itempage.SumFee + '</td>' +
+                 '<td class="sumtotalpayment" >&nbsp;</td><td class="sumteamyl" data-id="' + ssyl + '">&nbsp;</td><td >&nbsp;</td></tr>' +
+                 '<tr class="color2"><td colspan="6" class="pager"><div class="spana tcdPageCode" id="pager"></div></td></tr>';
+
+             $('#' + obj).html(tt + html);
+             $('#btn_team_search').show();
+             if (data.Items.length > 0) {
+                 $('#' + obj).parent().parent().parent().show();
+                 $.post('/User/GetAllParents', { userid: data.Items[0].UserID }, function (data) {
+                     if (data.result != "") {
+                         var result = data.result.substring(data.result.indexOf('@ViewBag.CUserID'), data.result.length);
+                         var parenthtml = '';
+                         if (data.result.indexOf('@ViewBag.CUserID') == -1) {
+                                parenthtml = parenthtml + '<a href="javascript:void(0);" class="ulname" data-uid="@ViewBag.CUserID">@ViewBag.CloginName</a>';
+                            } else {
+                                var plist = result.split('>');
+                                for (var i = 0; i < plist.length; i++) {
+                                    var pclist = plist[i].split(',');
+                                    if (i == 0 && pclist[0] != '@ViewBag.CUserID') {
+                                        parenthtml += '<a href="javascript:void(0);">' + pclist[1] + (i != (plist.length - 1) ? ">" : "") + '</a>';
+                                    } else {
+                                        parenthtml += '<a href="javascript:void(0);" class="ulname" data-uid="' + pclist[0] + '">' + pclist[1] + (i != (plist.length - 1) ? ">" : "") + '</a>';
+                                    }
+                                }
+                            }
+                            $('#plistdiv').html(parenthtml);
+                            $('.ulname').unbind('click').bind('click', function () {
+                                var _this = $(this);
+                                GetReportList(_this.data('uid'), 'utbody');
+                            });
+                        }
+                 });
+
+                } else {
+                    window.wxc.xcConfirm('暂无下级！', window.wxc.xcConfirm.typeEnum.warning);
+                }
+             $('.ulname').unbind('click').bind('click', function () {
+                 var _this = $(this);
+                 GetReportList(_this.data('uid'), 'utbody');
+             });
+             $('.userdetail').unbind('click').bind('click', function () {
+                 var _this = $(this);
+                 UserBack(_this.data('uid'), _this.data('name'));
+             });
+
+             $('.uupdstatus').unbind('click').bind('click', function () {
+                 var _this = $(this);
+                 var uuid = _this.data('id');
+                 var status = _this.data('type');
+                 window.wxc.xcConfirm('用户' + (status == 1 ? "禁闭后不可" : "解禁后可") + '登录,确认 ' + (status == 1 ? "禁闭" : "解禁") + '吗？',
+                     window.wxc.xcConfirm.typeEnum.cconfirm, { onOk: function () { UpdateUserStatus(uuid, status); } });
+             });
+             $('.uupdLevel').unbind('click').bind('click', function () {
+                 var _this = $(this);
+                 var uuid = _this.data('id');
+                 var status = _this.data('type');
+                 window.wxc.xcConfirm((status == 1 ? "解除用户高配额开户" : "允许用户高配额开户") + ',确认操作吗？',
+                     window.wxc.xcConfirm.typeEnum.cconfirm, { onOk: function () { UpdateUserLevel(uuid, status); } });
+             });
+
+             $('.restpwd').unbind('click').bind('click', function () {
+                 var _this = $(this);
+                 var uuid = _this.data('id');
+                 var status = _this.data('type');
+                 window.wxc.xcConfirm('请输入新的' + (status == 1 ? "登陆" : "资金") + '密码.',
+                     window.wxc.xcConfirm.typeEnum.input, {
+                         onOk: function () {
+                             var ms = $('.inputBox').val();
+                             UpdPwd(uuid, status, ms);
+                         }
+                     });
+             });
+             $('.reaccount').unbind('click').bind('click', function () {
+                 $('#zhuanzhang').show();
+                 var _this = $(this);
+                 $('.loginname').val(_this.data('name'));
+                 $('.sgBtn1').unbind('click').bind('click', function () {
+                     if ($('.accountfee').val() == '' || $('.accountfee').val() == null) {
+                         window.wxc.xcConfirm('转账金额不正确!', window.wxc.xcConfirm.typeEnum.warning);
+                         return false;
+                     }
+                     if ($('.accountpwd').val() == '' || $('.accountpwd').val() == null) {
+                         window.wxc.xcConfirm('转账密码不能为空!', window.wxc.xcConfirm.typeEnum.warning);
+                         return false;
+                     }
+                     $.post('/user/UserMoneyChange', { id: _this.data('id'), changemoney: $('.accountfee').val(), accountpwd: $('.accountpwd').val() }, function (data) {
+                         divhide();
+                         if (data.Msg.indexOf('成功') > -1) {
+                             window.wxc.xcConfirm(data.Msg, window.wxc.xcConfirm.typeEnum.success);
+                             window.location.href = '/User/UserList';
+                         } else {
+                             window.wxc.xcConfirm(data.Msg, window.wxc.xcConfirm.typeEnum.warning);
+                         }
+                     });
+                 });
+             });
+             if (uid == '') {
+                 $("#pager").createPage({
+                     pageCount: data.pageCount > 10 ? 10 : data.pageCount,
+                     current: data.pageIndex,
+                     backFn: function (p) {
+                         Params.pageIndex = p;
+                         GetReportList('', 'utbody');
+                     }
+                 });
+             }
+         });
+        }
+     function divhide() {
+         $('.xcConfirm').hide();
+         $('.xcConfirm input').val('');
+     }
+        function GetTeam() {
+            if (useridss != '') {
+                $.post('/User/GetUserTeamRPT', { userid: useridss, btime: Params.btime, etime: Params.etime }, function (data) {
+                    var sumyl = 0;
+                    var sumtotal = 0;
+                    $('.teamyl').each(function (i, v) {
+                        var uid = $(v).data('id');
+                        if (uid != '') {
+                            var ite = GetTeamYL(data.Item, uid);
+                            $(v).html(ite.yl);
+                            $(v).prev().html(ite.zt);
+                            sumyl = parseFloat(parseFloat(sumyl) + parseFloat(ite.yl)).toFixed(4);
+                            sumtotal = parseFloat(parseFloat(sumtotal) + parseFloat(ite.zt)).toFixed(4);
+                        }
+                    })
+                    //$('.sumtotalpayment').html(sumtotal);
+                    //$('.sumteamyl').html(sumyl);
+                });
+            }
+        }
+
+        function GetTeamYL(data, usid) {
+            var itt = {};
+            itt.yl = 0;
+            itt.zt = 0;
+            for (var i = 0; i < data.length; i++) {
+                if (usid == data[i].UserID) {
+                    itt.yl = data[i].YL;
+                    itt.zt = data[i].TotalPayMent;
+                    break;
+                }
+            }
+            return itt;
+        }
+
+        function UpdPwd(uuid, type, pwd) {
+            $.post('/User/UpdPwd', { id: uuid, type: type, pwd: pwd }, function (data) {
+                if (data.result == 1) {
+                    window.wxc.xcConfirm('执行成功', window.wxc.xcConfirm.typeEnum.success);
+                    window.Location.href = '/User/UserList';
+                } else {
+                    window.wxc.xcConfirm('执行失败', window.wxc.xcConfirm.typeEnum.warning);
+                }
+            });
+        }
+
+        function UpdateUserStatus(uuid, type) {
+            $.post('/User/UpdateUserStatus', { id: uuid, status: type }, function (data) {
+                if (data.status == 1) {
+                    window.wxc.xcConfirm('执行成功', window.wxc.xcConfirm.typeEnum.success);
+                    window.Location.href = '/User/UserList';
+                } else {
+                    window.wxc.xcConfirm('执行失败', window.wxc.xcConfirm.typeEnum.warning);
+                }
+            });
+        }
+
+        function UpdateUserLevel(uuid, type) {
+            $.post('/User/UpdateUserLevel', { id: uuid, status: type }, function (data) {
+                if (data.status == 1) {
+                    window.wxc.xcConfirm('执行成功', window.wxc.xcConfirm.typeEnum.success);
+                    window.Location.href = '/User/UserList';
+                } else {
+                    window.wxc.xcConfirm('执行失败', window.wxc.xcConfirm.typeEnum.warning);
+                }
+            });
+        }
+
+        $(function () {
+            var myDate = new Date();
+            var kk = myDate.getMonth() + 1;
+            if (kk < 10) { kk = '0' + kk; }
+            var ttody = myDate.getFullYear() + "-" + kk + "-" + (myDate.getDate() < 10 ? ('0' + myDate.getDate()) : myDate.getDate());
+            Params.btime = ttody;
+            laydate.render({
+                elem: '#btime',
+                max: $('#etime').val()
+            });
+            laydate.render({
+                elem: '#etime'
+            });
+            $('#btime').val(ttody);
+            $('#etime').val(ttody);
+            Params.btime = ttody;
+            GetReportList('', 'utbody');
+            $('.clsBtn').click(function () {
+                divhide();
+            });
+            $('#btn_bt_search').click(function () {
+                GetReportList('', 'utbody');
+            });
+            $('#btn_team_search').click(function () {
+                $('#btn_team_search').hide();
+                GetTeam();
+            });
+        });
+    </script>

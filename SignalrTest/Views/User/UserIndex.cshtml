@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "UserDefault";
+
+}
+
+@section css{  
+    <link rel="stylesheet" href="/modules/ancss/new.css" type="text/css" />
+    <link rel="stylesheet" href="/modules/ancss/pub.css" type="text/css" />
+    <link href="/modules/ancss/personal-center.css" rel="stylesheet" />
+    <link href="/modules/laydate/theme/default/laydate.css" rel="stylesheet"/> 
+<link rel="stylesheet" type="text/css" href="/modules/plug/antip/xcConfirm.css">
+    <link href="/modules/pager/page.css" rel="stylesheet"/>
+     <style type="text/css">
+        .spanc { cursor: pointer;}
+        .spanc:hover { cursor: pointer;color:#FF5722;}
+        body, a {color: #FF5722;}
+    </style>
+}
+@section scripts{
+    <script type="text/javascript" src="/Scripts/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/Scripts/common.js"></script>
+<script src="/Scripts/DateForm.js"></script>
+<script src="/modules/laydate/laydate.js"></script>
+    <script type="text/javascript" src="/modules/scripts/report/moneyinout.js"></script>
+    <script src="/modules/plug/antip/xcConfirm.js" type="text/javascript" charset="utf-8"></script> 
+<script src="/modules/pager/jquery.page.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            bindahref('ul');
+            $(".tab-bar li").click(function () {
+                $(this).addClass("tablion").siblings().removeClass("tablion");
+            })
+            $("#wrap").click(function () {
+                $('#mainframe2', window.parent.document).hide();
+                $(".overlays1", window.parent.document).hide();
+
+            })
+        })
+
+
+        function bindahref(obg) {
+            $(obg + ' a').each(function (i, v) {
+                $(v).click(function () {
+                    $('#mainframe1').attr("src", $(v).data("href"));
+                });
+            });
+        }
+    </script>
+    <style type="text/css">
+        .hide {
+            display: none;
+        }
+        .button:hover {
+            cursor:pointer;
+        }
+        .button {
+        border:none;
+        }
+    </style>
+}
+
+
+
+<div id="BgDiv"></div>
+
+
+
+<div id="page-container">
+    <div style='display:none'>
+        <input name="perid" id="perid" value="3838" style='display:none'>
+        <input name="this_url" id="this_url" value="http://6368397.com/?mod=report&code=orders" style='display:none'>
+        <input name="root_url" id="root_url" value="http://6368397.com/" style='display:none'>
+        <input name="do_url" id="do_url" value="http://6368397.com/do.aspx" style='display:none'>
+        <input name="tpl_url" id="tpl_url" value="http://6368397.com/template/default/" style='display:none'>
+        <input name="do_this_url" id="do_this_url" value="http://6368397.com/do.aspx?mod=report&code=orders" style='display:none'>
+    </div>
+
+    <div id="page-body">
+        <div class="main11" id='main_id'>
+
+            <div id='bodydiv' class='mainbody'>
+              
+                <div class="content">
+                    <div class="center-cont">
+                        <h1><img src="/modules/animg/14941214735291.png" /></h1>
+                        <div class="cont">
+                            <div class="left-div">
+                                <h3>个人中心</h3>
+                                <div class="inf">
+                                    <b>
+                                        <img src="/modules/animg/user.png" alt="" />
+                                        <span id='lostmoney' name='lostmoney'>@ViewBag.lgname</span>
+                                    </b>
+                                    <b>
+                                        <img src="/modules/animg/mony.png" alt="" />
+                                        <span>@ViewBag.accountfee.ToString("f2")</span>
+                                    </b>
+                                </div>
+                                <ul class="per-n">
+                                    <li data-type="record">游戏记录</li>
+                                    <li class="che" data-type="inout">资金明细</li>
+                                    <li  data-type="profit">盈亏报表</li>
+                                    <li data-type="daili">代理中心</li>
+                                    <li data-type="addmeb">添加会员</li>
+                                    <li data-type="signout">退出登录</li>
+                                </ul>
+                            </div>           
+                             <div class="right-div">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    var hh = window.screen.height - 50;
+
+                    if (document.getElementById('page-container').offsetHeight < hh) {
+                        document.getElementById('page-container').style.height = hh + 'px';
+                    }
+                    else document.getElementById('page-container').style.minHeight = window.screen.height + 'px';
+
+                    var ctype = '@ViewBag.Type';
+
+                    $(function () {
+                        $(".left-div .per-n li").click(function () {
+                            var selli = this;
+                            $(".left-div .per-n li").removeClass("che");
+                            $(selli).addClass("che");
+                            var type = $(selli).data("type");
+                            ctype = type;
+                            seltype(ctype);
+                        });
+                        if (ctype == '') {
+                            ctype = 'profit';
+                        }
+                        $(".left-div .per-n li").each(function(i, v) {
+                            var selli = this;
+                            if ($(selli).data("type") == ctype) {
+                                $(".left-div .per-n li").removeClass("che");
+                                $(selli).addClass("che"); 
+                                seltype(ctype);
+                            }
+                        }); 
+                    });
+
+                    function seltype(type)
+                    {
+                        switch (type)
+                        {
+                            case "record":
+                                $(".content .right-div").load("/help/bettrecord?start=" + new Date().format("yyyy-MM-dd") + "&end=" + new Date().format("yyyy-MM-dd"));
+                                break;
+                            case "inout":
+                                $(".content .right-div").load("/help/moneyrecord?start=" + new Date().format("yyyy-MM-dd") + "&end=" + new Date().format("yyyy-MM-dd"));
+                                break;
+                            case "profit":
+                                $(".content .right-div").load("/help/userreport");
+                                break;
+                            case "signout":
+                                $(".content .right-div").load("/home/logout");
+                                break;
+                            case "daili":
+                                $(".content .right-div").load("/user/userlist");
+                                break;
+                            case "addmeb":
+                                $(".content .right-div").load("/help/Addmember");
+                                break;
+                        }
+                    }
+                </script>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

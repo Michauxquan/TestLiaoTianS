@@ -1,0 +1,279 @@
+﻿@{
+    ViewBag.Title = "分享中心";
+    Layout = null;
+}
+ 
+ 
+@*    <link rel="stylesheet" type="text/css" href="/modules/css/help.css"/>*@
+    <link rel="stylesheet" type="text/css" href="/modules/css/userdefaultcon.css"/>
+    <link rel="stylesheet" type="text/css" href="/modules/css/jquery-ui.css"/> 
+
+    <script type="text/javascript" src="/Scripts/jquery-1.11.3.min.js"></script>  
+    <script type="text/javascript" src="/Scripts/DateForm.js"></script>
+         <script  type="text/javascript" src="/Scripts/ZeroClipboard.js"></script>
+    <style>
+         #box{position: relative; width: 100px; height: 15px;  margin:  5px 15px 0 10px;float:left;}
+         #bg{height: 5px; border: 1px solid #ddd; margin-top:0px;border-radius: 5px; overflow: hidden;}
+         #bgcolor{background: #d8ac03 url(/modules/images/tk_titlle1.png) 0 -1px; width: 0; height: 5px; border-radius: 5px;}
+         #bt{width: 20px; height: 10px; background: #e3b80a 50% 50% repeat-x; border-radius: 5px; overflow: hidden; position: absolute; left: 0px; margin-left: -6px; top: -1px; cursor: pointer;}
+         .jbhy_tb td {height: 46px;line-height: 28px;font-size: 14px;}
+         .tglj_tb td a.xingqing, .tglj_tb td a.erweima {color: #f60;text-decoration: underline;}
+    </style> 
+ 
+
+ 
+<h3>分享中心</h3>
+<div class="tagContent  selectTag" id="tagContent0" style="display: block;">
+    <div class="content-body">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbhy_tb">
+
+            <tbody><tr>
+                <td class="jbxx_right">彩票返点：</td>
+                <td width="81%" class="ladong_pv">
+                    <span id="tdsider" style="margin-top: 18px;">
+                    <div class="reduction" id="redudw" onclick="addordown(0)"><a href="javascript:void(0)" style="color: #fff; background: #dbb35f;">-</a></div>
+                 
+                                                <div id="box">
+  <div id="bg">
+   <div id="bgcolor"></div>
+  </div>
+  <div id="bt"></div>
+ </div> 
+                    <div class="Plus" id="plusdw" onclick="addordown(1)"><a href="javascript:void(0)" style="color: #fff; background: #dbb35f;">+</a></div>
+                    <div class="clear"></div>
+                </span> 
+                    <span style="text-align: center;"><p>定位返点</p><p><input name="" type="text" class="ipt_01" id="txtcdw" style="width: 50px;" readonly="readonly"></p></span> 
+                    <span style="text-align: center;"><p>3D返点</p><p><input name="" type="text" class="ipt_01" id="txt3d" style="width: 50px;" readonly="readonly"></p></span>
+                    <span style="text-align: center;"><p>11选5返点</p><p><input name="" type="text" class="ipt_01" id="txt11x5" style="width: 50px;" readonly="readonly"></p></span>
+                    <span style="text-align: center;"><p>奖金模式</p><p><input name="" type="text" class="ipt_01" id="txtmaxodds" style="width: 50px;" readonly="readonly"></p></span>
+                     <span class="left"><input type="submit" name="button" id="button_update_user" value="生成链接" style="margin-top: 18px;" class="qr_btn"></span>
+                </td>
+            </tr> 
+
+            </tbody></table>
+    </div>
+</div>
+
+
+<div class="jbxx_text" style="margin-top: 15px;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tglj_tb"><tbody> 
+        </tbody></table>
+</div>
+ 
+<!--详情弹出框 fist-->
+
+<!--详情弹出框 end-->
+
+
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable" id="mxdetail" tabindex="-1" role="dialog" aria-describedby="dialog-url" aria-labelledby="ui-id-1" style="display: none;">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all1 ui-helper-clearfix"><span id="ui-id-1" class="ui-dialog-title">推广链接详情</span>
+        <button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" id="btnclose" title="close">
+            <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+            <span class="ui-button-text">close</span>
+        </button></div>
+    <div class="jbxx_text ui-dialog-content ui-widget-content" id="dialog-url">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbhy_tb">
+            <tbody><tr>
+                <td class="jbxx_right">彩票返点：</td>
+                <td width="81%" class="ladong_pv">
+                    <span style="text-align:center;"><p>定位返点</p><p><input name="" type="text" class="ipt_01" id="txtcdwdetail" style="width:50px;" readonly="readonly"></p></span>            
+                    <span style="text-align:center;"><p>3D返点</p><p><input name="" type="text" class="ipt_01" id="txtc3ddetail" style="width:50px;" readonly="readonly"></p></span>
+                    <span style="text-align:center;"><p>11选5返点</p><p><input name="" type="text" class="ipt_01" id="txtc11x5detail" style="width:50px;" readonly="readonly"></p></span>
+                    <span style="text-align:center;"><p>奖金模式</p><p><input name="" type="text" class="ipt_01" id="txtmaxoddsdetail" style="width:50px;" readonly="readonly"></p></span>
+                </td>
+            </tr> 
+            </tbody></table>
+    </div>
+
+</div>
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable" tabindex="-1" role="dialog" id="dialog-erweima" aria-describedby="dialog-erweima" aria-labelledby="ui-id-2" style="display: none;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all1 ui-helper-clearfix"><span id="ui-id-2" class="ui-dialog-title">推广二维码</span><button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" id="btnermclose" role="button" aria-disabled="false" title="close"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span></button></div>
+    <div class="jbxx_text ui-dialog-content ui-widget-content">
+        <img id="img-erweima" src="" width="200" height="200" style="margin-left:10px;margin-top:5px;" >
+    </div>
+</div>
+    <div id="ClipSwf" style="left: -1000px; position: absolute; width: 69px; height: 21px;">
+    <embed id="ZeroClipboardMovie_1" src="/modules/plug/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="69" height="21" name="ZeroClipboardMovie_1" align="middle"
+            allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" 
+        flashvars="id=1&amp;width=69&amp;height=21" wmode="transparent">
+</div>
+ 
+<script type="text/javascript">
+    var list = [];
+    var item = {};
+    var Clip = null;
+    var ClipContainer = null;
+    $(function() {
+        $.post('/help/GetUserNextBackSet',
+            {},
+            function(data) {
+                var result = data; 
+                list = result.Items;
+                item = result.Item;
+                if (list.length > 4) {
+                    list = list.splice(0, list.length - 4);
+                }
+
+                $('#box').css('width', list.length + 'px');
+                (function ($) {
+                    var $box = $('#box');
+                    var $bg = $('#bg');
+                    var $bgcolor = $('#bgcolor');
+                    var $btn = $('#bt');
+                    var statu = false;
+                    var ox = 0;
+                    var lx = 0;
+                    var left = 0;
+                    var bgleft = 0;
+                    $btn.mousedown(function (e) {
+                        lx = $btn.offset().left;
+                        ox = e.pageX - left;
+                        statu = true;
+                    });
+                    $(document).mouseup(function () {
+                        statu = false;
+                    });
+                    $box.mousemove(function (e) {
+                        if (statu) {
+                            left = e.pageX - ox;
+                            if (left < 1) {
+                                left = 1;
+                            }
+                            if (left > list.length) {
+                                left = list.length;
+                            }
+                            getSet(left);
+                            $btn.css('left', left);
+                            $bgcolor.width(left);
+                        }
+                    });
+                    $bg.click(function (e) {
+                        if (!statu) {
+                            bgleft = $bg.offset().left;
+                            left = e.pageX - bgleft;
+                            if (left < 1) {
+                                left = 1;
+                            }
+                            if (left > list.length) {
+                                left = list.length;
+                            }
+                            getSet(left);
+                            $btn.css('left', left);
+                            $bgcolor.stop().animate({ width: left }, list.length);
+                        }
+                    });
+                })(jQuery);
+            });
+        getList();
+        $('#btnclose').click(function () { $('#mxdetail').hide(); });
+        $('#btnermclose').click(function () { $('#dialog-erweima').hide(); });
+        $('#button_update_user').click(function() {
+            if ($('#txtcdw').val() == '' || $('#txtcdw').val() == null) {
+                alert('请设置返点级别');
+                return false;
+            }
+            $.post('/help/SetUserlShare',
+                { backid: $('#txtcdw').data("backid") },
+                function(data) {
+                    if (data.result.indexOf('成功') > -1) {
+                        alert('操作成功');
+                        getList();
+                    } else {
+                        alert(data.ErrorMsg);
+                    }
+                });
+        });
+        Clip = new ZeroClipboard.Client();
+        ClipContainer = $("#ClipSwf");
+        Clip.setHandCursor(true);
+        Clip.setCSSEffects(true);
+        Clip.addEventListener("complete", function (client, text) {
+            alert("复制成功!内容:" + text);
+        });
+        ClipContainer.html(Clip.getHTML(69, 21));
+        
+    });
+    function SetClipValue(obj, SelectorEl) {
+        var offset = $(obj).offset();
+        ClipContainer.offset({ left: offset.left, top: offset.top });
+        var fzid = SelectorEl.toString().replace("cp", ""); 
+        Clip.setText($(fzid).data('url'));
+    }
+    function getSet(i) {
+        var ite;
+        if (list.length > 0) {
+            if (list.length < i) { ite = list[list.length - 1]; }
+            else { ite = list[i - 1]; }
+        } else {
+            ite = item;
+        }
+        $('#txtcdw').val(ite.SSCType + '%');
+        $('#txtcdw').data('backid', ite.AutoID);
+        $('#txt3d').val(ite.FCType);
+        $('#txt11x5').val(ite.X5Type + '%');
+        $('#txtmaxodds').val(ite.WinFee ); 
+    }
+    function addordown(type) {
+        var wid = $('#bgcolor').width() == null ? 0 : $('#bgcolor').width();
+        if (type == 0) {
+            wid = wid - 1 > 1 ? wid - 1 : 1;
+        } else {
+            wid = wid + 1 < list.length ? wid + 1 : list.length;
+        }
+        $('#bt').css('left', wid);
+        $('#bgcolor').width(wid);
+        getSet(wid);
+        $('#bgcolor').stop().animate({ width: wid }, list.length);
+    }
+    function getList() {
+        $.post('/help/GetUserShareList',{},
+           function (data) {
+               var html = '';
+               var result = data;
+               for (var i = 0; i < result.Items.length; i++) {
+                   var ite = result.Items[i];
+                   html += '<tr><td width="50%" class="jbxx_right">@ViewBag.Url/Home/Register/' +
+                       ite.qrcode +
+                       '</td><td width="10%"><a href="javascript:void(0)" class="xingqing"   dw="1.60" data-id="'+ ite.backid + '">详情</a></td>' +
+                       '<td width="10%"><a href="javascript:void(0)" class="erweima" id="'+ite.qrcode+'" data-url="@ViewBag.Url/Home/Register/'
+                       + ite.qrcode + '">二维码</a></td>' +
+                       '<td width="20%"><input type="button"  onmouseover="SetClipValue(this,\'#cp'+ ite.qrcode + '\')"  value="复制" id="cp' + ite.qrcode + '"   class="fz_btn" data-url="@ViewBag.Url/Home/Register/'
+                       + ite.qrcode + '"><span style="color: #F00">（Ctrl+C）</span></td>' +
+                       '<td width="10%"><a href="javascript:void(0)" data-urid="' + ite.AutoID + '" class="delete btdel"><img src="/modules/images/bin_closed.png"></a></td></tr>';
+               }
+               $('.tglj_tb tbody').html(html);
+               $('.btdel').click(function () {
+                   var _obj = $(this);
+                   $.post('/help/UserShareDel',
+                       { autoid: _obj.data('urid') },
+                       function (data) {
+                           if (data.result) {
+                               alert('删除成功');
+                               getList();
+                           } else { alert('删除失败'); }
+                       });
+               });
+               $('.xingqing').click(function () {
+                   var _this = $(this);
+                   $.post('/help/GetBackModelDetail',
+                       { autoid: _this.data('id') },
+                       function (data) { 
+                           $('#txtcdwdetail').val(data.Item.SSCType);
+                           $('#txtc3ddetail').val(data.Item.FCType);
+                           $('#txtc11x5detail').val(data.Item.X5Type);
+                           $('#txtmaxoddsdetail').val(data.Item.WinFee);
+                           $('#mxdetail').css('top','20%');
+                           $('#mxdetail').css('left','30%');
+                           $('#mxdetail').show();
+                       });
+               });
+               $('.erweima').click(function () { 
+                   $('#img-erweima').attr('src', 'http://qrickit.com/api/qr?qrsize=200&d=' + encodeURI($(this).data('url')));
+                   $('#dialog-erweima').css('top', '20%');
+                   $('#dialog-erweima').css('left', '30%');
+                   $('#dialog-erweima').fadeIn(1500);
+               });
+           });
+    }
+
+</script>
+ 

@@ -1,0 +1,307 @@
+﻿@{
+    ViewBag.Title = "人和国际-走势图";
+    Layout = null;
+}
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html" charset="utf-8" />
+		<meta charset="UTF-8">
+		<title>人和企业邮箱--历史走势</title>
+	    <link rel="stylesheet" type="text/css" href="/modules/css/userdefault.css"/>
+	    <link rel="stylesheet" type="text/css" href="/modules/css/userdefaultcon.css"/>
+            <link href="/modules/ancss/personal-center.css" rel="stylesheet" />
+        <link href="/modules/pager/page.css" rel="stylesheet"/>
+	    <style>
+    	    .qiu_bj{font-size:14px !important;}
+    	     body { border-top-left-radius: 8px;
+    	         border-top-right-radius: 8px;
+    	         border-bottom-left-radius: 30px;
+    	         border-bottom-right-radius: 30px;}
+             .tcdPageCode a{color:#272323;}
+    	    #GGS_cal_days {
+    	        width: 231px;
+    	        color: #333;
+    	    }
+            .lhd{display:none;}
+            .ds{display:none;}
+            .dax{display:none;}
+            .yuanc{    width: 20px; margin: 0 auto;line-height: 20px;height: 20px;border-radius: 10px;text-align: center;font-weight: bolder; color: #fff;}
+    	</style>
+         <script type="text/javascript" src="/Scripts/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="/Scripts/common.js"></script>
+		<script type="text/javascript" src="/Scripts/dates.js"></script>
+	    <script type="text/javascript" src="/Scripts/DateForm.js"></script>
+        <script src="/modules/pager/jquery.page.js"></script>
+		<script type="text/javascript">
+		    $(function() { 
+		        var start = ""; 
+		        var nowtime = new Date();  
+		            start = nowtime.getFullYear().toString() + "-" + ((nowtime.getMonth() + 1) < 10 ? ("0" + (nowtime.getMonth() + 1).toString()) : (nowtime.getMonth() + 1).toString()) + "-" + (nowtime.getDate() < 10 ? ("0" + nowtime.getDate().toString()) : nowtime.getDate().toString());
+		       
+		        $('#date').val(start);
+
+		    })
+
+		    Gca = new CalendarClass();
+		    Gca.obj = "Gca";
+
+		</script>
+	</head>
+    <body oncontextmenu="return false;" marginwidth="0" marginheight="0">
+        <div class="headers" style="display:none;width:975px;height:35px;background:url(/modules/images/tk_titlle1.png) repeat;border-top-left-radius:6px;border-top-right-radius:6px;border:none;">
+            <img src="/modules/images/guanbi.png" id="wrap" style="float:right;margin-top:7px;margin-right:5px;"/>
+        </div>
+
+        <div class="jbxx_text">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbxx_tb">
+              <tbody>
+
+              <tr style="color: black;"> 
+                  <td style="text-align: center;">日期：<input type="text" id="date" onclick="Gca.IniCal(this);" onfocus="this.select()" readonly="readonly" class="ipt_01"/> 彩种：
+                      <select name="" id="games">
+                          @foreach (ProEntity.Lottery model in ExpandClass.GetLottery(HttpContext.Current))
+                          {
+                              if (model.Status == 1)
+                              {
+                                  <option value="@(model.CPCode)" @(model.CPCode == ViewBag.CPCode ? "selected='true'" : "")>@(model.CPName)</option>
+                              }
+                          }
+                      </select>
+                        <select name="" id="plays">
+                        <option value="lhd">龙虎斗</option>
+                        <option value="ds" >单双</option> 
+                        <option value="dax">大小</option>
+                      </select>
+                      <select name="" id="lhdplays">
+                          <option value="9"  data-ind="1" data-ind2="5">万个</option>
+                          <option value="6" data-ind="1" data-ind2="2">万千</option>
+                          <option value="7" data-ind="1" data-ind2="3">万百</option>
+                          <option value="8" data-ind="1" data-ind2="4">万十</option>
+                          <option value="10" data-ind="2" data-ind2="3">千百</option>
+                          <option value="11" data-ind="2" data-ind2="4">千十</option>
+                          <option value="12" data-ind="2" data-ind2="5">千个</option>
+                          <option value="13" data-ind="3" data-ind2="4">百十</option>
+                          <option value="14" data-ind="3" data-ind2="5">百个</option>
+                          <option value="15" data-ind="4" data-ind2="5">十个</option>
+                      </select> 
+                      <input type="button" name="button" id="button" value="查询" class="fz_btn"></td>
+              </tr>
+            </tbody>
+            </table>
+            </div>
+        <div style="padding:5px;overflow-y:auto; width: 23%; margin: 0px auto;" oncontextmenu="return false;" marginwidth="0" marginheight="0">
+
+
+
+<div class="jbxx_text" style="padding:5px;overflow:auto;margin-bottom:20px;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="libiao2" id="table">
+    <tbody>
+
+    </tbody>
+    <tfoot>
+        <tr class="color2">
+                    <td colspan="15" class="pager">
+                        <div class="spana tcdPageCode" id="pager" style="float: right;"></div>
+                        <div style="clear: both;"></div>
+                    </td>
+                </tr>
+    </tfoot>
+</table> 
+</div>
+
+</div>
+    <script>
+        var pageindex = 1;
+        $(function() {
+           
+            $('#button').click(function () {
+                pageindex = 1;
+                getList();
+            });
+            $('#plays').change(function() {
+                $('.lhd,.dax,.ds').hide();
+                $('.' + $(this).val()).show();
+                if ($(this).val() != 'lhd') {
+                    $('#lhdplays').hide();
+                } else {
+                    $('#lhdplays').val(9);
+                    $('#lhdplays').show();
+                    lhdshow();
+                }
+            });
+            $('#lhdplays').change(function () {
+                lhdshow();
+            });
+            getList();
+        });
+        function lhdshow() {
+            var ind = $('#lhdplays').val();
+            var one = $("#lhdplays").find("option:selected").data('ind');
+            var two = $("#lhdplays").find("option:selected").data('ind2');
+            $('#table tbody tr td.lhd').hide();
+            $('#table tbody tr td').eq(2).show();
+            $('#table tbody tr').each(function (i, v) {
+                if (i > 1) {
+                    $(v).find('td').eq(1).html($(v).find('td').eq(1).data('num'));
+                    $(v).find('td').eq(2).html($(v).find('td').eq(2).data('num'));
+                    $(v).find('td').eq(3).html($(v).find('td').eq(3).data('num'));
+                    $(v).find('td').eq(4).html($(v).find('td').eq(4).data('num'));
+                    $(v).find('td').eq(5).html($(v).find('td').eq(5).data('num'));
+                    $(v).find('td').eq(ind).show();
+                   var oht= $(v).find('td').eq(one);
+                   var tht = $(v).find('td').eq(two); 
+                   oht.html('<div class="yuanc" style="color:#fff;background:#e21e1e;">' + oht.data('num') + '</div>');
+                   tht.html('<div class="yuanc" style="color:#fff;background:#e21e1e;">' + tht.data('num') + '</div>');
+                } else {
+                    $(v).find('td').eq(ind - 1).show();
+                }
+            }); 
+        }
+        function getList() {
+            console.log($('#mainframe4', parent.document).data('cpcode'));
+            $.post('/Lottery/GetlotteryResultToDay', { CPCode: $('#games').val(), btime: $('#date').val(), pagesize: 100, pageindex: pageindex }, function (data) {
+                var html = "";
+
+                for (var i = 0; i < data.items.length; i++) {
+                    var item = data.items[i];
+                    var one = '', two = '', three = '', four = '', five = '';
+                    var optime = convertdateTostring(item.OpenTime, true, 'yyyy-MM-dd hh:mm:ss');
+                    if ("CQSSC,TJSSC,XJSSC,HLJSSC,HLFFC,SFFFC,WFFFC,XDJKLB,XHGKLB,TXFFC".indexOf($('#games').val()) > -1) {
+                        if (item.ResultNum != null && item.ResultNum != "") {
+                            var lit = item.ResultNum.split(' ');
+                            one = lit[0];
+                            two = lit[1];
+                            three = lit[2];
+                            four = lit[3];
+                            five = lit[4];
+                        }
+                        if (i == 0) {
+                            html += '<tr class="titlle3"><td width="8%" rowspan="2">期数</td><td colspan="5">开奖号码</td><td  colspan="10" class="lhd">龙虎</td><td colspan="5" class="ds">单双</td><td colspan="5" class="dax">大小</td></tr>' +
+                                '<tr class="titlle2"><td width="2%">万</td><td width="2%">千</td><td width="2%">佰</td><td width="2%">拾</td><td width="2%" class="cu_line">个</td>'+
+                                '<td width="3%" class="lhd">万千</td><td width="3%"  class="lhd">万佰</td><td width="3%"  class="lhd">万拾</td><td width="3%" class="cu_line lhd">万个</td><td width="3%" class="lhd" >千佰</td>' +
+                                '<td width="3%" class="lhd">千拾</td><td width="3%" class="lhd cu_line">千个</td><td width="3%" class="lhd">佰拾</td><td width="3%" class="lhd cu_line">佰个</td><td width="3%" class="cu_line lhd">拾个</td>' +
+                                '<td width="3%" class="ds">万</td><td width="3%" class="ds">千</td><td width="3%" class="ds">佰</td><td width="3%" class="ds">拾</td><td width="3%" class="cu_line ds">个</td>' +
+                                '<td width="3%" class="dax">万</td><td width="3%" class="dax">千</td><td width="3%" class="dax">佰</td><td width="3%" class="dax">拾</td><td width="3%" class="dax cu_line">个</td>' +
+                                '</tr>';
+                        }
+                        html += '<tr><td class="cu_line">' + item.IssueNum + '</td>' +
+                            '<td  data-num="' + one + '">' + one + '</td><td data-num="' + two + '">' + two + '</td><td data-num="' + three + '">' + three + '</td><td   data-num="' + four + '">' + four + '</td><td class="cu_line" data-num="' + five + '">' + five + '</td>' +
+                            '<td  class="lhd"><div class="yuanc"  style="' + getLHHColor(one, two) + '">' + getLHH(one, two) + '</div></td><td  class="lhd"><div class="yuanc" style="' + getLHHColor(one, three) + '">' + getLHH(one, three) + '</div></td><td class="lhd"><div class="yuanc" style="' + getLHHColor(one, four) + '">' + getLHH(one, four) + '</div></td><td class="cu_line lhd"><div class="yuanc" style="' + getLHHColor(one, five) + '">' + getLHH(one, five) + '</div></td><td class="lhd"><div class="yuanc" style="' + getLHHColor(two, three) + '">' + getLHH(two, three) + '</div></td>' +
+                            '<td  class="lhd"><div class="yuanc" style="' + getLHHColor(two,four) + '">&nbsp;</div></td><td  class="lhd cu_line"><div class="yuanc" style="' + getLHHColor(two, five) + '">' + getLHH(two, five) + '</div></td><td  class="lhd"><div class="yuanc" style="' + getLHHColor(three, four) + '">' + getLHH(three, four) + '</div></td><td class="cu_line lhd"><div class="yuanc" style="' + getLHHColor(three, five) + '">' + getLHH(three, five) + '</div></td><td class="cu_line lhd"><div class="yuanc" style="' + getLHHColor(four, five) + '">' + getLHH(four, five) + '</div></td>' +
+                            '<td class="ds"><div class="yuanc" style="background:' + getDansColor(one) + ';">' + getDans(one) + '</div></td><td class="ds"><div class="yuanc" style="background:' + getDansColor(two) + ';">' + getDans(two) + '</div></td><td class="ds"><div class="yuanc" style="background:' + getDansColor(three) + ';">' + getDans(three) + '</div></td><td class="ds"><div class="yuanc" style="background:' + getDansColor(four) + ';">' + getDans(four) + '</div></td><td class="ds cu_line"><div class="yuanc" style="background:' + getDansColor(five) + ';">' + getDans(five) + '</div></td>' +
+                            '<td class="dax"><div class="yuanc" style="background:' + getDaXiaoColor(one) + ';">' + getDaXiao(one) + '</div></td><td class="dax"><div class="yuanc" style="background:' + getDaXiaoColor(two) + ';">' + getDaXiao(two) + '</div></td><td class="dax"><div class="yuanc" style="background:' + getDaXiaoColor(three) + ';">' + getDaXiao(three) + '</div></td><td class="dax"><div class="yuanc" style="background:' + getDaXiaoColor(four) + ';">' + getDaXiao(four) + '</div></td><td class="dax"><div class="yuanc" style="background:' + getDaXiaoColor(five) + ';">' + getDaXiao(five) + '</div></td>' +
+                            '</tr>';
+                    }  else if ($('#games').val().indexOf('BJSC') > -1) {
+                        var six = '', seven = '', eight = '', nine = '', ten = '';
+                        if (item.ResultNum != null && item.ResultNum != "") {
+                            var lit = item.ResultNum.split(' ');
+                            one = lit[0];
+                            two = lit[1];
+                            three = lit[2];
+                            four = lit[3];
+                            five = lit[4];
+                            six = lit[5];
+                            seven = lit[6];
+                            eight = lit[7];
+                            nine = lit[8];
+                            ten = lit[9];
+                        }
+                        if (i == 0) {
+                            html += '<tr class="titlle3"><td width="10%" rowspan="2">期数</td><td width="15%" rowspan="2">开奖时间</td><td colspan="10">开奖号码</td></tr>' +
+                                '<tr class="titlle2"><td width="7%">一</td><td width="7%">二</td><td width="7%">三</td><td width="7%">四</td><td width="7%">五</td><td width="7%">六</td><td width="7%">七</td><td width="7%">八</td><td width="7%">九</td><td width="8%" class="cu_line">十</td></tr>';
+                        }
+                        html += '<tr><td class="cu_line">' + item.IssueNum + '</td><td class="cu_line">' + optime.substring(5, optime.length) + '</td>' +
+                            '<td class="qiu_bj">' + one + '</td><td class="qiu_bj">' + two + '</td><td class="qiu_bj">' + three + '</td><td class="qiu_bj">' + four + '</td><td class="qiu_bj">' + five + '</td>' +
+                            '<td class="qiu_bj">' + six + '</td><td class="qiu_bj">' + seven + '</td><td class="qiu_bj">' + eight + '</td><td class="qiu_bj">' + nine + '</td><td class="qiu_bj cu_line">' + ten + '</td></tr>';
+                    }
+                }
+                $('#table tbody').html(html);
+                $('.' + $('#plays').val()).show();
+                if ($('#plays').val()=='lhd') {
+                    lhdshow();
+                }
+                $("#pager").createPage({
+                     pageCount: data.pageCount,
+                     current:pageindex,
+                     backFn: function (p)
+                     { 
+                         pageindex = p;
+                         getList();
+                     }
+                 });
+            });
+        }
+        
+        function getDans(num) {
+            var tnum = parseInt(num);
+            if (!isNaN(tnum)) {
+                return tnum % 2 == 0 ? "双" : "单";
+            }
+            return "--";
+        }
+        function getLHH(num,num2) {
+            var tnum = parseInt(num);
+            var tnum2 = parseInt(num2);
+            if (tnum > tnum2) {
+                return "&nbsp;";
+            } else if (tnum == tnum2) {
+                return "&nbsp;";
+            }
+            return "&nbsp;";
+        }
+        function getLHHColor(num, num2) {
+            var tnum = parseInt(num);
+            var tnum2 = parseInt(num2);
+            if (tnum > tnum2) {
+                return "background:url(/modules/animg/long.png) no-repeat;";//"#e21e1e";
+            } else if (tnum == tnum2) {
+                return "background:url(/modules/animg/he.png) no-repeat;";
+            }
+            return "background:url(/modules/animg/hu.png) no-repeat;";
+        }
+        function getDansColor(num) {
+            var tnum = parseInt(num);
+            if (!isNaN(tnum)) {
+                return tnum % 2 == 0 ? "#dda100" : "#109d16";
+            }
+            return "--";
+        }
+        function getDansCount(num) {
+            var clents = num.split(' ');
+            var cont = 0;
+            for (var i = 0; i < clents.length; i++) {
+                if (!isNaN(parseInt(clents[i]))) {
+                    cont += parseInt(clents[i]) % 2 == 0 ? 1 : 0;
+                }
+            }
+            return (5 - cont) + '单' + cont + '双';
+        }
+        function getDaXiao(num) {
+            var tnum = parseInt(num);
+            if (!isNaN(tnum)) {
+                return tnum < 5 ? "小" : "大";
+            }
+            return "--";
+        }
+        function getDaXiaoColor(num) {
+            var tnum = parseInt(num);
+            if (!isNaN(tnum)) {
+                return tnum < 5 ? "#0060bd" : "#e21e1e";
+            }
+            return "red";
+        }
+        function getZhiHe(num) { 
+            if ("1、2、3、5、7".indexOf(num) > -1) {
+                return "质";
+            } else if ("0、4、6、8、9".indexOf(num) > -1) {
+                return "合";
+            }
+            return "--";
+        }
+    </script>
+</body>
+</html>
+
+
+

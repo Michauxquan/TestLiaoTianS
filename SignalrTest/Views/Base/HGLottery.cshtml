@@ -60,7 +60,7 @@
                 userNickName = window.prompt("请输入昵称！");
             }
 
-            var chatHub = $.connection.HGRoomHub;
+            var chatHub = $.connection.HGRoomHub; 
             chatHub.client.NotifySendMessage = function (nickName,userName,message) {
                 var userAvatar = '/modules/animg/29.gif';
                 if (nickName == userNickName) {
@@ -86,7 +86,7 @@
                 objDiv.scrollTop = objDiv.scrollHeight;
             }
 
-            $.connection.hub.start().done(function () {
+            $.connection.hub.start().done(function () { 
                 chatHub.server.userEnter(userNickName, userTrueName);
             });
             $(document).on("keypress", function (e) {

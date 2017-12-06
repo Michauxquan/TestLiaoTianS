@@ -1,0 +1,364 @@
+﻿@using ProEntity
+@{
+    ViewBag.Title = "添加用户";
+    var modelist = (List<UserBackSet>)ViewBag.BackList;
+}
+<link rel="stylesheet" type="text/css" href="/modules/css/userdefaultcon.css" />
+<link rel="stylesheet" type="text/css" href="/modules/css/bill.css" />
+<style>
+    body {
+        background: #243c2369 !important;
+        color: black !important;
+    }
+    /*定义滚动条轨道 内阴影+圆角*/
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+    }
+    /*定义滑块 内阴影+圆角*/
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    }
+
+    #box {
+        position: relative;
+        width: 100px;
+        height: 15px;
+        margin: 5px 15px 0 10px;
+        float: left;
+    }
+
+    #bg {
+        height: 5px;
+        border: 1px solid #ddd;
+        margin-top: 0px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    #bgcolor {
+        background: #d8ac03 url(/modules/images/tk_titlle1.png) 0 -1px;
+        width: 0;
+        height: 5px;
+        border-radius: 5px;
+    }
+
+    #bt {
+        width: 20px;
+        height: 10px;
+        background: #e3b80a 50% 50% repeat-x;
+        border-radius: 5px;
+        overflow: hidden;
+        position: absolute;
+        left: 0px;
+        margin-left: -6px;
+        top: -1px;
+        cursor: pointer;
+    }
+</style>
+<script type="text/javascript">
+    var list = [];
+    var item = {};
+    var isgp = '@ViewBag.IsGP';
+    $(function () {
+        $('#back').unbind('click').bind('click', function () {
+            window.location.href = "/User/UserList";
+        });
+
+        $.post('/help/GetUserNextBackSet', { iseque: true }, function (data) {
+            var result = data;// eval('(' + data + ')');
+            list = result.Items;
+            item = result.Item;
+            if (isgp == '0') {
+                if (list.length > 5) {
+                    list = list.splice(0, list.length - 5);
+                }
+            } if (list.length == 0) {
+                list = item;
+            }
+            $('#box').css('width', list.length + 'px');
+            (function ($) {
+                var $box = $('#box');
+                var $bg = $('#bg');
+                var $bgcolor = $('#bgcolor');
+                var $btn = $('#bt');
+                var statu = false;
+                var ox = 0;
+                var lx = 0;
+                var left = 0;
+                var bgleft = 0;
+                $btn.mousedown(function (e) {
+                    lx = $btn.offset().left;
+                    ox = e.pageX - left;
+                    statu = true;
+                });
+                $(document).mouseup(function () {
+                    statu = false;
+                });
+                $box.mousemove(function (e) {
+                    if (statu) {
+                        left = e.pageX - ox;
+                        if (left < 1) {
+                            left = 1;
+                        }
+                        if (left > list.length) {
+                            left = list.length;
+                        }
+                        getSet(left);
+                        $btn.css('left', left);
+                        $bgcolor.width(left);
+                    }
+                });
+                $bg.click(function (e) {
+                    if (!statu) {
+                        bgleft = $bg.offset().left;
+                        left = e.pageX - bgleft;
+                        if (left < 1) {
+                            left = 1;
+                        }
+                        if (left > list.length) {
+                            left = list.length;
+                        }
+                        getSet(left);
+                        $btn.css('left', left);
+                        $bgcolor.stop().animate({ width: left }, list.length);
+                    }
+                });
+            })(jQuery);
+        });
+
+
+        $('.utype').eq(0).click();
+        $('#btnaddser').click(function () {
+            if (checkform()) {
+                var backid;
+                if ($('#txtdw').val() == "" || $('#txtdw').val() == null) {
+                    backid = list.length > 0 ? list[list.length - 1].AutoID : list[0].AutoID;
+                } else {
+                    backid = $('#txtdw').data('backid');
+                }
+                $.post('/User/UserAdd', {
+                    type: $('.utype:checked').val(),
+                    username: $('#txtusername').val(),
+                    loginname: $('#txtuname').val(),
+                    loginpwd: $('#txtpwd').val(),
+                    backid: backid
+                }, function (data) {
+                    if (data.result) {
+                        window.wxc.xcConfirm('新增成功', window.wxc.xcConfirm.typeEnum.success);
+                        $('.ipt_01').val('');
+                    } else {
+                        window.wxc.xcConfirm(data.Errmsg, window.wxc.xcConfirm.typeEnum.error);
+
+                    }
+                });
+            }
+        });
+
+    });
+
+    function addordown(type) {
+        var wid = $('#bt').position().left;
+        if (type == 0) {
+            wid = parseInt(wid) - 1 > 1 ? wid - 1 : 1;
+        } else {
+            wid = parseInt(wid) + 1 < list.length ? wid + 1 : list.length;
+        }
+        $('#bt').css('left', wid);
+        $('#bgcolor').width(wid);
+        getSet(wid);
+        $('#bgcolor').stop().animate({ width: wid }, list.length);
+    }
+    function getSet(kk) {
+        var i = parseInt(kk);
+        var wid = $('#bt').position().left;
+        var ite = {};
+        if (list.length > 0) {
+            if (list.length <= i) {
+                ite = list[list.length - 1];
+                wid = list.length - 1;
+            }
+            else { ite = list[i - 1]; if (i == 1) { wid = 1; } }
+        } else {
+            ite = item[0];
+            wid = 1;
+        }
+        $('#txtdw').val(ite.SSCType + '%');
+        $('#txtdw').data('backid', ite.AutoID);
+        $('#txt3d').val(ite.FCType);
+        $('#txt11x5').val(ite.X5Type + '%');
+        $('#txtmaxodds').val(ite.WinFee);
+        $('#bt').css('left', wid);
+        $('#bgcolor').width(wid);
+        $('#bgcolor').stop().animate({ width: wid }, list.length);
+    }
+    function checkform() {
+        if (!validateUserName($('#txtuname').val())) {
+            window.wxc.xcConfirm('用户名 格式为 6-16位数字、字母,首位必须为字母 ，请重新输入', window.wxc.xcConfirm.typeEnum.warning);
+            $('#txtuname').focus();
+            return false;
+        }
+        if (!validateUserPss($('#txtpwd').val())) {
+            window.wxc.xcConfirm('登陆密码 不符合规则，请重新输入', window.wxc.xcConfirm.typeEnum.warning);
+            $('#txtpwd').focus();
+            return false;
+        }
+        if (!validateNickName($('#txtusername').val())) {
+            window.wxc.xcConfirm('昵称 不符合规则，请重新输入', window.wxc.xcConfirm.typeEnum.warning);
+            $('#txtusername').focus();
+            return false;
+        }
+        return true;
+    }
+
+
+    $(function () {
+        $('.tjhy_dl').click(function () {
+            $('.tjhy_dl').removeClass('tjhy_dlFist');
+            $(this).addClass('tjhy_dlFist');
+            if ($(this).data('type') == '0') {
+                $('#tdsider').show();
+                $('#pelist').hide();
+                $('#smspan').hide();
+            } else {
+                $('#tdsider').hide();
+                $('#smspan').show();
+                $('#pelist').show();
+            }
+        });
+        $('.tjhy_pedlBtn').click(function () {
+            $('#txtdw').val($(this).data('ssctype') + '%');
+            $('#txtdw').data('backid', $(this).data('id'));
+            $('#txt3d').val($(this).data('fctype') + '%');
+            $('#txt11x5').val($(this).data('x5type') + '%');
+            $('#txtmaxodds').val($(this).val());
+            $('#txtMax').val($(this).data('max'));
+            $('#txtMaxdp').val($(this).data('low'));
+        });
+    });
+
+
+</script>
+<div style="margin:10px auto;width:100%;">
+    <span id="back" style="float:right;margin-right:10px;width:50px;height:24px;background:#7f4141;color:#fff;text-align:center;border-radius:5px;padding:5px;">返 回</span>
+    <span style="clear:both;"></span>
+</div>
+<div class="tagContent  selectTag" id="tagContent0" style="margin-top:30px;display:block">
+    <div class="jbxx_text">
+        <ul style="margin-right: 20px; margin-top: 5px;">
+            <li>
+                <a href="javascript:void(0)" class="tjhy_dl tjhy_dlFist" data-type="0">一般代理</a>
+                <a href="javascript:void(0)" style="display: @(modelist.Count > 0 ? "block" : "none");" id="peier" data-type="1" class="tjhy_dl">配额代理</a>
+                <div class="clear"></div>
+            </li>
+        </ul>
+        <div style="clear: both;"></div>
+    </div>
+    <div style="height: 360px; font-size: 12px;">
+
+        <div class="jbxx_text">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbhy_tb">
+                <tbody>
+                    <tr>
+                        <td width="15%" class="jbxx_right">用户名：</td>
+                        <td width="17%">
+                            <input id="txtuname" name="" type="text" placeholder="首位字母开头,长度大于6" class="ipt_01">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="jbxx_right">昵称：</td>
+                        <td>
+                            <input id="txtusername" name="txtnewpwd_dr" type="text" placeholder="长度必须大于2" class="ipt_01">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="jbxx_right">用户类型：</td>
+                        <td width="55%" class="ladong_pv">
+                            &nbsp;&nbsp;&nbsp;<input type="radio" name="utype" class="utype" value="1">代理
+                            &nbsp;&nbsp;&nbsp;<input type="radio" name="utype" class="utype" value="0"> 会员
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="jbxx_right">登录密码：</td>
+                        <td>
+                            <input id="txtpwd" name="txtpwd" autocomplete="new-password" type="password" placeholder="长度不小于6位" class="ipt_01">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="17%" class="jbxx_right">
+                            彩票返点：
+                            <br />
+                            <span id="smspan" style="width: 140px; display: none;">剩余/总量 &nbsp;</span>
+                        </td>
+                        <td width="53%" class="ladong_pv">
+
+                            <span id="tdsider" style="margin-top: 18px;">
+                                <div class="reduction" style="width: 36px;" onclick="getSet(1)"><a href="javascript:void(0)" style="color: #fff; width: 36px; background: #dbb35f;">最小</a></div>
+
+                                <div class="reduction" id="redudw" onclick="addordown(0)"><a href="javascript:void(0)" style="color: #fff; background: #dbb35f;">-</a></div>
+                                <div id="box">
+                                    <div id="bg">
+                                        <div id="bgcolor"></div>
+                                    </div>
+                                    <div id="bt"></div>
+                                </div>
+                                <div class="Plus" id="plusdw" onclick="addordown(1)"><a href="javascript:void(0)" style="color: #fff; background: #dbb35f;">+</a></div>
+
+                                <div class="Plus" style="width: 36px;" onclick="getSet(1000)"><a href="javascript:void(0)" style="color: #fff;width: 36px; background: #dbb35f;">最大</a></div>
+                                <div class="clear"></div>
+                            </span>
+
+                            <span style="float: left; display: none;" id="pelist">
+                                @foreach (UserBackSet md in modelist)
+                                {
+                                    <span style="text-align: center;">
+                                        <p>
+                                            <input type="button" data-id="@md.BackID" data-ssctype="@md.Bmodel.SSCType" data-fctype="@md.Bmodel.FCType" data-x5type="@md.Bmodel.X5Type" data-max="@md.Bmodel.MaxHigFee" data-low="@md.Bmodel.MaxHigFee" value="@md.Bmodel.WinFee" class="tjhy_pedlBtn">
+                                        </p>
+                                        <p>@(md.SSCNum - md.SSCUseNum)/@md.SSCNum</p>
+                                    </span>
+
+                                }
+
+                            </span>
+                            <div class="clear"></div>
+                            <span style="text-align: center;">
+                                <p>龙虎斗返点</p>
+                                <p>
+                                    <input name="" type="text" class="ipt_01" id="txtdw" style="width: 50px;" readonly="readonly">
+                                </p>
+                            </span>
+                            <span style="text-align: center;">
+                                <p>定位胆返点</p>
+                                <p>
+                                    <input name="" type="text" class="ipt_01" id="txt3d" style="width: 50px;" readonly="readonly">
+                                </p>
+                            </span>
+                            <span style="text-align: center;">
+                                <p>大小单双返点</p>
+                                <p>
+                                    <input name="" type="text" class="ipt_01" id="txt11x5" style="width: 50px;" readonly="readonly">
+                                </p>
+                            </span>
+                            <span style="text-align: center;">
+                                <p>奖金模式</p>
+                                <p>
+                                    <input name="" type="text" class="ipt_01" id="txtmaxodds" style="width: 50px;" readonly="readonly">
+                                </p>
+                            </span>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">
+                            <input type="button" name="button" id="btnaddser" value="确认添加" class="qr_btn">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "游戏统计";
+    Layout = null;
+    var orrt = (ProEntity.OrderReport)ViewData["itempage"];
+}
+<style>
+    .cancel {
+    color: red;
+    font-size: 15px;
+    font-weight: 600;
+    }
+</style>
+<script>
+    var Params = {
+        cpcode: '',
+        btime: '',
+        etime: '',
+        username: "",
+        type: '',
+        selfrange: -1,
+        pageIndex: 1
+    };
+
+    function getParams() {
+        Params.cpcode = $('#lotteryslt').val();
+        Params.selfrange = $('#isself').val();
+        Params.username = $('#ousername').val();
+        Params.btime = $('#btime').val();
+        Params.etime = $('#etime').val();
+    }
+
+    function loadChild(loginname) {
+        Params.username = loginname;
+        $(".content .right-div").load("/help/bettsumrecord", Params);
+    }
+
+    $(function() {
+        laydate.render({
+            elem: '#btime',
+            max: $('#etime').val()
+        });
+        laydate.render({
+            elem: '#etime' 
+        });
+        $("#lotteryslt").val('@ViewBag.CPCode');
+
+        $("#btn_bt_search").click(function() {
+            getParams();
+            Params.pageIndex = 1;
+            $(".content .right-div").load("/help/bettsumrecord", Params);
+        })
+        if ('@ViewBag.UserID' != '') {
+            var parenthtml = '';
+            if ('@ViewBag.UserID' == '@ViewBag.CUserID') {
+                parenthtml += '<a href="javascript:void(0);" class="ulname" data-name="@ViewBag.CUserName">@ViewBag.CUserName</a>';
+                $('#plistdiv').html(parenthtml);
+                $('.ulname').unbind('click').bind('click', function() {
+                    var _this = $(this);
+                    Params.username = _this.data('name');
+                    $(".content .right-div").load("/help/bettsumrecord", Params);
+                });
+            } else {
+                $.post('/User/GetAllParents', { userid: '@ViewBag.UserID' }, function(data) {
+                    if (data.result != "") {
+                        console.log(data.result);
+                        var result = data.result.substring(data.result.indexOf('@ViewBag.CUserID'), data.result.length);
+                        console.log(result);
+                        var plist = result.split('>');
+                        for (var i = 0; i < plist.length; i++) {
+                            var pclist = plist[i].split(',');
+                            parenthtml += '<a href="javascript:void(0);" class="ulname" data-name="' + pclist[1] + '">' + pclist[1] + (i != (plist.length - 1) ? ">" : "") + '</a>';
+                            $('#plistdiv').html(parenthtml);
+                            $('.ulname').unbind('click').bind('click', function() {
+                                var _this = $(this);
+                                Params.username = _this.data('name');
+                                $(".content .right-div").load("/help/bettsumrecord", Params);
+                            });
+                        }
+                    }
+                });
+            }
+            
+        }
+        $("#pager").createPage({
+            pageCount: @ViewData["pageCount"] > 10 ? 10 : @ViewData["pageCount"],
+            current: @ViewData["pageIndex"],
+            backFn: function (p)
+            {
+                getParams();
+                Params.pageIndex=p;
+                $(".content .right-div").load("/help/bettsumrecord",Params);
+            }
+        });
+
+    });
+</script>
+
+<h3>游戏记录</h3>
+<div class="tagContent  selectTag" id="tagContent0">
+    <div class="jbxx_text">
+        <ul>
+            <li style="margin-top: 20px;">
+                彩种：
+                <select name="lotteryslt" id="lotteryslt">
+                    <option value="">-所有彩种-</option>
+                    <optgroup label="时时彩">时时彩</optgroup>
+                    <option value="CQSSC">重庆时时彩</option>
+                    <optgroup label="PK10">PK10</optgroup>
+                    <option value="BJPK10">北京PK10</option>
+                    <optgroup label="分分彩">分分彩</optgroup>
+                    <option value="txffc">腾讯分分彩</option>
+                    <option value="hg1.5">韩国1.5</option>
+                    <option value="dj1.5">东京1.5</option>
+                </select>
+                &nbsp;
+                日期：
+                <input type="text" name="btime" id="btime" value="@ViewBag.Start" class="Wdate" style="width: 100px;">
+                &nbsp;至
+                <input type="text" name="etime" id="etime" value="@ViewBag.End" class="Wdate" style="width: 100px;">&nbsp;
+                登录帐号：<input name="ousername" id="ousername" type="text" style="width: 120px;" value="@ViewBag.UserName">
+                范围：
+                <select class="input gameuser" id="isself" name="isself">
+                    <option value="-1" @(ViewBag.IsSelf == 0 ? "selected='selected'" : "")>全部</option>
+                    <option value="0" @(ViewBag.IsSelf == 3 ? "selected='selected'" : "")>自己</option>
+                    <option value="1" @(ViewBag.IsSelf == 1 ? "selected='selected'" : "")>直接下级</option>
+                    <option value="2" @(ViewBag.IsSelf == 2 ? "selected='selected'" : "")>所有下级</option>
+                </select>
+                &nbsp;<input type="button" class="button" id="btn_bt_search" value=" 查询 ">
+
+            </li>
+        </ul>
+         <div style="clear: both;"></div>
+    </div>
+    <div id="plistdiv" style="margin-top: 5px; text-indent: 20px;">
+   
+    </div>
+    <div style="height: 360px; font-size: 12px;">
+        <table class="tab" cellpadding="0" cellspacing="0" border="0" id="table" style="margin-top:10px;" >
+            <thead style="font-size: 13px;">
+                <tr>
+                    <th>编号</th>
+                    <th> 登陆账号</th>   
+                    <th>定位胆总计</th>
+                    <th>大小单双总计</th>
+                    <th>龙虎斗总计</th> 
+                </tr>
+
+            </thead>
+            <tbody>
+                @{
+                    int i = 1;
+                    decimal bettotal = 0;
+                    decimal wintotal = 0;
+                    decimal lhhtotal = 0;
+                }
+                @foreach (ProEntity.OrderReport info in ((List<ProEntity.OrderReport>)ViewData["items"]))
+                {
+                    string status = string.Empty;
+                    bettotal += info.DWDFee; wintotal += info.DXDSFee;
+                    lhhtotal += info.LHHFee;
+                    <tr>
+                        <td>@i</td>
+                        <td><a href="javascript:void(0);" onclick="loadChild('@info.LoginName')"> @info.LoginName</a></td>  
+                        <td>@info.DWDFee.ToString("n2")</td>
+                        <td>@info.DXDSFee.ToString("n2")</td>
+                        <td>@info.LHHFee.ToString("n2")</td>
+                    </tr>
+                            i++;
+                }
+                <tr style="font-weight: bold;" class="color2">
+                    <td>当页合计：</td>
+                    <td colspan="1">&nbsp;</td>
+                    <td>@bettotal.ToString("n2")</td>
+                    <td>@wintotal.ToString("n2")</td>
+                    <td>@lhhtotal.ToString("n2")</td>
+                </tr>
+                  <tr style="font-weight: bold;" class="color2">
+                    <td>总计：</td>
+                    <td colspan="1">&nbsp;</td>
+                    <td>@orrt.DWDFee.ToString("n2")</td>
+                    <td>@orrt.DXDSFee.ToString("n2")</td>
+                    <td>@orrt.LHHFee.ToString("n2")</td> 
+                </tr>
+                <tr class="color2">
+                    <td colspan="5" class="pager">
+                        <div class="spana tcdPageCode" id="pager"></div>
+                    </td>
+                </tr>
+            </tbody>
+
+            
+        </table>
+       
+    </div>
+</div>
+
+<script type="text/javascript">
+        @{ string userids = ""; };
+    @foreach (ProEntity.OrderReport info in ((List<ProEntity.OrderReport>) ViewData["items"]))
+     {
+         userids += info.UserID + ",";
+     }
+    var userids = '@userids';
+    console.log('111'+userids);
+</script>

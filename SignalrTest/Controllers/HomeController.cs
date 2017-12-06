@@ -20,8 +20,9 @@ namespace SignalrTest.Controllers
             if (Session["Manager"] == null)
             {
                 return Redirect("/Home/Login1");
-            }
-            return View();
+            } 
+            return Redirect("/Base/CQLottery");
+            //return View();
         }
 
         public ActionResult SecondPage()

@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "UserAdd";
+    Layout = null;
+}
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html" charset="utf-8" />
+		<meta charset="UTF-8">
+		<title>增加用户</title>
+	    <link rel="stylesheet" type="text/css" href="/modules/css/help.css"/>
+            <script type="text/javascript" src="/Scripts/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="/Scripts/common.js"></script>
+		<style> 
+		</style>
+	</head>
+<body>
+<script type="text/javascript">
+(function($){
+$(document).ready(function(){
+	$("#keeppoint").keyup(function(){
+		$(this).val( filterPercent($(this).val()) );
+	});
+	$('input[name="usertype]').click(function() {
+	    $(this).siblings().removeAttr('checked');
+	    $(this).attr('checked', 'checked');
+	});
+    $('.btn').click(function() {
+        if (checkform()) {
+            $.post('/User/UserAdd', {
+                type: $("input[name='usertype']:checked").val(),
+                username: $('#username').val(),
+                loginname: $('#loginname').val(),
+                loginpwd: $('#userpassword').val(),
+                rebate: $('#keeppoint').val()
+            }, function (data) {
+                if (data.result) {
+                    window.history.go(-1);
+                } else {
+                    alert('新增失败');
+                }
+            });
+        }
+    });
+});
+})(jQuery);
+function checkform(obj) {
+    
+    if (!validateUserName($('#loginname').val()))
+  {
+     alert("登陆帐号 不符合规则，请重新输入");
+     $('#loginname').focus();
+	 return false;
+  }
+  if (!validateUserPss($('#userpassword').val()))
+  {
+  	alert("登陆密码 不符合规则，请重新输入");
+  	$('#userpassword').focus();
+	return false;
+  }
+  if( !validateNickName($('#username').val()) )
+  {
+  	alert("呢称 不符合规则，请重新输入");
+  	$('#username').focus();
+	return false;
+  }
+  minp = Number($("#keepmin").val());
+  maxp = Number($("#keepmax").val());
+    console.log($("#keeppoint").val());
+  if ($("#keeppoint").val() == "" || $("#keeppoint").val() ==null) {
+      alert("保留返点设置错误，请检查");
+      return false;
+  }
+  point= Number($("#keeppoint").val());
+  if( point > maxp || point < minp  ){
+		alert("保留返点设置错误，请检查");
+		return false;
+  } 
+  return true;
+}
+//返点输入框输入过滤
+function filterPercent(num){
+	num = num.replace(/^[^\d]/g,'');
+	num = num.replace(/[^\d.]/g,'');
+	num = num.replace(/\.{2,}/g,'.');
+	num = num.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	if( num.indexOf(".") != -1 ){
+		var data = num.split('.');
+		num = (data[0].substr(0,3))+'.'+(data[1].substr(0,1));
+	}else{
+		num = num.substr(0,3);
+	}
+	num = num > 100 ? 100 : num;
+	return num;
+}
+</script>
+<div class="p-header">
+    <p class="current-location">
+        <span>当前位置：</span><span> &gt; 增加用户</span>
+    </p>
+</div>
+<div class="add-user"> 
+    <div class="add-content">
+        <div class="add-title bg-gray co-blue" style="background: linear-gradient(#f32020, #ff6b6b); font-weight: bold;">填写基本信息</div>
+        <div class="border"></div>
+
+        <ul>
+            <li>
+                <label>
+                    用户级别：<span class="radio"><input type="radio" name="usertype" value="1" />代理用户</span>
+                    <span class="radio"><input type="radio" name="usertype" value="0"/>会员用户</span>
+                </label>
+            </li>
+            <li>
+                <label for="username">登录账号：
+                    <input type="text" class="input wide" id="loginname"/>
+                    <span class="notice-follow-input">(由0-9，a-z，A-Z组成的6-16个字符)</span>
+                </label>
+            </li>
+            <li>
+                <label for="userpassword">登录密码：
+                    <input type="password" class="input wide" id="userpassword"/>
+                    <span class="notice-follow-input">(由字母和数字组成6-16个字符；且必须包含数字和字母，不允许连续三位相同)</span>
+                </label>
+            </li>
+            <li>
+                <label for="user-nickname">用户昵称：
+                    <input type="text" class="input wide" id="username"/>
+                    <span class="notice-follow-input">(由2-8个字符组成，可中文，数字不能超过4个，不能含有'QQ'字样)</span>
+                </label>
+            </li>
+            <li style="line-height: 25px;">
+                <label>
+                    <span style="color: #F13031;">例如：您当前的直选返点为 0.8% 并且您的不定位返点为 0.6%，而您在下面“保留返点”处填写 0.5<br />
+							那么：您开设新账户的直选返点即为 0.3%， 不定位返点为 0.1%
+							</span>
+                </label>
+            </li>
+        </ul>
+        <ul class="add-detail">
+            <li>
+                <span class="add-orange biggap">
+							返点级别：<span style="padding-left: 20px;" id="Rebate">@ViewBag.Rebate</span>
+						</span>
+                <span class="biggap more">保留返点：
+							<input type="text" name="keeppoint" id="keeppoint" value="" class="input short"/>
+							<input type="hidden" name="keepmin" id="keepmin" value="0.2"/>
+							<input type="hidden" name="keepmax" id="keepmax" value="@ViewBag.UsableRebate" />%
+							<span class="notice-follow-input">( 可填范围：0.2~@ViewBag.UsableRebate)</span>
+						</span>
+            </li>
+        </ul>
+        <div style="text-align: center; padding: 30px 0;">
+            <div class="button btn red high">确认开户</div>
+        </div>
+    </div> 
+</div>
+</body>
+</html>
+

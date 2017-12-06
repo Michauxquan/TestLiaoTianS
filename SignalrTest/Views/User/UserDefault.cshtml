@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "UserDefault";
+    Layout = null;
+}
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html" charset="utf-8" />
+		<meta charset="UTF-8">
+		<title></title>
+	    <link rel="stylesheet" type="text/css" href="/modules/css/userdefault.css"/>
+         <script type="text/javascript" src="/Scripts/jquery-1.11.3.min.js"></script>
+        <script type="text/javascript" src="/Scripts/common.js"></script>
+	    <script type="text/javascript">
+    	    $(function() {
+    	        bindahref('ul');
+    	        $(".tab-bar li").click(function() {
+    	            $(this).addClass("tablion").siblings().removeClass("tablion");
+    	        })
+    	        $("#wrap").click(function() {
+    	            $('#mainframe2', window.parent.document).hide();
+    	            $(".overlays1", window.parent.document).hide();
+
+    	        })
+    	    })
+
+
+    	    function bindahref(obg) {
+    	        $(obg + ' a').each(function(i, v) {
+    	            $(v).click(function() {
+    	                $('#mainframe1').attr("src", $(v).data("href"));
+    	            });
+    	        });
+    	    }
+    	</script>
+        <style type="text/css"> .hide{display:none;}</style>
+	</head>
+<body>
+    <div class="container">
+        <div class="header"> 
+            <span id="ui-id-2" class="ui-dialog-title" style="width: 64px; height: 18px;line-height:30px"> 
+        <img src="/modules/img/litte-icon/logoold.png" alt="logo" title="logo" width="84" height="40" style="display: -webkit-box;position: absolute;top: -8px;left: -1px;">
+        </span>
+            <img src="/modules/images/guanbi.png" id="wrap"/>
+        </div>
+        <ul class="tab-bar">
+            <li class="tablion"><a data-href="/Help/Security" href="javascript:void(0);">个人资料</a></li><li><a data-href="/Help/Playrecord" href="javascript:void(0);">我的明细记录</a></li><li class="@(ViewBag.Type==0?"hide":"")"><a data-href="/Help/Addmember" href="javascript:void(0); ">团队管理</a></li><li class="@(ViewBag.Type==0?"hide":"")"><a data-href="/Help/Teamreport" href="javascript:void(0);">团队报表</a></li><li><a data-href="/Help/Mymsg" href="javascript:void(0);">我的信息</a></li><li><a data-href="/Help/Withdrawscash" href="javascript:void(0);">提款记录</a></li>@*<li><a data-href="/Lottery/LotteryRecord" href="javascript:void(0);">我的游戏记录</a></li><li><a data-href="/Report/ReportList" href="javascript:void(0);">账变记录</a></li><li><a data-href="/SysSet/Orders" href="javascript:void(0);">充值/提现</a></li>*@
+        </ul>
+        <ul class="childrens1 childrens">
+            <li><a data-href="/Help/Security" href="javascript:void(0);">基本资料</a></li><li><a data-href="/Help/addbank" href="javascript:void(0);">绑定银行卡</a></li><li><a data-href="/Help/changepsw" href="javascript:void(0);">修改密码</a></li><li><a data-href="/Help/Myreturn" href="javascript:void(0);">我的返点</a></li><li><a data-href="/Help/Prizes" href="javascript:void(0);">奖金详情</a></li>@*<li><a data-href="/Account/AccountSafe" href="javascript:void(0);">账户安全</a></li><li><a data-href="/Account/MyCard" href="javascript:void(0);">我的银行卡</a></li><li><a data-href="/User/UserReward" href="javascript:void(0);">奖金详情</a></li>*@
+        </ul>
+        <ul class="childrens2 childrens">
+            <li><a data-href="/Help/Playrecord" href="javascript:void(0);">我的游戏记录</a></li><li><a data-href="/Help/Moneyinout" href="javascript:void(0);">我的资金明细</a></li><li><a data-href="/Help/Addbetrecord" href="javascript:void(0);">我的追号记录</a></li>
+        </ul>
+        <ul class="childrens3 childrens @(ViewBag.Type==0?"hide":"")">
+            <li><a data-href="/Help/Addmember" href="javascript:void(0);">添加会员</a></li><li><a data-href="/Help/MemberList" href="javascript:void(0);">会员列表</a></li><li><a data-href="/Help/Sharelink" href="javascript:void(0);">代理推广链接</a></li><li><a data-href="/Help/Onlinemember" href="javascript:void(0);">在线会员</a></li>
+        </ul>
+        <ul class="childrens4 childrens @(ViewBag.Type==0?"hide":"") ">
+            <li><a data-href="/Help/Teamreport" href="javascript:void(0);">团队报表</a></li><li><a data-href="/Help/Teamorders" href="javascript:void(0);">团队订单明细</a></li><li><a data-href="/Help/Teambalance" href="javascript:void(0);">团队余额</a></li>
+        </ul>
+        <ul class="childrens5 childrens ">
+            <li><a data-href="/Help/Mymsg" href="javascript:void(0);">发信息</a></li><li><a data-href="/Help/Mymsgrecieve" href="javascript:void(0);">收件箱</a></li>
+        </ul>
+        <ul class="childrens4 childrens">
+            <li><a data-href="/Help/Withdrawscash" href="javascript:void(0);">提款记录</a></li>
+        </ul>
+        @*<ul class="childrens6 childrens">
+            <li><a data-href="/SysSet/Orders" href="javascript:void(0);">充值</a></li><li><a data-href="/SysSet/Draws" href="javascript:void(0);">提现</a></li>
+        </ul>*@
+        <div class="contents">
+            <iframe src="/Help/Security" frameborder="1" class="frame1" name="mainframe1" id="mainframe1" width="915" @*height="517"*@ height="545" scrolling="yes">
+                #document
+            </iframe>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $(".tab-bar li").click(function () {
+                $(".childrens").eq($(this).index()).show().siblings(".childrens").hide();
+            })
+        })
+    </script>
+ </body>
+</html>
+
+
+

@@ -1,0 +1,53 @@
+﻿.c-yellow {
+	color: #ff7e00
+}
+.mdl h1, .mdl h2, .mdl h3 {
+	line-height: 1 !important;
+}
+body, html {
+	font-family: '微软雅黑', arial !important;
+	font-size: 12px !important;
+	color: #fff !important;
+	padding: 0;
+	margin: 0
+}
+body a {
+	text-decoration: none;
+}
+.container { width:975px;height:690px;background:url(../images/body_bg.jpg);border-top-left-radius:8px;border-top-right-radius:8px;border-bottom-left-radius:30px;border-bottom-right-radius:30px;}
+ 
+.tab-bar { background: url(../images/vip_top.png) no-repeat;height:84px;width:890px;margin-left:25px;margin-top:5px;}
+.tab-bar li{
+    float:left;
+    width: 146px;
+    height: 46px;
+    line-height: 46px;
+    font-family: "微软雅黑";
+    font-size: 14px;
+    text-align: center;
+    list-style:none; 
+    margin-top:2px;
+}
+    .tab-bar li:first-child { margin-left:-10px;}
+.tab-bar li a { 
+    display: block;
+    width: 146px;
+    height: 46px;
+    color: #fff;
+    background: url(../images/vipMeun_line.png) no-repeat right;
+
+}
+.tab-bar li a:hover { 
+    background: url(../images/vipMeun_hover.png) no-repeat center;
+}
+.tablion {background: url(../images/vipMeun_hover.png) no-repeat center; }
+
+.childrens2, .childrens3, .childrens4, .childrens5 { display:none;}
+.childrens {height:30px;width:930px;padding:0;margin-left:25px;margin-top:-49px;clear:both;}
+.childrens li{float:left;width:85px;height:30px;line-height:30px;text-align:center;color:white; list-style:none;}
+    .childrens li:first-child { margin-left:30px;}
+    .childrens li a {color:rgb(217, 163, 75);}
+    .childrens li a:hover{ color:rgb(253, 217, 141);text-decoration:underline;}
+    .childrens li a:visited { color:rgb(253, 217, 141);text-decoration:underline;}
+
+.contents { border:1px solid #60502E;width:919px;margin-left:26px;padding:5px 5px 5px 3px;margin-top:-9px;border-top:none;height:550px;}

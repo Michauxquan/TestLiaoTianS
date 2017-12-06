@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "帐变记录";
+}
+@section css{
+    <link rel="stylesheet" type="text/css" href="/modules/css/red.css" />
+    <link rel="stylesheet" type="text/css" href="/modules/css/bill.css" />
+    <link href="/modules/laydate/theme/default/laydate.css" rel="stylesheet" />
+    <link href="/modules/pager/page.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background: #243c2369 !important;
+            color: black !important;
+        }
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        /*定义滑块 内阴影+圆角*/
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        }
+        .header{width:96%;background-color:#000;opacity:.6;position:fixed;top:5px;left:2%;right:2%;height:50px;border-radius:5px}
+        .header .header-left{float:left;width:197px;font-size:18px;color:#bfa44d;font-weight:600}
+        .header .header-left .back{float:left}
+        .header .header-left img{margin-top:5px;height:35px}
+        .header .header-left .title{display:inline-block;height:50px;line-height:50px;float:left}
+        .header .header-right{float:right;width:110px;height:50px}
+        .header .header-right .setting{height:40px;float:right;padding-top:5px}
+        .header .header-right .setting img{height:30px;margin-top:4px;width:25px;vertical-align:middle}
+        .header .header-right .money{float:right;color:#bfa44d;font-size:18px;line-height:50px}
+        .header .header-right .money p{width:85px}
+        .head-menu{width:130px;height:210px;background-color:#161616;position:fixed;top:50px;right:7px;z-index:111111111}
+        .head-menu ul li{height:35px;width:80%;line-height:35px;padding-left:3%;color:#fff;margin:0 auto;border-bottom:1px solid #424240}
+        .head-menu img{height:25px;vertical-align:middle;margin-right:5px}
+        .tab{width:100%}
+        .tab thead tr{border-left:1px solid #fff}
+        .tab thead tr th{border-top:1px solid #fff;line-height:20px;background:#870f00;color:#fff;font-weight:lighter;text-align:center;border-right:1px solid #907c73}
+        .tab tbody tr{border-right:1px solid #fff}
+        .tab tbody tr td{border-left:1px solid #fff;text-align:center;line-height:25px;color:#fff;border-bottom:1px solid #fff;height:35px}
+         .cancel {    color: red;    font-size: 15px;    font-weight: 600;    }
+    </style>
+}
+@section scripts{
+    <script src="/modules/laydate/laydate.js"></script>
+    <script src="/modules/pager/jquery.page.js"></script>
+}
+<script>
+        $(function() {
+            $('#webtitle').html('帐变记录');
+            $('#wf_title1').html('');
+            $('#back').unbind('click').bind('click', function() {
+                window.location.href = "/Lottery/CQLottery/CQSSC";
+            });
+            laydate.render({
+                elem: '#btime',
+                max: $('#etime').val()
+            });
+            laydate.render({
+                elem: '#etime',
+                min: $('#btime').val()
+            });
+            $("#ordertype").val(@ViewBag.Type);
+            $("#btn_my_search").click(function() {
+                window.location.href = "/help/moneyrecord?start=" + $('#btime').val() + "&end=" + $('#etime').val() + "&ordertype=" + $('#ordertype').val() + "&pageIndex=1";
+            });
+
+            $("#pager").createPage({
+                pageCount: @ViewData["pageCount"] > 10 ? 10 : @ViewData["pageCount"],
+                current: @ViewData["pageIndex"],
+                backFn: function(p) {
+                    window.location.href = "/help/moneyrecord?start=" + $('#btime').val() + "&end=" + $('#etime').val() + "&ordertype=" + $('#ordertype').val() + "&pageIndex="+p;
+                }
+            });
+
+        });
+</script>
+
+
+<div class="tagContent  selectTag" id="tagContent0" style="margin-top: 20px;">
+    <div class="chcck-bill jbxx_text" style="color: #443d3d;margin:10px auto;">
+        <input type="text" class="datainp" name="btime" id="btime" value="@ViewBag.Start" style="width:80px;">&nbsp;至<input type="text" class="datainp" name="etime" id="etime" value="@ViewBag.End" style="width:80px;">
+        <select name="ordertype" id="ordertype" style="width:60px;" class="datainp">
+            <option value="-1">全部</option>
+            <option value="2">取款</option>
+            <option value="1">存款</option>
+            <option value="4">下注</option>
+            <option value="8">中奖</option>
+            <option value="17">下级返点</option>
+            <option value="7">返点</option>
+            <option value="9">撤单</option>
+            <option value="19">分红</option>
+        </select>
+        <input type="button" id="btn_my_search" value=" 查询 " class="dateSub">
+    </div>
+    <div>
+        <table class="tab" cellpadding="0" cellspacing="0" border="0" id="table">
+            <thead style="font-size: 13px;">
+                <tr>
+                    <th>
+                        类型
+                    </th>
+                    <th>
+                        帐变
+                    </th>
+                    <th>
+                        余额
+                    </th>
+                    <th>
+                        时间
+                    </th>
+
+                    @*        <th style="width: 90px;">
+                            交易说明
+                        </th>*@
+                </tr>
+            </thead>
+
+            <tbody id="yxjlbody">
+                @foreach (ProEntity.LotteryOrder info in ((List<ProEntity.LotteryOrder>)ViewData["items"]))
+                {
+                    string time = info.CreateTime.ToString("MM-dd hh:mm");
+                    string type = string.Empty;
+                    switch (info.PlayType)
+                    {
+                        case 1:
+                            type = "存款"; break;
+                        case 2:
+                            type = "取款"; break;
+                        case 4:
+                            type = "投注"; break;
+                        case 7:
+                            type = "返点"; break;
+                        case 8:
+                            type = "中奖"; break;
+                        case 9:
+                            type = "撤单"; break;
+                        case 17:
+                            type = "下级返点"; break;
+                        case 19:
+                            type = "分红"; break;
+                        default:
+                            type = "其他" + info.PlayType; break;
+                    }
+                    <tr>
+                        <td>@type</td>
+                        <td>@info.AccountChange.ToString("n2")</td>
+                        <td>@info.Account.ToString("n2")</td>
+                        <td>@time</td>
+                        @*<td  style="width: 90px;height:90px !important; overflow:scroll;    word-break: break-all;word-wrap: break-word;word-spacing: initial;">@info.PlayTypeName</td>*@
+                    </tr>
+                }
+                @if ((int)ViewData["pageCount"] == 0)
+                {
+                    <tr height="35" align="center"><td colspan=6>未找到数据，请更改查询条件之后进行查询！</td></tr>
+                }
+                <tr class="color2">
+                    <td colspan="5" class="pager">
+                        <div class="spana tcdPageCode" id="pager"></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

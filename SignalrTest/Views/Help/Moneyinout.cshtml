@@ -1,0 +1,239 @@
+﻿@{
+    ViewBag.Title = "信息中心";
+    Layout = null;
+}
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/modules/css/help.css"/>
+    <link rel="stylesheet" type="text/css" href="/modules/css/userdefaultcon.css"/>
+    <link rel="stylesheet" type="text/css" href="/modules/css/need/laydate.css" />
+    <link rel="stylesheet" type="text/css" href="/modules/css/skins/dahong/laydate.css"/>
+    <link rel="stylesheet" type="text/css" href="/modules/datapager/style.css"/>
+    <script type="text/javascript" src="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js"></script>
+
+    <script type="text/javascript" src="/Scripts/jquery-1.11.3.min.js"></script>
+    <script  type="text/javascript"  src="/Scripts/DateForm.js"></script> 
+        <script type="text/javascript" src="/Scripts/laydate.js"></script>
+    <script type="text/javascript" src="/modules/datapager/paginate.js"></script>  
+
+</head>
+   <body style="padding:10px;" oncontextmenu="return false;">
+
+<div id="tagContent">	
+	<!--时时彩 fist-->
+	<div class="tagContent  selectTag" id="tagContent0">
+    	
+        <div class="jbxx_text">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbxx_tb">
+              <tbody><tr>
+              	<td width="7%">类型：</td>
+                <td colspan="7" ><select id="playtype" name="">
+      	              <option value="-1">全部</option>
+                    <option value="2">取款</option> 
+                    <option value="1">存款</option>
+                    <option value="4">下注</option>
+                     <option value="5">追号</option>
+      	              <option value="8">中奖</option>
+      	              <option value="17">下级返点</option>
+      	              <option value="7">返点</option>
+                    <option value="9">撤单</option>
+                    <option value="18">工资</option>
+                    <option value="19">分红</option> 
+                </select></td> 
+                </tr>
+                <tr>
+              	<td colspan="3">查询时间：</td>
+                <td width="84%" colspan="5"><input type="text" class="start-time ipt_01 laydate-icon" value="" id="btime" style="width: 210px;" onClick="laydate({ istime: true, format: 'YYYY-MM-DD hh:mm:ss' })" /> 
+										<span class="text-middle-input">&nbsp;至&nbsp;</span>
+										<input type="text" class="endtime ipt_01 laydate-icon"  value="" id="etime" style="width: 200px;" onClick="laydate({ istime: true, format: 'YYYY-MM-DD hh:mm:ss' })"/> 
+                <input type="button" name="button" id="search" value="开始搜索" class="fz_btn"></td>
+                </tr>
+            </tbody></table>
+        	
+        </div>
+        
+        <div style="height:360px;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" class="yxjl_tb data-table" id="table" style="font-size:12px;">
+                <thead style="font-size: 13px;">
+                <tr>
+                    <td width="100">订单详情</td>
+                    <td width="183">时间</td>
+                    <td width="80">类型</td>
+                    <td width="82">变动金额</td>
+                    <td width="76">账户余额</td>
+                    <td width="532">备注</td>
+                </tr>
+                </thead>
+                  <tr class="color1" style="background-color: rgb(236, 236, 236);"><td colspan="2" style="text-align: right;">支出笔数：</td><td colspan="2" style="text-align: left;" id="outcount">0</td><td style="text-align: right;">支出合计：</td><td style="text-align: left;" id="outaccount">￥0</td></tr>
+                  <tr class="color2"><td colspan="2" style="text-align: right;">收入笔数：</td><td colspan="2" style="text-align: left;" id="incount">0</td><td style="text-align: right;">收入合计：</td><td style="text-align: left;" id="inaccount">￥0</td></tr>
+                  <tr class="color1" style="background-color: rgb(236, 236, 236);"><td colspan="2" style="text-align:right;">合计：</td><td colspan="2" style="text-align:left;" id="allcount">0</td><td style="text-align:right;">合计：</td><td style="text-align:left;" id="allaccount">￥0</td></tr>
+              <tbody id="yxjlbody">
+              
+              </tbody>
+              
+              <tfoot>
+              <tr class="color2">
+                  <td colspan="10" class="pager"> 
+					    <div class="spana" id="pager"></div> 
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+        
+        </div>
+	</div>  
+</div> 
+
+
+
+
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable" tabindex="-1" role="dialog" aria-describedby="dialog-detail" aria-labelledby="ui-id-1" style="display: none;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all1 ui-helper-clearfix"><span id="ui-id-1" class="ui-dialog-title">彩票-订单详情</span><button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="close"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span></button></div><div id="dialog-detail" class="ddxq_tk ui-dialog-content ui-widget-content">
+	<div id="cpwait" style=" text-align:center; margin-top:200px;"><img src="images/b_loading.gif"></div>
+	<div id="cpcont" style="display:none;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbxx_tb ddxq_tb">
+      <tbody><tr>
+        <td width="25%" class="jbxx_right">投注号码：</td>
+        <td colspan="3">
+        <textarea id="txtcont" name="" cols="60" rows="5" class="wbk" readonly="readonly"></textarea></td>
+      </tr>
+      <tr>
+        <td width="25%" class="jbxx_right">会员帐号：</td>
+        <td width="35%" style="color:#0070c0;"><span id="tduname"></span></td>
+        <td width="20%" class="jbxx_right">投注模式：</td>
+        <td width="20%" style="color:#0070c0;" id="tdmodel">-</td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">订单编号：</td>
+        <td style="color:#0070c0;" id="tddid"></td>
+        <td class="jbxx_right">购买注数：</td>
+        <td style="color:#0070c0;" id="tdbetncount"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">期号：</td>
+        <td style="color:#0070c0;" id="tdqishu"></td>
+        <td class="jbxx_right">购买倍数：</td>
+        <td style="color:#0070c0;" id="tdncount"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">彩种：</td>
+        <td style="color:#0070c0;" id="tdgamename"></td>
+        <td class="jbxx_right">投注金额：</td>
+        <td style="color:#0070c0;" id="tdbetamount"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">玩法：</td>
+        <td style="color:#0070c0;" id="tdptname"></td>
+        <td class="jbxx_right">返点：</td>
+        <td style="color:#ff0000;" id="tdback"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">下单时间：</td>
+        <td style="color:#0070c0;" id="tdbettime"></td>
+        <td class="jbxx_right">中奖金额：</td>
+        <td style="color:#ff0000;" id="tdresult"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">开奖号码：</td>
+        <td style="color:#ff0000;" id="tdopenprice"></td>
+        <td class="jbxx_right">实际盈利：</td>
+        <td style="color:#ff0000;" id="tdyk"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">备注：</td>
+        <td colspan="3" style="color:#ff0000;" id="tdremark"></td>
+      </tr>
+    </tbody></table>
+	<div class="ddxq_btn"><input type="button" class="ddxq_close" value="关闭" onclick="$('#dialog-detail').dialog('close');"></div>
+	</div>
+</div></div><div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable" tabindex="-1" role="dialog" aria-describedby="dialog-detail-jr" aria-labelledby="ui-id-2" style="display: none;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all1 ui-helper-clearfix"><span id="ui-id-2" class="ui-dialog-title">金融-订单详情</span><button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="close"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span></button></div><div id="dialog-detail-jr" class="ddxq_tk ui-dialog-content ui-widget-content">
+	<div id="jrwait" style=" text-align:center; margin-top:200px;"><img src="images/b_loading.gif"></div>
+	<div id="jrcont" style="display:none;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbxx_tb ddxq_tb">
+      <tbody><tr>
+        <td width="25%" class="jbxx_right">会员帐号：</td>
+        <td width="35%" style="color:#0070c0;"><span id="tduname_jr"></span></td>
+        <td width="20%" class="jbxx_right">单号：</td>
+        <td width="20%" style="color:#0070c0;" id="tddid_jr">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">投注时间：</td>
+        <td style="color:#0070c0;" id="tdbettime_jr"></td>
+        <td class="jbxx_right">商品：</td>
+        <td style="color:#0070c0;" id="tdiname_jr"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">投注金额：</td>
+        <td style="color:#0070c0;" id="tdamount_jr"></td>
+        <td class="jbxx_right">类型：</td>
+        <td style="color:#0070c0;" id="tdbstype_jr"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">投注倍数：</td>
+        <td style="color:#0070c0;" id="tdbetncount_jr"></td>
+        <td class="jbxx_right">成交价：</td>
+        <td style="color:#0070c0;" id="tdprice_jr"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">平仓时间：</td>
+        <td style="color:#0070c0;" id="tdpingtime_jr"></td>
+        <td class="jbxx_right">平仓价：</td>
+        <td style="color:#0070c0;" id="tdpingprice_jr"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">返点：</td>
+        <td style="color:#ff0000;" id="tdback_jr"></td>
+        <td class="jbxx_right">实际盈利：</td>
+        <td style="color:#ff0000;" id="tdresult_jr"></td>
+      </tr>
+      
+    </tbody></table>
+  <div class="ddxq_btn"><input type="button" class="ddxq_close" value="关闭" onclick="$('#dialog-detail-jr').dialog('close');"></div>
+  </div>
+</div></div><div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable" tabindex="-1" role="dialog" aria-describedby="dialog-detail-bjl" aria-labelledby="ui-id-3" style="display: none;"><div class="ui-dialog-titlebar ui-widget-header ui-corner-all1 ui-helper-clearfix"><span id="ui-id-3" class="ui-dialog-title">百家乐-订单详情</span><button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" aria-disabled="false" title="close"><span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span><span class="ui-button-text">close</span></button></div><div id="dialog-detail-bjl" class="ddxq_tk ui-dialog-content ui-widget-content">
+	<div id="bjlwait" style=" text-align:center; margin-top:200px;"><img src="images/b_loading.gif"></div>
+	<div id="bjlcont" style="display:none;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="jbxx_tb ddxq_tb">
+      <tbody><tr>
+        <td width="25%" class="jbxx_right">会员帐号：</td>
+        <td width="35%" style="color:#0070c0;"><span id="tduname_bjl"></span></td>
+        <td width="20%" class="jbxx_right">单号：</td>
+        <td width="20%" style="color:#0070c0;" id="tddid_bjl">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">投注内容：</td>
+        <td style="color:#0070c0;" id="tdcont_bjl"></td>
+        <td class="jbxx_right">赔率：</td>
+        <td style="color:#0070c0;" id="tdrate_bjl"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">投注金额：</td>
+        <td style="color:#0070c0;" id="tdbetamount_bjl"></td>
+        <td class="jbxx_right">状态：</td>
+        <td style="color:#0070c0;" id="tdstatus_bjl"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">下注时间：</td>
+        <td style="color:#0070c0;" id="tdbettime_bjl"></td>
+        <td class="jbxx_right">桌号：</td>
+        <td style="color:#0070c0;" id="tdzh_bjl"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">派奖时间：</td>
+        <td style="color:#0070c0;" id="tdopentime_bjl"></td>
+        <td class="jbxx_right">期数：</td>
+        <td style="color:#0070c0;" id="tdqishu_bjl"></td>
+      </tr>
+      <tr>
+        <td class="jbxx_right">返点：</td>
+        <td style="color:#ff0000;" id="tdback_bjl"></td>
+        <td class="jbxx_right">实际盈利：</td>
+        <td style="color:#ff0000;" id="tdyk_bjl"></td>
+      </tr>
+    </tbody></table>
+  <div class="ddxq_btn"><input type="button" class="ddxq_close" value="关闭" onclick="$('#dialog-detail-bjl').dialog('close');"></div>
+  </div>
+</div></div></body>
+
+</html>

@@ -1,0 +1,212 @@
+﻿@{
+    ViewBag.Title = "游戏记录";
+  
+} 
+@section css{
+
+    <link rel="stylesheet" type="text/css" href="/modules/css/bill.css" />
+    <link href="/modules/ancss/personal-center.css" rel="stylesheet" />
+    <link href="/modules/laydate/theme/default/laydate.css" rel="stylesheet" />
+    <link href="/modules/pager/page.css" rel="stylesheet" />
+    <style type="text/css">
+        body {
+            background: #243c2369 !important;
+            color: black !important;
+        }
+        /*定义滚动条轨道 内阴影+圆角*/
+        ::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+        }
+        /*定义滑块 内阴影+圆角*/
+        ::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        }
+
+        .header{width:96%;background-color:#000;opacity:.6;position:fixed;top:5px;left:2%;right:2%;height:50px;border-radius:5px}
+        .header .header-left{float:left;width:197px;font-size:18px;color:#bfa44d;font-weight:600}
+        .header .header-left .back{float:left}
+        .header .header-left img{margin-top:5px;height:35px}
+        .header .header-left .title{display:inline-block;height:50px;line-height:50px;float:left}
+        .header .header-right{float:right;width:110px;height:50px}
+        .header .header-right .setting{height:40px;float:right;padding-top:5px}
+        .header .header-right .setting img{height:30px;margin-top:4px;width:25px;vertical-align:middle}
+        .header .header-right .money{float:right;color:#bfa44d;font-size:18px;line-height:50px}
+        .header .header-right .money p{width:85px}
+        .head-menu{width:130px;height:210px;background-color:#161616;position:fixed;top:50px;right:7px;z-index:111111111}
+        .head-menu ul li{height:35px;width:80%;line-height:35px;padding-left:3%;color:#fff;margin:0 auto;border-bottom:1px solid #424240}
+        .head-menu img{height:25px;vertical-align:middle;margin-right:5px}
+        .tab{width:100%}
+        .tab thead tr{border-left:1px solid #fff}
+        .tab thead tr th{border-top:1px solid #fff;line-height:20px;background:#870f00;color:#fff;font-weight:lighter;text-align:center;border-right:1px solid #907c73}
+        .tab tbody tr{border-right:1px solid #fff}
+        .tab tbody tr td{border-left:1px solid #fff;text-align:center;line-height:25px;color:#fff;border-bottom:1px solid #fff;height:35px}
+         .cancel {    color: red;    font-size: 15px;    font-weight: 600;    }
+    </style>
+}
+@section scripts{
+    <script src="/modules/laydate/laydate.js"></script>
+    <script src="/modules/pager/jquery.page.js"></script>
+
+<script type="text/javascript">
+     var Params = {
+        cpcode: '',
+        status: -1,
+        btime: '',
+        etime: '',
+        type: '',
+        selfrange:3,
+        pageIndex:1
+    };
+     function getParams() {
+        Params.status = $('#status').val();
+        Params.cpcode = $('#lotteryslt').val();
+        Params.btime = $('#btime').val();
+        Params.etime = $('#etime').val();
+        Params.issuenum=$('#issueslt').val();
+    }
+     $(function () { 
+        laydate.render({
+            elem: '#btime',max:$('#etime').val()
+        });laydate.render({
+            elem: '#etime',min:$('#btime').val()
+        });
+        $("#lotteryslt").val('@ViewBag.CPCode');
+        $("#status").val('@ViewBag.status');
+
+        $('.cancel').click(function () {
+            var ind = $(this).data('id');
+            $.post('/Lottery/ReturnMyLotteryOrd', { lcode: ind }, function (data) {
+                if (data.result) {
+                    alert('撤单成功');
+                    $("#btn_bt_search").click();
+                } else {
+                    alert('撤单失败');
+                }
+            });
+        });
+
+        $("#btn_bt_search").click(function() {
+            getParams();
+            Params.pageIndex = 1;
+            window.location.href = "/help/bettrecord?cpcode=" + Params.cpcode + "&status="+ Params.status+"&btime=" + Params.btime + "&etime=" + Params.etime + "&type=" + Params.type + "&selfrange=1&pageIndex=1";
+        });
+
+        $("#pager").createPage({
+            pageCount: @ViewData["pageCount"]> 10 ? 10 : @ViewData["pageCount"],
+            current: @ViewData["pageIndex"],
+            backFn: function (p)
+            {
+                getParams();
+                Params.pageIndex=p;
+                window.location.href = "/help/bettrecord?cpcode=" + Params.cpcode + "&status="+ Params.status+"&btime=" + Params.btime + "&etime=" + Params.etime + "&type=" + Params.type + "&selfrange="+Params.selfrange+"&pageIndex="+p;
+            }
+        });
+
+    });
+</script> 
+}
+ 
+
+<div class="tagContent  selectTag" id="tagContent0"  style="margin-top: 20px;"> 
+    <div class="chcck-bill jbxx_text" style="color: #443d3d;margin:10px auto;">
+        <input type="text" name="btime" id="btime" value="@ViewBag.Start" class="datainp" style="width:80px;">&nbsp;-<input type="text" name="etime" id="etime" value="@ViewBag.End" class="datainp" style="width:80px;">
+        <select name="lotteryslt" id="lotteryslt" class="datainp">
+            <option value="">-所有彩种-</option>
+            <optgroup label="时时彩">时时彩</optgroup>
+            <option value="CQSSC">重庆时时彩</option>
+            <optgroup label="PK10">PK10</optgroup>
+            <option value="BJPK10">北京PK10</option>
+            <optgroup label="分分彩">分分彩</optgroup>
+            <option value="txffc">腾讯分分彩</option>
+            <option value="hg1.5">韩国1.5</option>
+            <option value="dj1.5">东京1.5</option>
+        </select> <select id="status" class="datainp" style="width:60px;">
+            <option value="-1" selected="">全部</option>
+            <option value="2">已中奖</option>
+            <option value="1">未中奖</option>
+            <option value="4">结算中</option>
+            <option value="0">未开奖</option>
+            <option value="3">已撤单</option>
+        </select>
+        <input type="button" style="float: right; margin-right: 10px; margin-top: 5px;" class="button dateSub" id="btn_bt_search" value="查询"/>
+        <div style="clear: both; height: 0px; width: 0px;"></div>
+    </div>
+
+    <div style="height: 360px; font-size: 12px;">
+        <table class="tab" cellpadding="0" cellspacing="0" border="0" id="table">
+            <thead style="font-size: 13px;">
+                <tr>
+                    <th style="max-width:120px;">期号</th>
+                    <th>玩法</th>
+                    <th>内容</th>
+                    <th>时间</th>
+                    <th>金额</th>
+                    <th>状态</th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @{
+                    decimal bettotal = 0;
+                    decimal wintotal = 0;
+                }
+                @foreach (ProEntity.LotteryOrder info in ((List<ProEntity.LotteryOrder>)ViewData["items"]))
+                {
+                    string status = string.Empty;
+                    switch (info.Status)
+                    {
+                        case 0:
+                            status = "未开奖";
+                            break;
+                        case 1:
+                            status = "未中奖";
+                            break;
+                        case 2:
+                            status = "已中奖";
+                            break;
+                        case 3:
+                            status = "已撤单";
+                            break;
+                        case 4:
+                            status = "结算中";
+                            break;
+                    }
+                    bettotal += info.PayFee; wintotal += info.WinFee;
+                    <tr>
+                        <td>@info.CPName @info.IssueNum</td>
+                        <td>@info.TypeName</td>
+                        <td>@info.Content</td>
+                        <td>@info.CreateTime.ToString("MM-dd HH:mm")</td>
+                        <td>@info.PayFee.ToString("n2")</td>
+                        <td>@status</td>
+                        <td>
+                            @if (info.Status == 0)
+                            {<a href='javascript:void(0)' class='cancel' data-id='@info.LCode'>撤单</a>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr style="font-weight: bold;" class="color2">
+                    <td>当页合计：</td>
+                    <td colspan="4">总投注/总中奖:@bettotal.ToString("n2")/@wintotal.ToString("n2")</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr class="color2">
+                    <td colspan="7" class="pager">
+                        <div class="spana tcdPageCode" id="pager"></div>
+                    </td>
+                </tr>
+            </tbody>
+
+
+        </table>
+
+    </div>
+</div>
+
