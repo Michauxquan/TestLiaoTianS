@@ -528,14 +528,24 @@ namespace SignalR.Controllers
                 if (hubname.ToLower() == "xhgklb")
                 {
                     hub = GlobalHost.ConnectionManager.GetHubContext<HGChatHub>();
+                    hub.Clients.All.notice("【系统消息】<br/>" + msg);
                 }
                 else if (hubname.ToLower() == "bjsc") {
                     hub = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+                    hub.Clients.All.notice("【系统消息】<br/>" + msg);
                 }
                 else if (hubname.ToLower() == "xdjklb") {
                     hub = GlobalHost.ConnectionManager.GetHubContext<DJChatHub>();
+                    hub.Clients.All.notice("【系统消息】<br/>" + msg);
                 }
-                hub.Clients.All.notice("【系统消息】<br/>" + msg); 
+                else if (hubname.ToLower() == "cqssc")
+                {
+                    hub = GlobalHost.ConnectionManager.GetHubContext<DJChatHub>();
+                    hub.Clients.All.notice("【系统消息】<br/>" + msg);
+                }
+                else { 
+                  
+                }
                 result = "发送成功!";
                 LogHelper.Info("SysSendMsg", "SysSendMsg", msg);
             }

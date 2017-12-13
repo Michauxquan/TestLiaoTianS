@@ -59,9 +59,14 @@
             while (!userNickName) {
                 userNickName = window.prompt("请输入昵称！");
             }
+            //$.connection.hub.url = "http://localhost:8000/signalr";
 
+            //// var connection = $.connection('http://localhost:8000/signalr');
+            //// connection
+            //$.connection.hub.start({ transport: ['webSockets'] });
+            //$.connection.CQRoomHub.logging = true;
             var chatHub = $.connection.CQRoomHub; 
-
+          
             chatHub.client.NotifySendMessage = function (nickName,username, message) {
                 var userAvatar = '/modules/animg/29.gif';
                 if (nickName == userNickName) {
