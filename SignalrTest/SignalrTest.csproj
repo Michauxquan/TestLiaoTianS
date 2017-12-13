@@ -254,6 +254,7 @@
     <Content Include="modules\ancss\time_css.css" />
     <Content Include="modules\ancss\xssc.css" />
     <Content Include="modules\animg\29.gif" />
+    <Content Include="modules\animg\background.svg" />
     <Content Include="modules\animg\Demo_Asp_Sdk.rar" />
     <Content Include="modules\animg\tab.cache" />
     <Content Include="modules\css\bet.css" />

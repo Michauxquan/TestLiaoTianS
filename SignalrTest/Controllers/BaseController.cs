@@ -539,7 +539,7 @@ namespace SignalR.Controllers
                 }
                 else if (hubname.ToLower() == "cqssc")
                 {
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<DJChatHub>();
+                    var hub = GlobalHost.ConnectionManager.GetHubContext<CQChatHub>();
                     hub.Clients.All.notice("【系统消息】<br/>" + msg);
                 }
                 else { 
@@ -818,7 +818,7 @@ namespace SignalR.Controllers
                 }
                 else if (hubname.ToLower() == "cqssc")
                 {
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<DJChatHub>();
+                    var hub = GlobalHost.ConnectionManager.GetHubContext<CQChatHub>();
                     hub.Clients.All.notice("【系统消息】<br/>" + msg);
                 }
                 else

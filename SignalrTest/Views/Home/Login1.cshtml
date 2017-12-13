@@ -13,25 +13,93 @@
       <script src="/Scripts/jquery-1.8.2.js"></script>
 	<script src="/modules/plug/antip/xcConfirm.js" type="text/javascript" charset="utf-8"></script> 
     <link rel="stylesheet" type="text/css" href="/modules/ancss/index.css"/>
+    <style>
+        .logo {    background-attachment: scroll;
+    background-image: url(../modules/animg/background.svg);
+    background-repeat: no-repeat;
+    background-position: 50% 100%;
+    background-size: 180%;
+    display: inline-block;
+    width: 100%;
+    height: 170px;
+    margin-left: auto;
+    margin-right: auto;
+        }
+        .form-signin-heading{
+                font-weight: 400;
+    font-size: 24px;
+    width: 100px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    color: #85b033;
+        }
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 0 0 60px;
+            font-size: 12px;
+            color: #555;
+            border: 0;
+            border-bottom: 1px solid #9b9b9b;
+            border-radius: 0;
+        }
+        .form-signin {
+    padding-right: 50px;
+    padding-left: 50px;
+    margin-right: auto;
+    margin-left: auto;
+}
+        .sr-only {
+    position: relative;
+    display: inline-block;
+    height: auto;
+    width: auto;
+    font-size: 14px;
+    top: 35px;
+}
+        .btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #2b3f57;
+    width:100%;
+}  
+            </style>
 </head>
-<body>
-	<div class="logo">
-		<img src="/modules/animg/logo.png" alt="" />
-	</div>
-	<div class="login"> 
-		<div class="username">
-			<span><img src="/modules/img/username.png" alt="" /></span>
-			<input type="text" name="username" id="username" value="" placeholder="用户名"/>
-		</div>
-		<div class="password">
-			<span><img src="/modules/img/pwd.png" alt="" /></span>
-			<input type="password" name="password" id="loginpass_source" value="" placeholder="密码"/>
-		</div>
-	 
-		<div class="btn">
-			<input type="submit" name="subbutton" id="submit" onclick="LoginNow()" value="立即登陆" />
-		</div> 
-	</div>
+<body style="background: #FFF;">
+    <div class="logo">
+        <img src="/modules/animg/logo.png" style="    width: 250px;    height: 100px;" />
+    </div> 
+    <div class="form-signin">
+        <h2 class="form-signin-heading" id="login">登入</h2>
+        <label for="inputEmail" class="sr-only">帐号</label>
+        <input id="username" name="username" class="form-control" placeholder="- -请使用您的人和帐号登入- -" required="" autofocus="">
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" name="password" id="loginpass_source" class="form-control" placeholder="" required="">
+        <div class="notice">&nbsp;</div>
+         
+        <button type="submit" name="subbutton" id="submit" class="btn" onclick="LoginNow()" >立即登陆</button> 
+    </div>
 </body>
 	<script type="text/javascript">
 
